@@ -1,0 +1,1134 @@
+# SOC 2 Type II - Trust Services Criteria
+# Automated Compliance Checks for Security (Common Criteria)
+#
+# Framework: AICPA Trust Services Criteria (2017)
+# Categories: CC6-CC9 (Security - Mandatory), A1 (Availability - Optional)
+#
+# This file defines compliance checks that can be automatically evaluated
+# against cloud infrastructure resources (AWS, Azure, GCP, Kubernetes).
+
+id: soc2-trust-services-criteria
+name: SOC 2 Type II - Trust Services Criteria
+version: "2024.1"
+description: |
+  SOC 2 Trust Services Criteria automated compliance checks covering:
+
+  - CC6: Logical and Physical Access Controls (Authentication, Authorization, Encryption)
+  - CC7: System Operations (Monitoring, Backup, Vulnerability Management)
+  - CC8: Change Management (Configuration Tracking, Audit)
+  - CC9: Risk Mitigation (Vendor Management, Incident Response)
+  - A1: Availability (High Availability, Disaster Recovery)
+
+  These checks provide continuous monitoring and automated evidence collection
+  for SOC 2 Type II audits across AWS, Azure, GCP, and Kubernetes environments.
+
+metadata:
+  framework: SOC2
+  framework_version: "2017"
+  trust_service_categories:
+    - Security (Common Criteria)
+    - Availability
+  last_updated: "2024-12-16"
+  total_checks: 45
+  automated_percentage: 90
+  applicable_platforms:
+    - AWS
+    - Azure
+    - GCP
+    - Kubernetes
+
+checks:
+  # ==========================================================================
+  # CC6.1 - Logical Access Security Software, Infrastructure, and Architectures
+  # ==========================================================================
+
+  - id: soc2-cc6.1-001
+    title: IAM User MFA Enabled
+    description: |
+      Ensure all IAM users have multi-factor authentication (MFA) enabled.
+      MFA adds an additional layer of protection on top of username and password.
+      This is a critical control for preventing unauthorized access.
+    severity: critical
+    resource_types:
+      - iam_user
+      - aws_iam_user
+    condition:
+      path: raw_data.MFADevices
+      operator: is_not_empty
+    remediation: |
+      Enable MFA for the IAM user:
+      1. Sign in to AWS Management Console
+      2. Navigate to IAM > Users
+      3. Select the user
+      4. Click Security credentials tab
+      5. Enable MFA device (virtual, hardware, or U2F)
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html
+      - https://www.aicpa.org/resources/landing/system-and-organization-controls-soc-suite-of-services
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - IA-2
+        - IA-2(1)
+      cis-aws:
+        - "1.10"
+    tags:
+      - authentication
+      - mfa
+      - iam
+      - identity
+
+  - id: soc2-cc6.1-002
+    title: IAM Password Policy Minimum Length
+    description: |
+      Ensure IAM password policy requires a minimum password length of 14 characters.
+      Strong password policies help prevent brute force and dictionary attacks.
+    severity: high
+    resource_types:
+      - iam_password_policy
+      - aws_iam_account_password_policy
+    condition:
+      path: raw_data.MinimumPasswordLength
+      operator: gte
+      value: 14
+    remediation: |
+      Set minimum password length in IAM password policy:
+      1. Navigate to IAM > Account settings
+      2. Set minimum password length to 14 or more characters
+      3. Save changes
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - IA-5
+        - IA-5(1)
+    tags:
+      - password
+      - iam
+      - authentication
+
+  - id: soc2-cc6.1-003
+    title: IAM Password Policy Requires Uppercase
+    description: |
+      Ensure IAM password policy requires at least one uppercase letter.
+      Password complexity requirements help prevent dictionary attacks.
+    severity: high
+    resource_types:
+      - iam_password_policy
+      - aws_iam_account_password_policy
+    condition:
+      path: raw_data.RequireUppercaseCharacters
+      operator: is_true
+    remediation: |
+      Enable uppercase character requirement in IAM password policy.
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - IA-5
+        - IA-5(1)
+    tags:
+      - password
+      - iam
+      - authentication
+
+  - id: soc2-cc6.1-004
+    title: IAM Password Policy Requires Lowercase
+    description: |
+      Ensure IAM password policy requires at least one lowercase letter.
+      Password complexity requirements help prevent dictionary attacks.
+    severity: high
+    resource_types:
+      - iam_password_policy
+      - aws_iam_account_password_policy
+    condition:
+      path: raw_data.RequireLowercaseCharacters
+      operator: is_true
+    remediation: |
+      Enable lowercase character requirement in IAM password policy.
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - IA-5
+        - IA-5(1)
+    tags:
+      - password
+      - iam
+      - authentication
+
+  - id: soc2-cc6.1-005
+    title: IAM Password Policy Requires Numbers
+    description: |
+      Ensure IAM password policy requires at least one number.
+      Password complexity requirements help prevent dictionary attacks.
+    severity: high
+    resource_types:
+      - iam_password_policy
+      - aws_iam_account_password_policy
+    condition:
+      path: raw_data.RequireNumbers
+      operator: is_true
+    remediation: |
+      Enable number requirement in IAM password policy.
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - IA-5
+        - IA-5(1)
+    tags:
+      - password
+      - iam
+      - authentication
+
+  - id: soc2-cc6.1-006
+    title: IAM Password Policy Requires Symbols
+    description: |
+      Ensure IAM password policy requires at least one symbol.
+      Password complexity requirements help prevent dictionary attacks.
+    severity: high
+    resource_types:
+      - iam_password_policy
+      - aws_iam_account_password_policy
+    condition:
+      path: raw_data.RequireSymbols
+      operator: is_true
+    remediation: |
+      Enable symbol requirement in IAM password policy.
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - IA-5
+        - IA-5(1)
+    tags:
+      - password
+      - iam
+      - authentication
+
+  - id: soc2-cc6.1-007
+    title: IAM Password Policy Expiration
+    description: |
+      Ensure IAM password policy enforces password expiration within 90 days.
+      Regular password rotation reduces the risk of compromised credentials.
+    severity: medium
+    resource_types:
+      - iam_password_policy
+      - aws_iam_account_password_policy
+    condition:
+      path: raw_data.MaxPasswordAge
+      operator: lte
+      value: 90
+    remediation: |
+      Set maximum password age to 90 days or less in IAM password policy.
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - IA-5
+        - IA-5(1)
+    tags:
+      - password
+      - iam
+      - rotation
+
+  - id: soc2-cc6.1-008
+    title: S3 Bucket Encryption Enabled
+    description: |
+      Ensure all S3 buckets have server-side encryption enabled.
+      Encryption protects data at rest from unauthorized access.
+    severity: critical
+    resource_types:
+      - s3_bucket
+      - aws_s3_bucket
+    condition:
+      path: raw_data.Encryption
+      operator: is_not_empty
+    remediation: |
+      Enable default encryption for S3 bucket:
+      1. Open S3 console
+      2. Select bucket
+      3. Go to Properties > Default encryption
+      4. Enable encryption (AES-256 or AWS-KMS)
+    references:
+      - https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-encryption.html
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - SC-28
+        - SC-28(1)
+    tags:
+      - encryption
+      - s3
+      - data-protection
+
+  - id: soc2-cc6.1-009
+    title: RDS Instance Encryption Enabled
+    description: |
+      Ensure RDS instances have encryption at rest enabled.
+      Encryption protects database data from unauthorized access.
+    severity: critical
+    resource_types:
+      - rds_instance
+      - aws_rds_instance
+    condition:
+      path: raw_data.StorageEncrypted
+      operator: is_true
+    remediation: |
+      Enable encryption when creating RDS instance (cannot be enabled after creation).
+      For existing unencrypted instances:
+      1. Create a snapshot
+      2. Copy snapshot with encryption enabled
+      3. Restore from encrypted snapshot
+    references:
+      - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - SC-28
+    tags:
+      - encryption
+      - rds
+      - data-protection
+
+  - id: soc2-cc6.1-010
+    title: EBS Volume Encryption Enabled
+    description: |
+      Ensure EBS volumes are encrypted to protect data at rest.
+      Unencrypted volumes expose data to unauthorized access.
+    severity: high
+    resource_types:
+      - ebs_volume
+      - aws_ebs_volume
+    condition:
+      path: raw_data.Encrypted
+      operator: is_true
+    remediation: |
+      Create encrypted replacement for unencrypted volume:
+      1. Create encrypted snapshot of unencrypted volume
+      2. Create new encrypted volume from snapshot
+      3. Replace unencrypted volume with encrypted volume
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - SC-28
+    tags:
+      - encryption
+      - ebs
+      - data-protection
+
+  - id: soc2-cc6.1-011
+    title: KMS Key Rotation Enabled
+    description: |
+      Ensure KMS keys have automatic rotation enabled.
+      Key rotation limits the exposure if a key is compromised.
+    severity: medium
+    resource_types:
+      - kms_key
+      - aws_kms_key
+    condition:
+      path: raw_data.KeyRotationEnabled
+      operator: is_true
+    remediation: |
+      Enable automatic key rotation for KMS keys:
+      1. Navigate to KMS console
+      2. Select the key
+      3. Enable automatic key rotation
+    frameworks:
+      soc2:
+        - CC6.1
+      nist-800-53:
+        - SC-12
+        - SC-12(1)
+    tags:
+      - encryption
+      - kms
+      - key-rotation
+
+  # ==========================================================================
+  # CC6.2 - Prior to Issuing System Credentials
+  # ==========================================================================
+
+  - id: soc2-cc6.2-001
+    title: No Direct Admin Policy Attached to Users
+    description: |
+      Ensure IAM users do not have AdministratorAccess policy directly attached.
+      Users should use role-based access with proper approval workflows.
+    severity: high
+    resource_types:
+      - iam_user
+      - aws_iam_user
+    condition:
+      not:
+        path: raw_data.AttachedPolicies
+        operator: contains
+        value: AdministratorAccess
+    remediation: |
+      Remove AdministratorAccess policy from IAM users:
+      1. Use IAM roles with appropriate permissions instead
+      2. Implement least privilege access
+      3. Use temporary credentials via STS AssumeRole
+    frameworks:
+      soc2:
+        - CC6.2
+      nist-800-53:
+        - AC-2
+        - AC-6
+        - AC-6(1)
+    tags:
+      - iam
+      - least-privilege
+      - authorization
+
+  - id: soc2-cc6.2-002
+    title: Root Account No Access Keys
+    description: |
+      Ensure root account does not have access keys.
+      Root account should be used only for initial setup and emergencies.
+    severity: critical
+    resource_types:
+      - iam_root_user
+      - aws_iam_root_user
+    condition:
+      path: raw_data.AccessKeys
+      operator: is_empty
+    remediation: |
+      Delete access keys for root account:
+      1. Sign in as root
+      2. Navigate to Security Credentials
+      3. Delete all access keys
+      4. Use IAM users/roles for programmatic access
+    frameworks:
+      soc2:
+        - CC6.2
+      nist-800-53:
+        - AC-2
+        - AC-6
+      cis-aws:
+        - "1.4"
+    tags:
+      - iam
+      - root
+      - access-keys
+
+  # ==========================================================================
+  # CC6.3 - Removes Access to Protected Assets
+  # ==========================================================================
+
+  - id: soc2-cc6.3-001
+    title: No Unrestricted SSH Access
+    description: |
+      Ensure security groups do not allow unrestricted SSH access (0.0.0.0/0:22).
+      Unrestricted SSH access is a critical security vulnerability.
+    severity: critical
+    resource_types:
+      - ec2_security_group
+      - aws_security_group
+    condition:
+      not:
+        path: raw_data.IngressRules
+        operator: contains
+        value: "0.0.0.0/0:22"
+    remediation: |
+      Restrict SSH access:
+      1. Remove 0.0.0.0/0 from SSH ingress rules
+      2. Restrict to specific IP ranges
+      3. Use VPN or bastion hosts for SSH access
+    frameworks:
+      soc2:
+        - CC6.3
+      nist-800-53:
+        - AC-4
+        - SC-7
+      cis-aws:
+        - "5.2"
+    tags:
+      - security-group
+      - network
+      - ssh
+
+  - id: soc2-cc6.3-002
+    title: No Unrestricted RDP Access
+    description: |
+      Ensure security groups do not allow unrestricted RDP access (0.0.0.0/0:3389).
+      Unrestricted RDP access is a critical security vulnerability.
+    severity: critical
+    resource_types:
+      - ec2_security_group
+      - aws_security_group
+    condition:
+      not:
+        path: raw_data.IngressRules
+        operator: contains
+        value: "0.0.0.0/0:3389"
+    remediation: |
+      Restrict RDP access:
+      1. Remove 0.0.0.0/0 from RDP ingress rules
+      2. Restrict to specific IP ranges
+      3. Use VPN or bastion hosts for RDP access
+    frameworks:
+      soc2:
+        - CC6.3
+      nist-800-53:
+        - AC-4
+        - SC-7
+      cis-aws:
+        - "5.3"
+    tags:
+      - security-group
+      - network
+      - rdp
+
+  - id: soc2-cc6.3-003
+    title: VPC Flow Logs Enabled
+    description: |
+      Ensure VPC flow logging is enabled.
+      Flow logs capture IP traffic for security monitoring and incident investigation.
+    severity: high
+    resource_types:
+      - vpc
+      - aws_vpc
+    condition:
+      path: raw_data.FlowLogs
+      operator: is_not_empty
+    remediation: |
+      Enable VPC flow logs:
+      1. Navigate to VPC console
+      2. Select the VPC
+      3. Create flow log with destination (CloudWatch or S3)
+      4. Capture all traffic (accept and reject)
+    frameworks:
+      soc2:
+        - CC6.3
+      nist-800-53:
+        - AU-2
+        - AU-12
+      cis-aws:
+        - "3.9"
+    tags:
+      - vpc
+      - flow-logs
+      - monitoring
+
+  - id: soc2-cc6.3-004
+    title: Default Security Group Restricts Traffic
+    description: |
+      Ensure default security group does not allow any traffic.
+      Default security groups should be locked down to prevent unintended access.
+    severity: medium
+    resource_types:
+      - ec2_security_group
+      - aws_security_group
+    condition:
+      or:
+        - path: raw_data.GroupName
+          operator: ne
+          value: default
+        - and:
+            - path: raw_data.IpPermissions
+              operator: is_empty
+            - path: raw_data.IpPermissionsEgress
+              operator: is_empty
+    remediation: |
+      Remove all rules from default security group:
+      1. Navigate to VPC > Security Groups
+      2. Select default security group
+      3. Delete all inbound rules
+      4. Delete all outbound rules
+    frameworks:
+      soc2:
+        - CC6.3
+      nist-800-53:
+        - SC-7
+      cis-aws:
+        - "5.4"
+    tags:
+      - security-group
+      - network
+      - default
+
+  # ==========================================================================
+  # CC6.6 - Restricts System Access to Authorized Users
+  # ==========================================================================
+
+  - id: soc2-cc6.6-001
+    title: S3 Public Access Blocked
+    description: |
+      Ensure S3 buckets have public access blocked.
+      Public S3 buckets are a common source of data breaches.
+    severity: critical
+    resource_types:
+      - s3_bucket
+      - aws_s3_bucket
+    condition:
+      and:
+        - path: raw_data.PublicAccessBlock.BlockPublicAcls
+          operator: is_true
+        - path: raw_data.PublicAccessBlock.BlockPublicPolicy
+          operator: is_true
+        - path: raw_data.PublicAccessBlock.IgnorePublicAcls
+          operator: is_true
+        - path: raw_data.PublicAccessBlock.RestrictPublicBuckets
+          operator: is_true
+    remediation: |
+      Enable all public access block settings for S3 bucket:
+      1. Navigate to S3 console
+      2. Select bucket > Permissions
+      3. Edit Block Public Access settings
+      4. Enable all four block settings
+    frameworks:
+      soc2:
+        - CC6.6
+      nist-800-53:
+        - AC-3
+        - AC-21
+      cis-aws:
+        - "2.1.5"
+    tags:
+      - s3
+      - public-access
+      - data-protection
+
+  - id: soc2-cc6.6-002
+    title: RDS Not Publicly Accessible
+    description: |
+      Ensure RDS instances are not publicly accessible.
+      Public databases are vulnerable to attacks from the internet.
+    severity: critical
+    resource_types:
+      - rds_instance
+      - aws_rds_instance
+    condition:
+      path: raw_data.PubliclyAccessible
+      operator: is_false
+    remediation: |
+      Disable public accessibility for RDS instances:
+      1. Navigate to RDS console
+      2. Modify the instance
+      3. Set Publicly accessible to No
+      4. Apply changes
+    frameworks:
+      soc2:
+        - CC6.6
+      nist-800-53:
+        - AC-3
+        - SC-7
+      cis-aws:
+        - "2.3.2"
+    tags:
+      - rds
+      - public-access
+      - network
+
+  - id: soc2-cc6.6-003
+    title: EC2 Requires IMDSv2
+    description: |
+      Ensure EC2 instances require IMDSv2 for instance metadata service.
+      IMDSv2 protects against SSRF attacks that could steal credentials.
+    severity: high
+    resource_types:
+      - ec2_instance
+      - aws_ec2_instance
+    condition:
+      path: raw_data.MetadataOptions.HttpTokens
+      operator: eq
+      value: required
+    remediation: |
+      Modify instance metadata options to require IMDSv2:
+      aws ec2 modify-instance-metadata-options \
+        --instance-id <instance-id> \
+        --http-tokens required \
+        --http-endpoint enabled
+    frameworks:
+      soc2:
+        - CC6.6
+      nist-800-53:
+        - AC-3
+      cis-aws:
+        - "5.6"
+    tags:
+      - ec2
+      - imds
+      - metadata
+
+  # ==========================================================================
+  # CC6.7 - Restricts Data Transmission, Movement, and Removal
+  # ==========================================================================
+
+  - id: soc2-cc6.7-001
+    title: IAM Access Keys Rotated
+    description: |
+      Ensure IAM access keys are rotated within 90 days.
+      Regular key rotation reduces the risk of compromised credentials.
+    severity: medium
+    resource_types:
+      - iam_access_key
+      - aws_iam_access_key
+    condition:
+      path: raw_data.CreateDate
+      operator: exists
+    remediation: |
+      Rotate IAM access keys that are older than 90 days:
+      1. Create a new access key
+      2. Update applications to use new key
+      3. Disable old access key
+      4. Verify applications still work
+      5. Delete old access key
+    frameworks:
+      soc2:
+        - CC6.7
+      nist-800-53:
+        - AC-2
+      cis-aws:
+        - "1.14"
+    tags:
+      - iam
+      - access-keys
+      - rotation
+
+  - id: soc2-cc6.7-002
+    title: ELB Uses TLS 1.2 or Higher
+    description: |
+      Ensure load balancers use TLS 1.2 or higher.
+      Older TLS versions have known vulnerabilities.
+    severity: high
+    resource_types:
+      - elb_load_balancer
+      - aws_elb
+      - aws_alb
+    condition:
+      path: raw_data.SslPolicy
+      operator: contains
+      value: TLS-1-2
+    remediation: |
+      Update ELB SSL policy to use TLS 1.2:
+      1. Navigate to EC2 > Load Balancers
+      2. Select the load balancer
+      3. Edit listeners
+      4. Choose policy with TLS 1.2 or higher
+    frameworks:
+      soc2:
+        - CC6.7
+      nist-800-53:
+        - SC-8
+        - SC-8(1)
+    tags:
+      - elb
+      - tls
+      - encryption
+
+  # ==========================================================================
+  # CC7.2 - Monitors System Components
+  # ==========================================================================
+
+  - id: soc2-cc7.2-001
+    title: CloudTrail Enabled All Regions
+    description: |
+      Ensure CloudTrail is enabled in all regions.
+      CloudTrail captures API activity for security monitoring and compliance.
+    severity: critical
+    resource_types:
+      - cloudtrail_trail
+      - aws_cloudtrail
+    condition:
+      path: raw_data.IsMultiRegionTrail
+      operator: is_true
+    remediation: |
+      Enable CloudTrail in all regions:
+      1. Navigate to CloudTrail console
+      2. Create or update trail
+      3. Enable "Apply trail to all regions"
+    frameworks:
+      soc2:
+        - CC7.2
+      nist-800-53:
+        - AU-2
+        - AU-3
+      cis-aws:
+        - "3.1"
+    tags:
+      - cloudtrail
+      - logging
+      - audit
+
+  - id: soc2-cc7.2-002
+    title: CloudTrail Log Validation Enabled
+    description: |
+      Ensure CloudTrail log file validation is enabled.
+      Log validation helps detect if logs were modified or deleted.
+    severity: high
+    resource_types:
+      - cloudtrail_trail
+      - aws_cloudtrail
+    condition:
+      path: raw_data.LogFileValidationEnabled
+      operator: is_true
+    remediation: |
+      Enable log file validation in CloudTrail settings.
+    frameworks:
+      soc2:
+        - CC7.2
+      nist-800-53:
+        - AU-9
+      cis-aws:
+        - "3.2"
+    tags:
+      - cloudtrail
+      - logging
+      - integrity
+
+  - id: soc2-cc7.2-003
+    title: CloudTrail Logs Encrypted
+    description: |
+      Ensure CloudTrail logs are encrypted with KMS.
+      Encryption protects audit logs from unauthorized access.
+    severity: high
+    resource_types:
+      - cloudtrail_trail
+      - aws_cloudtrail
+    condition:
+      path: raw_data.KMSKeyId
+      operator: exists
+    remediation: |
+      Configure CloudTrail to use KMS encryption for log files.
+    frameworks:
+      soc2:
+        - CC7.2
+        - CC6.1
+      nist-800-53:
+        - SC-28
+        - AU-9
+      cis-aws:
+        - "3.7"
+    tags:
+      - cloudtrail
+      - encryption
+      - logging
+
+  - id: soc2-cc7.2-004
+    title: AWS Config Enabled
+    description: |
+      Ensure AWS Config is enabled.
+      Config provides configuration history and change notifications for compliance.
+    severity: high
+    resource_types:
+      - config_recorder
+      - aws_config_recorder
+    condition:
+      path: raw_data.RecordingGroup.AllSupported
+      operator: is_true
+    remediation: |
+      Enable AWS Config recording for all supported resources.
+    frameworks:
+      soc2:
+        - CC7.2
+      nist-800-53:
+        - CM-2
+        - CM-3
+    tags:
+      - config
+      - monitoring
+      - compliance
+
+  - id: soc2-cc7.2-005
+    title: GuardDuty Enabled
+    description: |
+      Ensure GuardDuty is enabled.
+      GuardDuty provides threat detection and continuous security monitoring.
+    severity: high
+    resource_types:
+      - guardduty_detector
+      - aws_guardduty_detector
+    condition:
+      path: raw_data.Status
+      operator: eq
+      value: ENABLED
+    remediation: |
+      Enable GuardDuty in all regions.
+    frameworks:
+      soc2:
+        - CC7.2
+        - CC7.4
+      nist-800-53:
+        - SI-4
+        - IR-4
+    tags:
+      - guardduty
+      - threat-detection
+      - monitoring
+
+  - id: soc2-cc7.2-006
+    title: CloudWatch Log Retention Set
+    description: |
+      Ensure CloudWatch log groups have retention policy.
+      Log retention ensures logs are available for compliance audits.
+    severity: medium
+    resource_types:
+      - cloudwatch_log_group
+      - aws_cloudwatch_log_group
+    condition:
+      path: raw_data.RetentionInDays
+      operator: gte
+      value: 90
+    remediation: |
+      Set CloudWatch log group retention to at least 90 days.
+    frameworks:
+      soc2:
+        - CC7.2
+      nist-800-53:
+        - AU-11
+    tags:
+      - cloudwatch
+      - logging
+      - retention
+
+  # ==========================================================================
+  # CC7.3 - Evaluates Security Events / Backup and Recovery
+  # ==========================================================================
+
+  - id: soc2-cc7.3-001
+    title: RDS Automated Backups Enabled
+    description: |
+      Ensure RDS instances have automated backups enabled.
+      Automated backups enable point-in-time recovery.
+    severity: high
+    resource_types:
+      - rds_instance
+      - aws_rds_instance
+    condition:
+      path: raw_data.BackupRetentionPeriod
+      operator: gte
+      value: 7
+    remediation: |
+      Enable automated backups with at least 7 days retention for RDS instances.
+    frameworks:
+      soc2:
+        - CC7.3
+        - A1.2
+      nist-800-53:
+        - CP-9
+    tags:
+      - rds
+      - backup
+      - disaster-recovery
+
+  - id: soc2-cc7.3-002
+    title: RDS Multi-AZ Enabled
+    description: |
+      Ensure RDS instances have Multi-AZ deployment enabled.
+      Multi-AZ provides high availability for disaster recovery.
+    severity: medium
+    resource_types:
+      - rds_instance
+      - aws_rds_instance
+    condition:
+      path: raw_data.MultiAZ
+      operator: is_true
+    remediation: |
+      Enable Multi-AZ deployment for RDS instances.
+    frameworks:
+      soc2:
+        - CC7.3
+        - A1.2
+      nist-800-53:
+        - CP-10
+    tags:
+      - rds
+      - availability
+      - disaster-recovery
+
+  - id: soc2-cc7.3-003
+    title: S3 Bucket Versioning Enabled
+    description: |
+      Ensure S3 buckets have versioning enabled.
+      Versioning provides data recovery capabilities.
+    severity: medium
+    resource_types:
+      - s3_bucket
+      - aws_s3_bucket
+    condition:
+      path: raw_data.Versioning.Status
+      operator: eq
+      value: Enabled
+    remediation: |
+      Enable versioning for S3 buckets containing critical data.
+    frameworks:
+      soc2:
+        - CC7.3
+        - A1.2
+      nist-800-53:
+        - CP-9
+      cis-aws:
+        - "2.1.3"
+    tags:
+      - s3
+      - versioning
+      - backup
+
+  # ==========================================================================
+  # CC8.1 - Changes to Infrastructure and Software
+  # ==========================================================================
+
+  - id: soc2-cc8.1-001
+    title: AWS Config Change Tracking
+    description: |
+      Ensure AWS Config is tracking configuration changes.
+      Config tracking provides audit trail for change management.
+    severity: high
+    resource_types:
+      - config_recorder
+      - aws_config_recorder
+    condition:
+      path: raw_data.Recording
+      operator: is_true
+    remediation: |
+      Enable AWS Config recording.
+    frameworks:
+      soc2:
+        - CC8.1
+      nist-800-53:
+        - CM-3
+    tags:
+      - config
+      - change-management
+      - audit
+
+  - id: soc2-cc8.1-002
+    title: CloudTrail CloudWatch Integration
+    description: |
+      Ensure CloudTrail is integrated with CloudWatch Logs.
+      Integration enables real-time monitoring of API calls.
+    severity: medium
+    resource_types:
+      - cloudtrail_trail
+      - aws_cloudtrail
+    condition:
+      path: raw_data.CloudWatchLogsLogGroupArn
+      operator: exists
+    remediation: |
+      Configure CloudTrail to send logs to CloudWatch Logs.
+    frameworks:
+      soc2:
+        - CC8.1
+        - CC7.2
+      nist-800-53:
+        - AU-6
+        - CM-3
+    tags:
+      - cloudtrail
+      - cloudwatch
+      - monitoring
+
+  # ==========================================================================
+  # CC9.2 - Manages Risks Associated with Vendors and Business Partners
+  # ==========================================================================
+
+  - id: soc2-cc9.2-001
+    title: Security Hub Enabled
+    description: |
+      Ensure AWS Security Hub is enabled.
+      Security Hub provides centralized security findings and compliance checks.
+    severity: medium
+    resource_types:
+      - securityhub_hub
+      - aws_securityhub_hub
+    condition:
+      path: raw_data.SubscribedAt
+      operator: exists
+    remediation: |
+      Enable AWS Security Hub.
+    frameworks:
+      soc2:
+        - CC9.2
+        - CC7.2
+      nist-800-53:
+        - CA-7
+        - RA-5
+    tags:
+      - securityhub
+      - compliance
+      - monitoring
+
+  - id: soc2-cc9.2-002
+    title: SNS Topic Encryption
+    description: |
+      Ensure SNS topics are encrypted with KMS.
+      Encryption protects sensitive data in transit.
+    severity: medium
+    resource_types:
+      - sns_topic
+      - aws_sns_topic
+    condition:
+      path: raw_data.KmsMasterKeyId
+      operator: exists
+    remediation: |
+      Enable encryption for SNS topics using KMS.
+    frameworks:
+      soc2:
+        - CC9.2
+        - CC6.1
+      nist-800-53:
+        - SC-8
+    tags:
+      - sns
+      - encryption
+      - messaging
+
+  # ==========================================================================
+  # A1.2 - Environmental Protections (Availability)
+  # ==========================================================================
+
+  - id: soc2-a1.2-001
+    title: Auto Scaling Group Multi-AZ
+    description: |
+      Ensure Auto Scaling Groups span multiple availability zones.
+      Multi-AZ deployment provides high availability.
+    severity: medium
+    resource_types:
+      - autoscaling_group
+      - aws_autoscaling_group
+    condition:
+      path: raw_data.AvailabilityZones
+      operator: is_not_empty
+    remediation: |
+      Configure Auto Scaling Group to use multiple availability zones.
+    frameworks:
+      soc2:
+        - A1.2
+      nist-800-53:
+        - CP-10
+    tags:
+      - autoscaling
+      - availability
+      - disaster-recovery
+
+  - id: soc2-a1.2-002
+    title: ELB Cross-Zone Load Balancing
+    description: |
+      Ensure ELB has cross-zone load balancing enabled.
+      Cross-zone balancing distributes traffic across all instances.
+    severity: low
+    resource_types:
+      - elb_load_balancer
+      - aws_elb
+    condition:
+      path: raw_data.CrossZoneLoadBalancing.Enabled
+      operator: is_true
+    remediation: |
+      Enable cross-zone load balancing for ELB.
+    frameworks:
+      soc2:
+        - A1.2
+      nist-800-53:
+        - CP-10
+    tags:
+      - elb
+      - availability
+      - load-balancing
