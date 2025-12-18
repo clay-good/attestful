@@ -1,0 +1,519 @@
+id: cis-azure-foundations
+name: CIS Microsoft Azure Foundations Benchmark
+version: "2.0.0"
+description: |
+  The CIS Microsoft Azure Foundations Benchmark provides prescriptive guidance for
+  establishing a secure baseline configuration for Microsoft Azure. This benchmark
+  covers foundational security principles for Azure services with an emphasis on
+  testable and architecture-agnostic settings.
+
+metadata:
+  framework: CIS
+  category: Cloud Security
+  provider: Azure
+  last_updated: "2024-01-15"
+  compliance_frameworks:
+    - CIS
+    - NIST
+    - ISO 27001
+
+checks:
+  # 1. Identity and Access Management
+  - id: cis-azure-1.1
+    name: Ensure that multi-factor authentication is enabled for all privileged users
+    description: |
+      Multi-factor authentication (MFA) requires an individual to present a minimum of two
+      separate forms of authentication before access is granted. MFA provides additional
+      assurance that the individual attempting to gain access is who they claim to be.
+    severity: critical
+    resource_types:
+      - azure_ad_user
+    condition: |
+      resource.get('type') == 'azure_ad_user' and
+      resource.get('is_privileged', False) == True and
+      resource.get('mfa_enabled', False) == True
+    remediation: |
+      1. Sign in to the Azure portal as a Global Administrator
+      2. Navigate to Azure Active Directory > Users
+      3. Select Multi-Factor Authentication
+      4. Select the users and enable MFA
+      5. Configure MFA settings and trusted IPs if needed
+    references:
+      - https://docs.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-getstarted
+      - https://www.cisecurity.org/benchmark/azure
+    metadata:
+      cis_control: "1.1"
+      cis_level: 1
+      compliance_frameworks:
+        - CIS
+        - NIST 800-53
+
+  - id: cis-azure-1.2
+    name: Ensure that multi-factor authentication is enabled for all non-privileged users
+    description: |
+      Enable MFA for all non-privileged users to add an extra layer of security.
+      This helps prevent unauthorized access even if credentials are compromised.
+    severity: high
+    resource_types:
+      - azure_ad_user
+    condition: |
+      resource.get('type') == 'azure_ad_user' and
+      resource.get('is_privileged', False) == False and
+      resource.get('mfa_enabled', False) == True
+    remediation: |
+      1. Sign in to the Azure portal
+      2. Navigate to Azure Active Directory > Users
+      3. Select Multi-Factor Authentication
+      4. Enable MFA for non-privileged users
+    references:
+      - https://docs.microsoft.com/en-us/azure/active-directory/authentication/concept-mfa-howitworks
+    metadata:
+      cis_control: "1.2"
+      cis_level: 2
+
+  - id: cis-azure-1.3
+    name: Ensure that there are no guest users
+    description: |
+      Guest users are typically external users who have been granted access to Azure resources.
+      Review and remove unnecessary guest users to minimize the attack surface.
+    severity: medium
+    resource_types:
+      - azure_ad_user
+    condition: |
+      resource.get('type') == 'azure_ad_user' and
+      resource.get('user_type', '') != 'Guest'
+    remediation: |
+      1. Review all guest users in Azure AD
+      2. Remove guest users that are no longer needed
+      3. Implement a guest user review process
+    references:
+      - https://docs.microsoft.com/en-us/azure/active-directory/external-identities/what-is-b2b
+    metadata:
+      cis_control: "1.3"
+      cis_level: 1
+
+  # 2. Security Center
+  - id: cis-azure-2.1
+    name: Ensure that Azure Defender is set to On for Servers
+    description: |
+      Azure Defender for servers provides threat detection and advanced defenses for
+      Windows and Linux machines. Enabling this helps protect against threats and vulnerabilities.
+    severity: high
+    resource_types:
+      - azure_security_center_subscription
+    condition: |
+      resource.get('type') == 'azure_security_center_subscription' and
+      resource.get('pricing_tier', {}).get('VirtualMachines', '') == 'Standard'
+    remediation: |
+      1. Navigate to Azure Security Center
+      2. Select Pricing & settings
+      3. Select the subscription
+      4. Set Azure Defender for servers to On
+    references:
+      - https://docs.microsoft.com/en-us/azure/security-center/defender-for-servers-introduction
+    metadata:
+      cis_control: "2.1"
+      cis_level: 2
+
+  # 3. Storage Accounts
+  - id: cis-azure-3.1
+    name: Ensure that 'Secure transfer required' is set to 'Enabled'
+    description: |
+      The secure transfer option enhances the security of a storage account by only allowing
+      requests to the storage account by a secure connection (HTTPS/SMB 3.0).
+    severity: high
+    resource_types:
+      - azure_storage_account
+    condition: |
+      resource.get('type') == 'azure_storage_account' and
+      resource.get('properties', {}).get('supportsHttpsTrafficOnly', False) == True
+    remediation: |
+      1. Navigate to Storage Accounts
+      2. Select the storage account
+      3. Under Settings, select Configuration
+      4. Set 'Secure transfer required' to Enabled
+    references:
+      - https://docs.microsoft.com/en-us/azure/storage/common/storage-require-secure-transfer
+    metadata:
+      cis_control: "3.1"
+      cis_level: 1
+
+  - id: cis-azure-3.2
+    name: Ensure that storage account access keys are periodically regenerated
+    description: |
+      Regenerating access keys periodically helps prevent unauthorized access to storage
+      accounts if keys are compromised.
+    severity: medium
+    resource_types:
+      - azure_storage_account
+    condition: |
+      resource.get('type') == 'azure_storage_account' and
+      resource.get('key_rotation_enabled', False) == True
+    remediation: |
+      1. Navigate to Storage Accounts
+      2. Select the storage account
+      3. Under Security + networking, select Access keys
+      4. Regenerate keys periodically (recommended: every 90 days)
+    references:
+      - https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage
+    metadata:
+      cis_control: "3.2"
+      cis_level: 1
+
+  - id: cis-azure-3.3
+    name: Ensure Storage logging is enabled for Queue service
+    description: |
+      Storage Analytics logs detailed information about successful and failed requests
+      to the Queue service. This information can be used to monitor individual requests
+      and diagnose issues.
+    severity: medium
+    resource_types:
+      - azure_storage_account
+    condition: |
+      resource.get('type') == 'azure_storage_account' and
+      resource.get('queue_logging_enabled', False) == True
+    remediation: |
+      1. Navigate to Storage Accounts
+      2. Select the storage account
+      3. Under Monitoring, select Diagnostic settings
+      4. Enable logging for Queue service
+    references:
+      - https://docs.microsoft.com/en-us/azure/storage/common/storage-analytics-logging
+    metadata:
+      cis_control: "3.3"
+      cis_level: 2
+
+  - id: cis-azure-3.4
+    name: Ensure that storage account encryption is enabled
+    description: |
+      Azure Storage Service Encryption (SSE) automatically encrypts data before persisting
+      it to Azure Managed Disks, Azure Blob storage, Azure Files, or Azure Queue storage,
+      and decrypts the data before retrieval.
+    severity: high
+    resource_types:
+      - azure_storage_account
+    condition: |
+      resource.get('type') == 'azure_storage_account' and
+      resource.get('properties', {}).get('encryption', {}).get('services', {}).get('blob', {}).get('enabled', False) == True
+    remediation: |
+      1. Navigate to Storage Accounts
+      2. Select the storage account
+      3. Under Security + networking, select Encryption
+      4. Ensure encryption is enabled for all services
+    references:
+      - https://docs.microsoft.com/en-us/azure/storage/common/storage-service-encryption
+    metadata:
+      cis_control: "3.4"
+      cis_level: 1
+
+  # 4. Database Services
+  - id: cis-azure-4.1
+    name: Ensure that 'Auditing' is set to 'On' for SQL servers
+    description: |
+      Enable auditing on SQL servers to track database events and write them to an audit log.
+      This helps with compliance and security investigations.
+    severity: high
+    resource_types:
+      - azure_sql_server
+    condition: |
+      resource.get('type') == 'azure_sql_server' and
+      resource.get('auditing_enabled', False) == True
+    remediation: |
+      1. Navigate to SQL servers
+      2. Select the SQL server
+      3. Under Security, select Auditing
+      4. Set Auditing to ON
+      5. Configure storage destination
+    references:
+      - https://docs.microsoft.com/en-us/azure/azure-sql/database/auditing-overview
+    metadata:
+      cis_control: "4.1"
+      cis_level: 1
+
+  - id: cis-azure-4.2
+    name: Ensure that Azure Active Directory Admin is configured for SQL servers
+    description: |
+      Use Azure Active Directory authentication for SQL servers to enable centralized
+      identity management and eliminate the need for SQL authentication.
+    severity: high
+    resource_types:
+      - azure_sql_server
+    condition: |
+      resource.get('type') == 'azure_sql_server' and
+      resource.get('aad_admin_configured', False) == True
+    remediation: |
+      1. Navigate to SQL servers
+      2. Select the SQL server
+      3. Under Settings, select Active Directory admin
+      4. Set an Azure AD admin
+    references:
+      - https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-configure
+    metadata:
+      cis_control: "4.2"
+      cis_level: 1
+
+  - id: cis-azure-4.3
+    name: Ensure that 'Transparent Data Encryption' is set to 'On' for SQL databases
+    description: |
+      Transparent Data Encryption (TDE) helps protect against malicious activity by
+      performing real-time encryption and decryption of the database, backups, and
+      transaction log files at rest.
+    severity: high
+    resource_types:
+      - azure_sql_database
+    condition: |
+      resource.get('type') == 'azure_sql_database' and
+      resource.get('transparent_data_encryption_enabled', False) == True
+    remediation: |
+      1. Navigate to SQL databases
+      2. Select the database
+      3. Under Security, select Transparent data encryption
+      4. Set Data encryption to ON
+    references:
+      - https://docs.microsoft.com/en-us/azure/azure-sql/database/transparent-data-encryption-tde-overview
+    metadata:
+      cis_control: "4.3"
+      cis_level: 1
+
+  # 5. Logging and Monitoring
+  - id: cis-azure-5.1
+    name: Ensure that a 'Diagnostic Setting' exists for all resources
+    description: |
+      Diagnostic settings enable you to stream or send logs and metrics from Azure resources
+      to different destinations for analysis and archival.
+    severity: medium
+    resource_types:
+      - azure_resource
+    condition: |
+      resource.get('diagnostic_settings_enabled', False) == True
+    remediation: |
+      1. Navigate to the resource
+      2. Under Monitoring, select Diagnostic settings
+      3. Add diagnostic setting
+      4. Configure log categories and destination
+    references:
+      - https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/diagnostic-settings
+    metadata:
+      cis_control: "5.1"
+      cis_level: 2
+
+  - id: cis-azure-5.2
+    name: Ensure Activity Log Retention is set to 365 days or greater
+    description: |
+      Activity logs provide insight into operations performed on resources. Retaining logs
+      for at least 365 days ensures compliance and forensic analysis capabilities.
+    severity: medium
+    resource_types:
+      - azure_log_profile
+    condition: |
+      resource.get('type') == 'azure_log_profile' and
+      resource.get('retention_days', 0) >= 365
+    remediation: |
+      1. Navigate to Azure Monitor
+      2. Select Activity log
+      3. Select Export Activity Logs
+      4. Set retention to 365 days or greater
+    references:
+      - https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log
+    metadata:
+      cis_control: "5.2"
+      cis_level: 1
+
+  # 6. Networking
+  - id: cis-azure-6.1
+    name: Ensure that RDP access is restricted from the Internet
+    description: |
+      Restricting RDP (port 3389) access from the Internet reduces the attack surface
+      and prevents brute force attacks on Windows virtual machines.
+    severity: critical
+    resource_types:
+      - azure_network_security_group
+    condition: |
+      not any(
+        rule.get('direction') == 'Inbound' and
+        rule.get('access') == 'Allow' and
+        rule.get('protocol') in ['*', 'TCP'] and
+        rule.get('destination_port_range') in ['*', '3389', '3389-3389'] and
+        rule.get('source_address_prefix') in ['*', 'Internet', '0.0.0.0/0']
+        for rule in resource.get('security_rules', [])
+      )
+    remediation: |
+      1. Navigate to Network Security Groups
+      2. Select the NSG
+      3. Under Settings, select Inbound security rules
+      4. Remove or modify rules allowing RDP from Internet
+      5. Use Azure Bastion or VPN for remote access
+    references:
+      - https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview
+    metadata:
+      cis_control: "6.1"
+      cis_level: 1
+
+  - id: cis-azure-6.2
+    name: Ensure that SSH access is restricted from the Internet
+    description: |
+      Restricting SSH (port 22) access from the Internet reduces the attack surface
+      and prevents brute force attacks on Linux virtual machines.
+    severity: critical
+    resource_types:
+      - azure_network_security_group
+    condition: |
+      not any(
+        rule.get('direction') == 'Inbound' and
+        rule.get('access') == 'Allow' and
+        rule.get('protocol') in ['*', 'TCP'] and
+        rule.get('destination_port_range') in ['*', '22', '22-22'] and
+        rule.get('source_address_prefix') in ['*', 'Internet', '0.0.0.0/0']
+        for rule in resource.get('security_rules', [])
+      )
+    remediation: |
+      1. Navigate to Network Security Groups
+      2. Select the NSG
+      3. Under Settings, select Inbound security rules
+      4. Remove or modify rules allowing SSH from Internet
+      5. Use Azure Bastion or VPN for remote access
+    references:
+      - https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview
+    metadata:
+      cis_control: "6.2"
+      cis_level: 1
+
+  - id: cis-azure-6.3
+    name: Ensure that Network Security Group Flow Logs are enabled
+    description: |
+      NSG flow logs provide visibility into ingress and egress IP traffic through NSGs.
+      This helps with security analysis, compliance, and troubleshooting.
+    severity: medium
+    resource_types:
+      - azure_network_security_group
+    condition: |
+      resource.get('type') == 'azure_network_security_group' and
+      resource.get('flow_logs_enabled', False) == True
+    remediation: |
+      1. Navigate to Network Watcher
+      2. Select NSG flow logs
+      3. Select the NSG
+      4. Enable flow logs
+      5. Configure storage account and retention
+    references:
+      - https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-logging-overview
+    metadata:
+      cis_control: "6.3"
+      cis_level: 2
+
+  # 7. Virtual Machines
+  - id: cis-azure-7.1
+    name: Ensure that OS disk encryption is enabled for Virtual Machines
+    description: |
+      Azure Disk Encryption helps protect and safeguard data to meet organizational
+      security and compliance commitments. It uses BitLocker (Windows) or DM-Crypt (Linux).
+    severity: high
+    resource_types:
+      - azure_virtual_machine
+    condition: |
+      resource.get('type') == 'azure_virtual_machine' and
+      resource.get('os_disk_encryption_enabled', False) == True
+    remediation: |
+      1. Navigate to Virtual machines
+      2. Select the VM
+      3. Under Settings, select Disks
+      4. Enable Azure Disk Encryption
+      5. Configure Key Vault for encryption keys
+    references:
+      - https://docs.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview
+    metadata:
+      cis_control: "7.1"
+      cis_level: 1
+
+  - id: cis-azure-7.2
+    name: Ensure that Virtual Machines are backed up
+    description: |
+      Regular backups of virtual machines ensure business continuity and disaster recovery
+      capabilities. Azure Backup provides a simple, secure, and cost-effective solution.
+    severity: medium
+    resource_types:
+      - azure_virtual_machine
+    condition: |
+      resource.get('type') == 'azure_virtual_machine' and
+      resource.get('backup_enabled', False) == True
+    remediation: |
+      1. Navigate to Virtual machines
+      2. Select the VM
+      3. Under Operations, select Backup
+      4. Configure backup policy
+      5. Enable backup
+    references:
+      - https://docs.microsoft.com/en-us/azure/backup/backup-azure-vms-introduction
+    metadata:
+      cis_control: "7.2"
+      cis_level: 2
+
+  # 8. Key Vault
+  - id: cis-azure-8.1
+    name: Ensure that the expiration date is set on all keys
+    description: |
+      Setting an expiration date on keys ensures that keys are rotated regularly,
+      reducing the risk of key compromise.
+    severity: medium
+    resource_types:
+      - azure_key_vault
+    condition: |
+      resource.get('type') == 'azure_key_vault' and
+      all(key.get('expiration_date') is not None for key in resource.get('keys', []))
+    remediation: |
+      1. Navigate to Key Vaults
+      2. Select the Key Vault
+      3. Under Settings, select Keys
+      4. For each key, set an expiration date
+    references:
+      - https://docs.microsoft.com/en-us/azure/key-vault/keys/about-keys
+    metadata:
+      cis_control: "8.1"
+      cis_level: 1
+
+  - id: cis-azure-8.2
+    name: Ensure that the expiration date is set on all secrets
+    description: |
+      Setting an expiration date on secrets ensures that secrets are rotated regularly,
+      reducing the risk of secret compromise.
+    severity: medium
+    resource_types:
+      - azure_key_vault
+    condition: |
+      resource.get('type') == 'azure_key_vault' and
+      all(secret.get('expiration_date') is not None for secret in resource.get('secrets', []))
+    remediation: |
+      1. Navigate to Key Vaults
+      2. Select the Key Vault
+      3. Under Settings, select Secrets
+      4. For each secret, set an expiration date
+    references:
+      - https://docs.microsoft.com/en-us/azure/key-vault/secrets/about-secrets
+    metadata:
+      cis_control: "8.2"
+      cis_level: 1
+
+  - id: cis-azure-8.3
+    name: Ensure that Key Vault is recoverable
+    description: |
+      Enabling soft delete and purge protection on Key Vault ensures that deleted vaults
+      and objects can be recovered, preventing accidental or malicious deletion.
+    severity: high
+    resource_types:
+      - azure_key_vault
+    condition: |
+      resource.get('type') == 'azure_key_vault' and
+      resource.get('properties', {}).get('enableSoftDelete', False) == True and
+      resource.get('properties', {}).get('enablePurgeProtection', False) == True
+    remediation: |
+      1. Navigate to Key Vaults
+      2. Select the Key Vault
+      3. Under Settings, select Properties
+      4. Enable Soft Delete
+      5. Enable Purge Protection
+    references:
+      - https://docs.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview
+    metadata:
+      cis_control: "8.3"
+      cis_level: 1
+

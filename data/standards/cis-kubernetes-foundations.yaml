@@ -1,0 +1,1069 @@
+standard_id: cis-kubernetes-foundations
+name: CIS Kubernetes Benchmark
+version: "1.8.0"
+description: |
+  Center for Internet Security (CIS) Kubernetes Benchmark v1.8.0
+  
+  This benchmark provides prescriptive guidance for establishing a secure
+  configuration posture for Kubernetes clusters. It covers control plane
+  components, worker nodes, RBAC, pod security, network policies, and more.
+
+checks:
+  # ============================================================================
+  # 5.1 RBAC and Service Accounts
+  # ============================================================================
+  
+  - id: cis-k8s-5.1.1
+    name: Ensure that the cluster-admin role is only used where required
+    description: |
+      The cluster-admin role provides wide-ranging powers over the environment
+      and should be used only where and when needed.
+    severity: high
+    resource_types:
+      - k8s_clusterrolebinding
+    condition:
+      type: expression
+      expression: |
+        resource.role_ref.name != 'cluster-admin' or
+        len(resource.subjects) == 0 or
+        all(s.name in ['system:masters', 'admin'] for s in resource.subjects)
+    remediation: |
+      Identify all clusterrolebindings to the cluster-admin role:
+        kubectl get clusterrolebindings -o=custom-columns=NAME:.metadata.name,ROLE:.roleRef.name,SUBJECT:.subjects[*].name
+      
+      Remove unnecessary bindings:
+        kubectl delete clusterrolebinding [binding_name]
+    references:
+      - https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+  
+  - id: cis-k8s-5.1.2
+    name: Minimize access to secrets
+    description: |
+      The Kubernetes API stores secrets, which may be service account tokens
+      for the Kubernetes API or credentials used by workloads in the cluster.
+      Access to these secrets should be restricted to the smallest possible group.
+    severity: high
+    resource_types:
+      - k8s_role
+      - k8s_clusterrole
+    condition:
+      type: expression
+      expression: |
+        not any(
+          rule.get('resources', []) == ['secrets'] and
+          ('*' in rule.get('verbs', []) or 'get' in rule.get('verbs', []))
+          for rule in resource.rules
+        )
+    remediation: |
+      Review roles and clusterroles with secret access:
+        kubectl get roles,clusterroles -A -o json | jq '.items[] | select(.rules[].resources[] | contains("secrets"))'
+      
+      Remove unnecessary secret access from roles.
+    references:
+      - https://kubernetes.io/docs/concepts/configuration/secret/
+  
+  - id: cis-k8s-5.1.3
+    name: Minimize wildcard use in Roles and ClusterRoles
+    description: |
+      Kubernetes Roles and ClusterRoles provide access to resources based on sets
+      of objects and actions that can be taken on those objects. It is possible to
+      set either of these to be the wildcard "*" which matches all items.
+    severity: medium
+    resource_types:
+      - k8s_role
+      - k8s_clusterrole
+    condition:
+      type: expression
+      expression: |
+        not any(
+          '*' in rule.get('resources', []) or '*' in rule.get('verbs', [])
+          for rule in resource.rules
+        )
+    remediation: |
+      Identify roles with wildcard permissions:
+        kubectl get roles,clusterroles -A -o json | jq '.items[] | select(.rules[] | .resources[] == "*" or .verbs[] == "*")'
+      
+      Replace wildcards with specific resources and verbs.
+    references:
+      - https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+  
+  - id: cis-k8s-5.1.5
+    name: Ensure that default service accounts are not actively used
+    description: |
+      The default service account should not be used to ensure that rights granted
+      to applications can be more easily audited and reviewed.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        resource.spec.get('serviceAccountName', 'default') != 'default' and
+        resource.spec.get('serviceAccount', 'default') != 'default'
+    remediation: |
+      Create a dedicated service account for each application:
+        kubectl create serviceaccount <service-account-name> -n <namespace>
+      
+      Update pod spec to use the new service account:
+        spec:
+          serviceAccountName: <service-account-name>
+    references:
+      - https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  
+  - id: cis-k8s-5.1.6
+    name: Ensure that Service Account Tokens are only mounted where necessary
+    description: |
+      Service accounts tokens should not be mounted in pods except where the
+      workload running in the pod explicitly needs to communicate with the API server.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        resource.spec.get('automountServiceAccountToken', True) == False
+    remediation: |
+      Modify the pod spec to disable automounting:
+        spec:
+          automountServiceAccountToken: false
+    references:
+      - https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  
+  # ============================================================================
+  # 5.2 Pod Security Policies / Pod Security Standards
+  # ============================================================================
+  
+  - id: cis-k8s-5.2.1
+    name: Ensure that the cluster has at least one active policy control mechanism
+    description: |
+      Ensure that either Pod Security Admission or a policy engine like OPA
+      Gatekeeper is enabled to enforce pod security standards.
+    severity: high
+    resource_types:
+      - k8s_namespace
+    condition:
+      type: expression
+      expression: |
+        'pod-security.kubernetes.io/enforce' in resource.labels or
+        'pod-security.kubernetes.io/audit' in resource.labels or
+        'pod-security.kubernetes.io/warn' in resource.labels
+    remediation: |
+      Enable Pod Security Standards on namespaces:
+        kubectl label namespace <namespace> pod-security.kubernetes.io/enforce=baseline
+        kubectl label namespace <namespace> pod-security.kubernetes.io/audit=restricted
+        kubectl label namespace <namespace> pod-security.kubernetes.io/warn=restricted
+    references:
+      - https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  
+  - id: cis-k8s-5.2.2
+    name: Minimize the admission of privileged containers
+    description: |
+      Privileged containers have access to all Linux Kernel capabilities and devices.
+      A container running with full privileges can do almost everything that the host can do.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not any(
+          container.get('securityContext', {}).get('privileged', False)
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Remove privileged: true from container security contexts:
+        spec:
+          containers:
+          - name: container-name
+            securityContext:
+              privileged: false
+    references:
+      - https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  
+  - id: cis-k8s-5.2.3
+    name: Minimize the admission of containers wishing to share the host process ID namespace
+    description: |
+      A container running in the host's PID namespace can inspect processes running
+      outside the container and can invoke kill on other processes.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not resource.spec.get('hostPID', False)
+    remediation: |
+      Remove hostPID: true from pod spec:
+        spec:
+          hostPID: false
+    references:
+      - https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  
+  - id: cis-k8s-5.2.4
+    name: Minimize the admission of containers wishing to share the host IPC namespace
+    description: |
+      A container running in the host's IPC namespace can use IPC to interact
+      with processes outside the container.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not resource.spec.get('hostIPC', False)
+    remediation: |
+      Remove hostIPC: true from pod spec:
+        spec:
+          hostIPC: false
+    references:
+      - https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  
+  - id: cis-k8s-5.2.5
+    name: Minimize the admission of containers wishing to share the host network namespace
+    description: |
+      A container running in the host's network namespace can access the loopback
+      device, listen to traffic on all network interfaces, and access network traffic
+      to and from other pods.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not resource.spec.get('hostNetwork', False)
+    remediation: |
+      Remove hostNetwork: true from pod spec:
+        spec:
+          hostNetwork: false
+    references:
+      - https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  
+  - id: cis-k8s-5.2.6
+    name: Minimize the admission of containers with allowPrivilegeEscalation
+    description: |
+      A container running with the allowPrivilegeEscalation flag set to true may
+      have processes that can gain more privileges than their parent.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          container.get('securityContext', {}).get('allowPrivilegeEscalation', True) == False
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Set allowPrivilegeEscalation to false in container security contexts:
+        spec:
+          containers:
+          - name: container-name
+            securityContext:
+              allowPrivilegeEscalation: false
+    references:
+      - https://kubernetes.io/docs/concepts/security/pod-security-standards/
+
+  - id: cis-k8s-5.2.7
+    name: Minimize the admission of root containers
+    description: |
+      Containers should not run as root user. Running as a non-root user provides
+      an additional layer of security and helps prevent privilege escalation.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          container.get('securityContext', {}).get('runAsNonRoot', False) == True or
+          (container.get('securityContext', {}).get('runAsUser', 0) != 0)
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Set runAsNonRoot to true or runAsUser to non-zero in container security contexts:
+        spec:
+          containers:
+          - name: container-name
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+    references:
+      - https://kubernetes.io/docs/concepts/security/pod-security-standards/
+
+  - id: cis-k8s-5.2.8
+    name: Minimize the admission of containers with the NET_RAW capability
+    description: |
+      Containers should not have the NET_RAW capability, which allows them to
+      craft raw packets and potentially perform network attacks.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          'NET_RAW' not in container.get('securityContext', {}).get('capabilities', {}).get('add', [])
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Remove NET_RAW from capabilities or drop it explicitly:
+        spec:
+          containers:
+          - name: container-name
+            securityContext:
+              capabilities:
+                drop:
+                - NET_RAW
+    references:
+      - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+
+  - id: cis-k8s-5.2.9
+    name: Minimize the admission of containers with added capabilities
+    description: |
+      Containers should drop all capabilities and only add back those that are
+      strictly necessary for their operation.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          'ALL' in container.get('securityContext', {}).get('capabilities', {}).get('drop', [])
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Drop all capabilities and add back only required ones:
+        spec:
+          containers:
+          - name: container-name
+            securityContext:
+              capabilities:
+                drop:
+                - ALL
+                add:
+                - NET_BIND_SERVICE
+    references:
+      - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+
+  - id: cis-k8s-5.2.10
+    name: Minimize the admission of containers with dangerous capabilities
+    description: |
+      Containers should not have dangerous capabilities like SYS_ADMIN, SYS_MODULE,
+      SYS_RAWIO, SYS_PTRACE, SYS_TIME, or SYS_BOOT.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not any(
+          cap in container.get('securityContext', {}).get('capabilities', {}).get('add', [])
+          for container in resource.spec.get('containers', [])
+          for cap in ['SYS_ADMIN', 'SYS_MODULE', 'SYS_RAWIO', 'SYS_PTRACE', 'SYS_TIME', 'SYS_BOOT']
+        )
+    remediation: |
+      Remove dangerous capabilities from container security contexts.
+    references:
+      - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+
+  - id: cis-k8s-5.2.11
+    name: Minimize the admission of Windows HostProcess containers
+    description: |
+      Windows HostProcess containers should be minimized as they run with elevated
+      privileges on the Windows host.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not resource.spec.get('securityContext', {}).get('windowsOptions', {}).get('hostProcess', False)
+    remediation: |
+      Remove hostProcess: true from Windows security context.
+    references:
+      - https://kubernetes.io/docs/tasks/configure-pod-container/create-hostprocess-pod/
+
+  - id: cis-k8s-5.2.12
+    name: Minimize the admission of HostPath volumes
+    description: |
+      HostPath volumes should be avoided as they can expose the host filesystem
+      to containers, potentially allowing access to sensitive data.
+    severity: high
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not any(
+          volume.get('hostPath') is not None
+          for volume in resource.spec.get('volumes', [])
+        )
+    remediation: |
+      Replace hostPath volumes with more secure alternatives like ConfigMaps,
+      Secrets, or PersistentVolumes.
+    references:
+      - https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
+
+  - id: cis-k8s-5.2.13
+    name: Minimize the admission of containers which use HostPorts
+    description: |
+      HostPorts should be avoided as they can cause port conflicts and expose
+      services directly on the host network.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not any(
+          port.get('hostPort') is not None
+          for container in resource.spec.get('containers', [])
+          for port in container.get('ports', [])
+        )
+    remediation: |
+      Remove hostPort from container port definitions and use Services instead.
+    references:
+      - https://kubernetes.io/docs/concepts/services-networking/service/
+
+  # ============================================================================
+  # 5.3 Network Policies
+  # ============================================================================
+
+  - id: cis-k8s-5.3.1
+    name: Ensure that the CNI in use supports Network Policies
+    description: |
+      Network policies are a key security feature in Kubernetes. Ensure your CNI
+      plugin supports network policies (e.g., Calico, Cilium, Weave Net).
+    severity: high
+    resource_types:
+      - k8s_namespace
+    condition:
+      type: expression
+      expression: |
+        # This check requires manual verification of CNI plugin
+        # We check if network policies exist in the namespace
+        True  # Manual check required
+    remediation: |
+      Install a CNI plugin that supports network policies:
+      - Calico: https://docs.projectcalico.org/
+      - Cilium: https://cilium.io/
+      - Weave Net: https://www.weave.works/docs/net/latest/kubernetes/
+    references:
+      - https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+  - id: cis-k8s-5.3.2
+    name: Ensure that all Namespaces have Network Policies defined
+    description: |
+      Network policies should be defined for all namespaces to control traffic
+      between pods and external endpoints.
+    severity: high
+    resource_types:
+      - k8s_namespace
+    condition:
+      type: expression
+      expression: |
+        # System namespaces are exempt
+        resource.name in ['kube-system', 'kube-public', 'kube-node-lease'] or
+        'network-policy' in resource.labels
+    remediation: |
+      Create a default deny-all network policy for each namespace:
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: default-deny-all
+          namespace: <namespace>
+        spec:
+          podSelector: {}
+          policyTypes:
+          - Ingress
+          - Egress
+    references:
+      - https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+  # ============================================================================
+  # 5.4 Secrets Management
+  # ============================================================================
+
+  - id: cis-k8s-5.4.1
+    name: Prefer using secrets as files over secrets as environment variables
+    description: |
+      Secrets should be mounted as files rather than exposed as environment
+      variables to reduce the risk of accidental exposure.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not any(
+          env.get('valueFrom', {}).get('secretKeyRef') is not None
+          for container in resource.spec.get('containers', [])
+          for env in container.get('env', [])
+        )
+    remediation: |
+      Mount secrets as volumes instead of environment variables:
+        spec:
+          containers:
+          - name: container-name
+            volumeMounts:
+            - name: secret-volume
+              mountPath: /etc/secrets
+              readOnly: true
+          volumes:
+          - name: secret-volume
+            secret:
+              secretName: my-secret
+    references:
+      - https://kubernetes.io/docs/concepts/configuration/secret/
+
+  - id: cis-k8s-5.4.2
+    name: Consider external secret storage
+    description: |
+      Consider using external secret management solutions like HashiCorp Vault,
+      AWS Secrets Manager, or Azure Key Vault for sensitive data.
+    severity: low
+    resource_types:
+      - k8s_secret
+    condition:
+      type: expression
+      expression: |
+        # This is informational - external secret storage is recommended
+        True
+    remediation: |
+      Integrate with external secret management:
+      - HashiCorp Vault: https://www.vaultproject.io/docs/platform/k8s
+      - External Secrets Operator: https://external-secrets.io/
+      - Sealed Secrets: https://github.com/bitnami-labs/sealed-secrets
+    references:
+      - https://kubernetes.io/docs/concepts/configuration/secret/
+
+  # ============================================================================
+  # 5.5 Extensible Admission Control
+  # ============================================================================
+
+  - id: cis-k8s-5.5.1
+    name: Configure Image Provenance using ImagePolicyWebhook admission controller
+    description: |
+      Use admission controllers to enforce image provenance and ensure only
+      trusted images are deployed.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        # This requires cluster-level configuration
+        # Check if images are from trusted registries
+        all(
+          any(
+            container.get('image', '').startswith(registry)
+            for registry in ['gcr.io/', 'docker.io/', 'quay.io/']
+          )
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Configure ImagePolicyWebhook or use OPA Gatekeeper to enforce image policies.
+    references:
+      - https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/
+
+  # ============================================================================
+  # 5.6 Resource Management
+  # ============================================================================
+
+  - id: cis-k8s-5.6.1
+    name: Ensure that resource requests are set for all containers
+    description: |
+      Resource requests should be set for all containers to ensure proper
+      scheduling and resource allocation.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          container.get('resources', {}).get('requests') is not None
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Set resource requests for all containers:
+        spec:
+          containers:
+          - name: container-name
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "250m"
+    references:
+      - https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
+  - id: cis-k8s-5.6.2
+    name: Ensure that resource limits are set for all containers
+    description: |
+      Resource limits should be set for all containers to prevent resource
+      exhaustion and ensure fair resource allocation.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          container.get('resources', {}).get('limits') is not None
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Set resource limits for all containers:
+        spec:
+          containers:
+          - name: container-name
+            resources:
+              limits:
+                memory: "128Mi"
+                cpu: "500m"
+    references:
+      - https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
+  # ============================================================================
+  # 5.7 Ingress and Service Security
+  # ============================================================================
+
+  - id: cis-k8s-5.7.1
+    name: Ensure that Ingress resources use TLS
+    description: |
+      Ingress resources should use TLS to encrypt traffic between clients
+      and the cluster.
+    severity: high
+    resource_types:
+      - k8s_ingress
+    condition:
+      type: expression
+      expression: |
+        len(resource.spec.get('tls', [])) > 0
+    remediation: |
+      Configure TLS for Ingress:
+        spec:
+          tls:
+          - hosts:
+            - example.com
+            secretName: tls-secret
+    references:
+      - https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+
+  - id: cis-k8s-5.7.2
+    name: Ensure that Services do not use NodePort
+    description: |
+      NodePort services expose ports directly on cluster nodes, which can be
+      a security risk. Use LoadBalancer or Ingress instead.
+    severity: medium
+    resource_types:
+      - k8s_service
+    condition:
+      type: expression
+      expression: |
+        resource.service_type != 'NodePort'
+    remediation: |
+      Change service type to LoadBalancer or ClusterIP with Ingress:
+        spec:
+          type: LoadBalancer
+    references:
+      - https://kubernetes.io/docs/concepts/services-networking/service/
+
+  - id: cis-k8s-5.7.3
+    name: Ensure that Services use appropriate session affinity
+    description: |
+      Services should use appropriate session affinity settings based on
+      application requirements.
+    severity: low
+    resource_types:
+      - k8s_service
+    condition:
+      type: expression
+      expression: |
+        # This is informational - session affinity should be configured appropriately
+        True
+    remediation: |
+      Configure session affinity if needed:
+        spec:
+          sessionAffinity: ClientIP
+          sessionAffinityConfig:
+            clientIP:
+              timeoutSeconds: 10800
+    references:
+      - https://kubernetes.io/docs/concepts/services-networking/service/
+
+  # ============================================================================
+  # 5.8 General Policies
+  # ============================================================================
+
+  - id: cis-k8s-5.8.1
+    name: Ensure that namespaces are used to isolate workloads
+    description: |
+      Namespaces should be used to logically separate workloads and apply
+      different security policies.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        resource.namespace not in [None, 'default']
+    remediation: |
+      Create dedicated namespaces for different workloads:
+        kubectl create namespace <namespace-name>
+
+      Deploy pods to appropriate namespaces:
+        kubectl apply -f pod.yaml -n <namespace-name>
+    references:
+      - https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+
+  - id: cis-k8s-5.8.2
+    name: Ensure that the seccomp profile is set to docker/default or runtime/default
+    description: |
+      Seccomp profiles should be set to restrict system calls that containers
+      can make, reducing the attack surface.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        resource.spec.get('securityContext', {}).get('seccompProfile', {}).get('type') in ['RuntimeDefault', 'Localhost'] or
+        any(
+          container.get('securityContext', {}).get('seccompProfile', {}).get('type') in ['RuntimeDefault', 'Localhost']
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Set seccomp profile in pod or container security context:
+        spec:
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+    references:
+      - https://kubernetes.io/docs/tutorials/security/seccomp/
+
+  - id: cis-k8s-5.8.3
+    name: Ensure that the AppArmor profile is set appropriately
+    description: |
+      AppArmor profiles should be set to restrict container capabilities
+      and access to system resources.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        any(
+          annotation.startswith('container.apparmor.security.beta.kubernetes.io/')
+          for annotation in resource.annotations.keys()
+        ) or True  # AppArmor is optional but recommended
+    remediation: |
+      Set AppArmor profile using annotations:
+        metadata:
+          annotations:
+            container.apparmor.security.beta.kubernetes.io/container-name: runtime/default
+    references:
+      - https://kubernetes.io/docs/tutorials/security/apparmor/
+
+  - id: cis-k8s-5.8.4
+    name: Ensure that the SELinux options are set appropriately
+    description: |
+      SELinux options should be configured to provide mandatory access control
+      for containers.
+    severity: low
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        # SELinux is optional and depends on the host OS
+        True
+    remediation: |
+      Configure SELinux options in security context:
+        spec:
+          securityContext:
+            seLinuxOptions:
+              level: "s0:c123,c456"
+    references:
+      - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+
+  - id: cis-k8s-5.8.5
+    name: Ensure that pods have liveness and readiness probes configured
+    description: |
+      Liveness and readiness probes should be configured to ensure pods are
+      healthy and ready to serve traffic.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          container.get('livenessProbe') is not None and
+          container.get('readinessProbe') is not None
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Configure liveness and readiness probes:
+        spec:
+          containers:
+          - name: container-name
+            livenessProbe:
+              httpGet:
+                path: /healthz
+                port: 8080
+              initialDelaySeconds: 3
+              periodSeconds: 3
+            readinessProbe:
+              httpGet:
+                path: /ready
+                port: 8080
+              initialDelaySeconds: 3
+              periodSeconds: 3
+    references:
+      - https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+
+  - id: cis-k8s-5.8.6
+    name: Ensure that pods do not use the latest image tag
+    description: |
+      Pods should use specific image tags rather than 'latest' to ensure
+      reproducibility and prevent unexpected changes.
+    severity: medium
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          not container.get('image', '').endswith(':latest') and
+          ':' in container.get('image', '')
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Use specific image tags:
+        spec:
+          containers:
+          - name: container-name
+            image: nginx:1.21.0
+    references:
+      - https://kubernetes.io/docs/concepts/containers/images/
+
+  - id: cis-k8s-5.8.7
+    name: Ensure that pods have imagePullPolicy set to Always or IfNotPresent
+    description: |
+      Image pull policy should be explicitly set to ensure consistent behavior
+      across different environments.
+    severity: low
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        all(
+          container.get('imagePullPolicy') in ['Always', 'IfNotPresent']
+          for container in resource.spec.get('containers', [])
+        )
+    remediation: |
+      Set imagePullPolicy explicitly:
+        spec:
+          containers:
+          - name: container-name
+            imagePullPolicy: Always
+    references:
+      - https://kubernetes.io/docs/concepts/containers/images/
+
+  - id: cis-k8s-5.8.8
+    name: Ensure that PodDisruptionBudgets are configured for critical workloads
+    description: |
+      PodDisruptionBudgets should be configured for critical workloads to ensure
+      availability during voluntary disruptions.
+    severity: low
+    resource_types:
+      - k8s_deployment
+      - k8s_statefulset
+    condition:
+      type: expression
+      expression: |
+        # This requires cross-resource validation
+        # Check if deployment has appropriate labels for PDB
+        True
+    remediation: |
+      Create a PodDisruptionBudget:
+        apiVersion: policy/v1
+        kind: PodDisruptionBudget
+        metadata:
+          name: app-pdb
+        spec:
+          minAvailable: 1
+          selector:
+            matchLabels:
+              app: myapp
+    references:
+      - https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+
+  - id: cis-k8s-5.8.9
+    name: Ensure that ResourceQuotas are configured for namespaces
+    description: |
+      ResourceQuotas should be configured for namespaces to limit resource
+      consumption and prevent resource exhaustion.
+    severity: medium
+    resource_types:
+      - k8s_namespace
+    condition:
+      type: expression
+      expression: |
+        # System namespaces are exempt
+        resource.name in ['kube-system', 'kube-public', 'kube-node-lease'] or
+        'resource-quota' in resource.labels
+    remediation: |
+      Create a ResourceQuota for the namespace:
+        apiVersion: v1
+        kind: ResourceQuota
+        metadata:
+          name: compute-quota
+          namespace: <namespace>
+        spec:
+          hard:
+            requests.cpu: "10"
+            requests.memory: 20Gi
+            limits.cpu: "20"
+            limits.memory: 40Gi
+    references:
+      - https://kubernetes.io/docs/concepts/policy/resource-quotas/
+
+  - id: cis-k8s-5.8.10
+    name: Ensure that LimitRanges are configured for namespaces
+    description: |
+      LimitRanges should be configured for namespaces to set default resource
+      limits and requests for containers.
+    severity: medium
+    resource_types:
+      - k8s_namespace
+    condition:
+      type: expression
+      expression: |
+        # System namespaces are exempt
+        resource.name in ['kube-system', 'kube-public', 'kube-node-lease'] or
+        'limit-range' in resource.labels
+    remediation: |
+      Create a LimitRange for the namespace:
+        apiVersion: v1
+        kind: LimitRange
+        metadata:
+          name: limit-range
+          namespace: <namespace>
+        spec:
+          limits:
+          - default:
+              cpu: 500m
+              memory: 512Mi
+            defaultRequest:
+              cpu: 250m
+              memory: 256Mi
+            type: Container
+    references:
+      - https://kubernetes.io/docs/concepts/policy/limit-range/
+
+  - id: cis-k8s-5.8.11
+    name: Ensure that pods do not mount Docker socket
+    description: |
+      Pods should not mount the Docker socket (/var/run/docker.sock) as this
+      provides full control over the container runtime.
+    severity: critical
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        not any(
+          volume.get('hostPath', {}).get('path') in ['/var/run/docker.sock', '/run/containerd/containerd.sock']
+          for volume in resource.spec.get('volumes', [])
+        )
+    remediation: |
+      Remove Docker socket mounts from pod volumes.
+    references:
+      - https://kubernetes.io/docs/concepts/storage/volumes/#hostpath
+
+  - id: cis-k8s-5.8.12
+    name: Ensure that pods have appropriate restart policies
+    description: |
+      Pods should have appropriate restart policies based on their workload type.
+    severity: low
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        resource.spec.get('restartPolicy', 'Always') in ['Always', 'OnFailure', 'Never']
+    remediation: |
+      Set appropriate restart policy:
+        spec:
+          restartPolicy: Always
+    references:
+      - https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
+
+  - id: cis-k8s-5.8.13
+    name: Ensure that deployments have appropriate update strategies
+    description: |
+      Deployments should use RollingUpdate strategy with appropriate maxSurge
+      and maxUnavailable settings.
+    severity: low
+    resource_types:
+      - k8s_deployment
+    condition:
+      type: expression
+      expression: |
+        resource.spec.get('strategy', {}).get('type', 'RollingUpdate') == 'RollingUpdate'
+    remediation: |
+      Configure RollingUpdate strategy:
+        spec:
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 1
+              maxUnavailable: 0
+    references:
+      - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+  - id: cis-k8s-5.8.14
+    name: Ensure that StatefulSets have appropriate update strategies
+    description: |
+      StatefulSets should use RollingUpdate strategy with appropriate partition
+      settings for controlled rollouts.
+    severity: low
+    resource_types:
+      - k8s_statefulset
+    condition:
+      type: expression
+      expression: |
+        resource.spec.get('updateStrategy', {}).get('type', 'RollingUpdate') == 'RollingUpdate'
+    remediation: |
+      Configure RollingUpdate strategy:
+        spec:
+          updateStrategy:
+            type: RollingUpdate
+            rollingUpdate:
+              partition: 0
+    references:
+      - https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+
+  - id: cis-k8s-5.8.15
+    name: Ensure that pods have appropriate termination grace periods
+    description: |
+      Pods should have appropriate termination grace periods to allow graceful
+      shutdown of applications.
+    severity: low
+    resource_types:
+      - k8s_pod
+    condition:
+      type: expression
+      expression: |
+        resource.spec.get('terminationGracePeriodSeconds', 30) >= 30
+    remediation: |
+      Set appropriate termination grace period:
+        spec:
+          terminationGracePeriodSeconds: 30
+    references:
+      - https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
+

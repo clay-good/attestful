@@ -1,0 +1,513 @@
+id: cis-gcp-foundations
+name: CIS Google Cloud Platform Foundations Benchmark
+version: "2.0.0"
+description: |
+  The CIS Google Cloud Platform Foundations Benchmark provides prescriptive guidance for
+  establishing a secure baseline configuration for Google Cloud Platform. This benchmark
+  covers foundational security principles for GCP services with an emphasis on
+  testable and architecture-agnostic settings.
+
+metadata:
+  framework: CIS
+  category: Cloud Security
+  provider: GCP
+  last_updated: "2024-01-15"
+  compliance_frameworks:
+    - CIS
+    - NIST
+    - ISO 27001
+
+checks:
+  # 1. Identity and Access Management
+  - id: cis-gcp-1.1
+    name: Ensure that corporate login credentials are used
+    description: |
+      Use corporate login credentials instead of Gmail accounts to access GCP resources.
+      This ensures centralized identity management and better security controls.
+    severity: high
+    resource_types:
+      - gcp_iam_policy
+    condition: |
+      resource.get('type') == 'gcp_iam_policy' and
+      all(not member.endswith('@gmail.com') for binding in resource.get('bindings', []) for member in binding.get('members', []))
+    remediation: |
+      1. Navigate to IAM & Admin > IAM in the GCP Console
+      2. Review all members with @gmail.com addresses
+      3. Remove Gmail accounts and replace with corporate identities
+      4. Use Cloud Identity or Google Workspace for user management
+    references:
+      - https://cloud.google.com/iam/docs/overview
+      - https://www.cisecurity.org/benchmark/google_cloud_computing_platform
+    metadata:
+      cis_control: "1.1"
+      cis_level: 1
+
+  - id: cis-gcp-1.2
+    name: Ensure that multi-factor authentication is enabled for all non-service accounts
+    description: |
+      Enable MFA for all user accounts to add an extra layer of security.
+      Service accounts should use key-based authentication instead.
+    severity: critical
+    resource_types:
+      - gcp_iam_policy
+    condition: |
+      resource.get('type') == 'gcp_iam_policy' and
+      all(member.startswith('serviceAccount:') or member.startswith('group:') for binding in resource.get('bindings', []) for member in binding.get('members', []) if member.startswith('user:'))
+    remediation: |
+      1. Navigate to IAM & Admin > IAM
+      2. Enable 2-Step Verification for all user accounts
+      3. Use security keys or authenticator apps
+      4. Enforce MFA at the organization level
+    references:
+      - https://cloud.google.com/identity/solutions/enforce-mfa
+    metadata:
+      cis_control: "1.2"
+      cis_level: 1
+
+  - id: cis-gcp-1.3
+    name: Ensure that Service Account has no Admin privileges
+    description: |
+      Service accounts should follow the principle of least privilege and not have
+      admin-level permissions unless absolutely necessary.
+    severity: high
+    resource_types:
+      - gcp_iam_policy
+    condition: |
+      resource.get('type') == 'gcp_iam_policy' and
+      not any(
+        binding.get('role', '').endswith('Admin') and
+        any(member.startswith('serviceAccount:') for member in binding.get('members', []))
+        for binding in resource.get('bindings', [])
+      )
+    remediation: |
+      1. Review all service account permissions
+      2. Remove admin roles from service accounts
+      3. Grant only necessary permissions
+      4. Use custom roles for fine-grained access control
+    references:
+      - https://cloud.google.com/iam/docs/understanding-roles
+    metadata:
+      cis_control: "1.3"
+      cis_level: 1
+
+  # 2. Logging and Monitoring
+  - id: cis-gcp-2.1
+    name: Ensure that Cloud Audit Logging is configured properly
+    description: |
+      Cloud Audit Logs provide a record of administrative activities and accesses
+      within your GCP resources. Ensure audit logging is enabled for all services.
+    severity: high
+    resource_types:
+      - gcp_project
+    condition: |
+      resource.get('type') == 'gcp_project' and
+      resource.get('audit_logging_enabled', False) == True
+    remediation: |
+      1. Navigate to IAM & Admin > Audit Logs
+      2. Enable Admin Read, Data Read, and Data Write logs
+      3. Configure log retention policies
+      4. Set up log sinks for long-term storage
+    references:
+      - https://cloud.google.com/logging/docs/audit
+    metadata:
+      cis_control: "2.1"
+      cis_level: 1
+
+  - id: cis-gcp-2.2
+    name: Ensure that sinks are configured for all log entries
+    description: |
+      Log sinks export copies of all log entries to supported destinations.
+      Configure sinks to ensure logs are retained and available for analysis.
+    severity: medium
+    resource_types:
+      - gcp_project
+    condition: |
+      resource.get('type') == 'gcp_project' and
+      resource.get('log_sinks_configured', False) == True
+    remediation: |
+      1. Navigate to Logging > Logs Router
+      2. Create a sink for all logs
+      3. Configure destination (Cloud Storage, BigQuery, or Pub/Sub)
+      4. Set appropriate filters and exclusions
+    references:
+      - https://cloud.google.com/logging/docs/export
+    metadata:
+      cis_control: "2.2"
+      cis_level: 1
+
+  # 3. Networking
+  - id: cis-gcp-3.1
+    name: Ensure that the default network does not exist in a project
+    description: |
+      The default network has pre-configured firewall rules that may not align with
+      security best practices. Delete the default network and create custom networks.
+    severity: medium
+    resource_types:
+      - gcp_network
+    condition: |
+      resource.get('type') == 'gcp_network' and
+      resource.get('name') != 'default'
+    remediation: |
+      1. Create custom VPC networks with appropriate subnets
+      2. Delete the default network
+      3. Configure firewall rules according to security requirements
+    references:
+      - https://cloud.google.com/vpc/docs/vpc
+    metadata:
+      cis_control: "3.1"
+      cis_level: 2
+
+  - id: cis-gcp-3.2
+    name: Ensure legacy networks do not exist for a project
+    description: |
+      Legacy networks are the old-style networks that have been deprecated.
+      Use VPC networks instead for better security and features.
+    severity: medium
+    resource_types:
+      - gcp_network
+    condition: |
+      resource.get('type') == 'gcp_network' and
+      resource.get('auto_create_subnetworks', True) == False
+    remediation: |
+      1. Identify all legacy networks
+      2. Create equivalent VPC networks
+      3. Migrate resources to VPC networks
+      4. Delete legacy networks
+    references:
+      - https://cloud.google.com/vpc/docs/legacy
+    metadata:
+      cis_control: "3.2"
+      cis_level: 1
+
+  - id: cis-gcp-3.3
+    name: Ensure that DNSSEC is enabled for Cloud DNS
+    description: |
+      DNSSEC adds cryptographic signatures to DNS records to prevent DNS spoofing
+      and cache poisoning attacks.
+    severity: medium
+    resource_types:
+      - gcp_dns_zone
+    condition: |
+      resource.get('type') == 'gcp_dns_zone' and
+      resource.get('dnssec_enabled', False) == True
+    remediation: |
+      1. Navigate to Network Services > Cloud DNS
+      2. Select the DNS zone
+      3. Enable DNSSEC
+      4. Configure DNSSEC settings
+    references:
+      - https://cloud.google.com/dns/docs/dnssec
+    metadata:
+      cis_control: "3.3"
+      cis_level: 1
+
+  - id: cis-gcp-3.4
+    name: Ensure that RSASHA1 is not used for the key-signing key in Cloud DNS DNSSEC
+    description: |
+      RSASHA1 is deprecated and should not be used for DNSSEC key-signing keys.
+      Use stronger algorithms like RSASHA256 or RSASHA512.
+    severity: medium
+    resource_types:
+      - gcp_dns_zone
+    condition: |
+      resource.get('type') == 'gcp_dns_zone' and
+      resource.get('dnssec_config', {}).get('key_signing_algorithm') not in ['RSASHA1', 'rsasha1']
+    remediation: |
+      1. Navigate to Cloud DNS
+      2. Update DNSSEC configuration
+      3. Use RSASHA256 or RSASHA512 for key-signing
+      4. Rotate keys if necessary
+    references:
+      - https://cloud.google.com/dns/docs/dnssec-advanced
+    metadata:
+      cis_control: "3.4"
+      cis_level: 1
+
+  - id: cis-gcp-3.5
+    name: Ensure that SSH access is restricted from the internet
+    description: |
+      SSH access should not be allowed from the internet (0.0.0.0/0).
+      Restrict SSH access to specific IP ranges or use IAP for SSH.
+    severity: critical
+    resource_types:
+      - gcp_firewall_rule
+    condition: |
+      resource.get('type') == 'gcp_firewall_rule' and
+      not (
+        resource.get('direction') == 'INGRESS' and
+        '0.0.0.0/0' in resource.get('source_ranges', []) and
+        any(
+          allowed.get('ip_protocol') == 'tcp' and '22' in allowed.get('ports', [])
+          for allowed in resource.get('allowed', [])
+        )
+      )
+    remediation: |
+      1. Navigate to VPC Network > Firewall
+      2. Review firewall rules allowing SSH (port 22)
+      3. Remove rules with source 0.0.0.0/0
+      4. Create rules with specific IP ranges
+      5. Consider using Identity-Aware Proxy (IAP) for SSH
+    references:
+      - https://cloud.google.com/iap/docs/using-tcp-forwarding
+    metadata:
+      cis_control: "3.5"
+      cis_level: 1
+
+  - id: cis-gcp-3.6
+    name: Ensure that RDP access is restricted from the internet
+    description: |
+      RDP access should not be allowed from the internet (0.0.0.0/0).
+      Restrict RDP access to specific IP ranges or use IAP.
+    severity: critical
+    resource_types:
+      - gcp_firewall_rule
+    condition: |
+      resource.get('type') == 'gcp_firewall_rule' and
+      not (
+        resource.get('direction') == 'INGRESS' and
+        '0.0.0.0/0' in resource.get('source_ranges', []) and
+        any(
+          allowed.get('ip_protocol') == 'tcp' and '3389' in allowed.get('ports', [])
+          for allowed in resource.get('allowed', [])
+        )
+      )
+    remediation: |
+      1. Navigate to VPC Network > Firewall
+      2. Review firewall rules allowing RDP (port 3389)
+      3. Remove rules with source 0.0.0.0/0
+      4. Create rules with specific IP ranges
+    references:
+      - https://cloud.google.com/compute/docs/instances/connecting-to-instance
+    metadata:
+      cis_control: "3.6"
+      cis_level: 1
+
+  # 4. Virtual Machines
+  - id: cis-gcp-4.1
+    name: Ensure that instances are not configured to use the default service account
+    description: |
+      The default Compute Engine service account has the Editor role, which grants
+      broad permissions. Use custom service accounts with minimal permissions.
+    severity: high
+    resource_types:
+      - gcp_compute_instance
+    condition: |
+      resource.get('type') == 'gcp_compute_instance' and
+      not resource.get('service_account', '').endswith('-compute@developer.gserviceaccount.com')
+    remediation: |
+      1. Create a custom service account with minimal permissions
+      2. Attach the custom service account to instances
+      3. Remove the default service account
+    references:
+      - https://cloud.google.com/compute/docs/access/service-accounts
+    metadata:
+      cis_control: "4.1"
+      cis_level: 1
+
+  - id: cis-gcp-4.2
+    name: Ensure that instances are not configured to use the default service account with full access to all Cloud APIs
+    description: |
+      Instances should not have full access to all Cloud APIs. Grant only necessary
+      API access scopes to follow the principle of least privilege.
+    severity: high
+    resource_types:
+      - gcp_compute_instance
+    condition: |
+      resource.get('type') == 'gcp_compute_instance' and
+      'https://www.googleapis.com/auth/cloud-platform' not in resource.get('scopes', [])
+    remediation: |
+      1. Review instance service account scopes
+      2. Remove cloud-platform scope
+      3. Grant only necessary API scopes
+    references:
+      - https://cloud.google.com/compute/docs/access/service-accounts#accesscopesiam
+    metadata:
+      cis_control: "4.2"
+      cis_level: 1
+
+  - id: cis-gcp-4.3
+    name: Ensure oslogin is enabled for a Project
+    description: |
+      OS Login links SSH keys to IAM users and facilitates effective SSH key
+      lifecycle management. Enable OS Login at the project level.
+    severity: medium
+    resource_types:
+      - gcp_project
+    condition: |
+      resource.get('type') == 'gcp_project' and
+      resource.get('metadata', {}).get('enable-oslogin', 'false').lower() == 'true'
+    remediation: |
+      1. Navigate to Compute Engine > Metadata
+      2. Add metadata key 'enable-oslogin' with value 'TRUE'
+      3. Ensure all instances inherit this setting
+    references:
+      - https://cloud.google.com/compute/docs/oslogin
+    metadata:
+      cis_control: "4.3"
+      cis_level: 1
+
+  - id: cis-gcp-4.4
+    name: Ensure 'Block Project-wide SSH keys' is enabled for VM instances
+    description: |
+      Project-wide SSH keys can be used to access all instances in a project.
+      Block project-wide SSH keys and use instance-specific keys instead.
+    severity: medium
+    resource_types:
+      - gcp_compute_instance
+    condition: |
+      resource.get('type') == 'gcp_compute_instance' and
+      resource.get('metadata', {}).get('block-project-ssh-keys', 'false').lower() == 'true'
+    remediation: |
+      1. Navigate to Compute Engine > VM instances
+      2. Edit the instance
+      3. Under SSH Keys, enable 'Block project-wide SSH keys'
+    references:
+      - https://cloud.google.com/compute/docs/instances/adding-removing-ssh-keys
+    metadata:
+      cis_control: "4.4"
+      cis_level: 1
+
+  - id: cis-gcp-4.5
+    name: Ensure Compute instances are launched with Shielded VM enabled
+    description: |
+      Shielded VMs provide verifiable integrity of instances to ensure they haven't
+      been compromised by boot or kernel-level malware.
+    severity: medium
+    resource_types:
+      - gcp_compute_instance
+    condition: |
+      resource.get('type') == 'gcp_compute_instance' and
+      resource.get('shielded_instance_config', {}).get('enable_secure_boot', False) == True and
+      resource.get('shielded_instance_config', {}).get('enable_vtpm', False) == True and
+      resource.get('shielded_instance_config', {}).get('enable_integrity_monitoring', False) == True
+    remediation: |
+      1. When creating instances, enable Shielded VM
+      2. Enable Secure Boot, vTPM, and Integrity Monitoring
+      3. For existing instances, create a new instance with Shielded VM
+    references:
+      - https://cloud.google.com/security/shielded-cloud/shielded-vm
+    metadata:
+      cis_control: "4.5"
+      cis_level: 2
+
+  # 5. Storage
+  - id: cis-gcp-5.1
+    name: Ensure that Cloud Storage bucket is not anonymously or publicly accessible
+    description: |
+      Cloud Storage buckets should not be publicly accessible unless specifically
+      required. Review and remove public access permissions.
+    severity: critical
+    resource_types:
+      - gcp_storage_bucket
+    condition: |
+      resource.get('type') == 'gcp_storage_bucket' and
+      not any(
+        member in ['allUsers', 'allAuthenticatedUsers']
+        for binding in resource.get('iam_policy', {}).get('bindings', [])
+        for member in binding.get('members', [])
+      )
+    remediation: |
+      1. Navigate to Cloud Storage > Browser
+      2. Select the bucket
+      3. Go to Permissions tab
+      4. Remove 'allUsers' and 'allAuthenticatedUsers' members
+    references:
+      - https://cloud.google.com/storage/docs/access-control/making-data-public
+    metadata:
+      cis_control: "5.1"
+      cis_level: 1
+
+  - id: cis-gcp-5.2
+    name: Ensure that Cloud Storage buckets have uniform bucket-level access enabled
+    description: |
+      Uniform bucket-level access disables ACLs for all Cloud Storage resources,
+      simplifying access management through IAM.
+    severity: medium
+    resource_types:
+      - gcp_storage_bucket
+    condition: |
+      resource.get('type') == 'gcp_storage_bucket' and
+      resource.get('iam_configuration', {}).get('uniform_bucket_level_access_enabled', False) == True
+    remediation: |
+      1. Navigate to Cloud Storage > Browser
+      2. Select the bucket
+      3. Go to Permissions tab
+      4. Enable 'Uniform' access control
+    references:
+      - https://cloud.google.com/storage/docs/uniform-bucket-level-access
+    metadata:
+      cis_control: "5.2"
+      cis_level: 2
+
+  # 6. Cloud SQL
+  - id: cis-gcp-6.1
+    name: Ensure that Cloud SQL database instances do not have public IPs
+    description: |
+      Cloud SQL instances should not be accessible from the public internet.
+      Use private IPs and Cloud SQL Proxy for secure access.
+    severity: critical
+    resource_types:
+      - gcp_sql_instance
+    condition: |
+      resource.get('type') == 'gcp_sql_instance' and
+      not any(
+        ip.get('type') == 'PRIMARY'
+        for ip in resource.get('ip_addresses', [])
+      )
+    remediation: |
+      1. Create a new instance with private IP
+      2. Migrate data from public instance
+      3. Delete the public instance
+      4. Use Cloud SQL Proxy for connections
+    references:
+      - https://cloud.google.com/sql/docs/mysql/configure-private-ip
+    metadata:
+      cis_control: "6.1"
+      cis_level: 1
+
+  - id: cis-gcp-6.2
+    name: Ensure that Cloud SQL database instances require all incoming connections to use SSL
+    description: |
+      Require SSL/TLS for all connections to Cloud SQL instances to encrypt
+      data in transit and prevent eavesdropping.
+    severity: high
+    resource_types:
+      - gcp_sql_instance
+    condition: |
+      resource.get('type') == 'gcp_sql_instance' and
+      resource.get('settings', {}).get('ip_configuration', {}).get('require_ssl', False) == True
+    remediation: |
+      1. Navigate to Cloud SQL > Instances
+      2. Select the instance
+      3. Go to Connections tab
+      4. Enable 'Require SSL'
+      5. Configure SSL certificates
+    references:
+      - https://cloud.google.com/sql/docs/mysql/configure-ssl-instance
+    metadata:
+      cis_control: "6.2"
+      cis_level: 1
+
+  - id: cis-gcp-6.3
+    name: Ensure that Cloud SQL database instances have automated backups enabled
+    description: |
+      Enable automated backups to protect against data loss and enable
+      point-in-time recovery.
+    severity: high
+    resource_types:
+      - gcp_sql_instance
+    condition: |
+      resource.get('type') == 'gcp_sql_instance' and
+      resource.get('settings', {}).get('backup_configuration', {}).get('enabled', False) == True
+    remediation: |
+      1. Navigate to Cloud SQL > Instances
+      2. Select the instance
+      3. Go to Backups tab
+      4. Enable automated backups
+      5. Configure backup window and retention
+    references:
+      - https://cloud.google.com/sql/docs/mysql/backup-recovery/backups
+    metadata:
+      cis_control: "6.3"
+      cis_level: 1
+

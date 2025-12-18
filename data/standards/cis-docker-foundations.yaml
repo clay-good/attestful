@@ -1,0 +1,311 @@
+# CIS Docker Benchmark v1.6.0
+# Compliance checks for Docker containers and hosts
+#
+# This standard defines security checks for Docker-based environments
+# collected by the Docker scanner agent.
+
+id: cis-docker-foundations
+name: CIS Docker Benchmark
+version: "1.6.0"
+description: |
+  Center for Internet Security (CIS) Docker Benchmark provides prescriptive
+  guidance for establishing a secure configuration posture for Docker containers
+  and host systems.
+
+sections:
+  - id: "1"
+    name: "Host Configuration"
+    description: "Security checks for the Docker host system"
+    
+    checks:
+      - id: "1.1"
+        name: "Ensure a separate partition for containers has been created"
+        description: |
+          All Docker containers and their data and metadata is stored under /var/lib/docker directory.
+          By default, /var/lib/docker would be mounted under / or /var partitions based on availability.
+        severity: medium
+        resource_types:
+          - docker.filesystem
+        condition:
+          type: any
+          conditions:
+            - field: data.mountpoint
+              operator: equals
+              value: "/var/lib/docker"
+        
+      - id: "1.2"
+        name: "Ensure only trusted users are allowed to control Docker daemon"
+        description: |
+          The Docker daemon currently requires 'root' privileges. A user added to the 'docker' group
+          gives him full 'root' access rights.
+        severity: high
+        resource_types:
+          - docker.security
+        condition:
+          type: all
+          conditions:
+            - field: type
+              operator: equals
+              value: "docker.security"
+            - field: data.name
+              operator: equals
+              value: "docker"
+            - field: data.members
+              operator: count_less_than
+              value: 5
+      
+      - id: "1.3"
+        name: "Ensure auditing is configured for Docker files and directories"
+        description: |
+          Audit all Docker related files and directories. Docker daemon runs with 'root' privileges.
+          Its behavior depends on some key files and directories.
+        severity: medium
+        resource_types:
+          - docker.security
+        condition:
+          type: any
+          conditions:
+            - field: data.path
+              operator: in
+              value: ["/var/lib/docker", "/etc/docker", "/usr/bin/docker"]
+
+  - id: "2"
+    name: "Docker Daemon Configuration"
+    description: "Security checks for Docker daemon configuration"
+    
+    checks:
+      - id: "2.1"
+        name: "Ensure network traffic is restricted between containers"
+        description: |
+          By default, all network traffic is allowed between containers on the same host.
+          If not desired, restrict all inter-container communication.
+        severity: medium
+        resource_types:
+          - docker.network
+        condition:
+          type: all
+          conditions:
+            - field: type
+              operator: equals
+              value: "docker.network"
+
+  - id: "3"
+    name: "Docker Daemon Configuration Files"
+    description: "Security checks for Docker daemon configuration files"
+    
+    checks:
+      - id: "3.1"
+        name: "Ensure that docker.service file ownership is set to root:root"
+        description: |
+          Verify that the 'docker.service' file ownership and group-ownership are correctly set to 'root'.
+        severity: high
+        resource_types:
+          - docker.security
+        condition:
+          type: all
+          conditions:
+            - field: data.path
+              operator: equals
+              value: "/usr/lib/systemd/system/docker.service"
+            - field: data.owner
+              operator: equals
+              value: "root"
+            - field: data.group
+              operator: equals
+              value: "root"
+      
+      - id: "3.2"
+        name: "Ensure that docker.service file permissions are set to 644 or more restrictive"
+        description: |
+          Verify that the 'docker.service' file permissions are correctly set to '644' or more restrictive.
+        severity: high
+        resource_types:
+          - docker.security
+        condition:
+          type: all
+          conditions:
+            - field: data.path
+              operator: equals
+              value: "/usr/lib/systemd/system/docker.service"
+            - field: data.mode
+              operator: in
+              value: ["0644", "0640", "0600", "0400"]
+
+  - id: "4"
+    name: "Container Images and Build Files"
+    description: "Security checks for container images"
+    
+    checks:
+      - id: "4.1"
+        name: "Ensure a user for the container has been created"
+        description: |
+          Create a non-root user for the container in the Dockerfile for the container image.
+        severity: high
+        resource_types:
+          - docker.security
+        condition:
+          type: all
+          conditions:
+            - field: type
+              operator: equals
+              value: "docker.security"
+            - field: data.username
+              operator: not_equals
+              value: "root"
+
+  - id: "5"
+    name: "Container Runtime"
+    description: "Security checks for running containers"
+    
+    checks:
+      - id: "5.1"
+        name: "Ensure that, if applicable, an AppArmor Profile is enabled"
+        description: |
+          AppArmor is an effective and easy-to-use Linux application security system.
+          It is available on quite a few Linux distributions by default.
+        severity: medium
+        resource_types:
+          - docker.system_info
+        condition:
+          type: any
+          conditions:
+            - field: data.platform
+              operator: equals
+              value: "Linux"
+      
+      - id: "5.2"
+        name: "Ensure that, if applicable, SELinux security options are set"
+        description: |
+          SELinux is an effective and easy-to-use Linux application security system.
+          It is available on quite a few Linux distributions by default.
+        severity: medium
+        resource_types:
+          - docker.system_info
+        condition:
+          type: any
+          conditions:
+            - field: data.platform
+              operator: equals
+              value: "Linux"
+      
+      - id: "5.3"
+        name: "Ensure Linux Kernel Capabilities are restricted within containers"
+        description: |
+          By default, Docker starts containers with a restricted set of Linux Kernel Capabilities.
+          Do not change this setting unless needed.
+        severity: high
+        resource_types:
+          - docker.process
+        condition:
+          type: all
+          conditions:
+            - field: type
+              operator: equals
+              value: "docker.process"
+
+  - id: "6"
+    name: "Docker Security Operations"
+    description: "Security checks for Docker operations"
+    
+    checks:
+      - id: "6.1"
+        name: "Ensure that image sprawl is avoided"
+        description: |
+          Do not keep a large number of container images on the same host.
+          Use only tagged images as appropriate.
+        severity: low
+        resource_types:
+          - docker.package
+        condition:
+          type: all
+          conditions:
+            - field: type
+              operator: equals
+              value: "docker.package"
+      
+      - id: "6.2"
+        name: "Ensure that container sprawl is avoided"
+        description: |
+          Do not keep a large number of containers on the same host.
+        severity: low
+        resource_types:
+          - docker.process
+        condition:
+          type: all
+          conditions:
+            - field: type
+              operator: equals
+              value: "docker.process"
+            - field: data.status
+              operator: equals
+              value: "running"
+
+  - id: "7"
+    name: "System Hardening"
+    description: "General system hardening checks"
+    
+    checks:
+      - id: "7.1"
+        name: "Ensure unnecessary packages are not installed"
+        description: |
+          Containers should only include necessary packages and dependencies.
+        severity: medium
+        resource_types:
+          - docker.package
+        condition:
+          type: all
+          conditions:
+            - field: type
+              operator: equals
+              value: "docker.package"
+      
+      - id: "7.2"
+        name: "Ensure sensitive files have appropriate permissions"
+        description: |
+          Sensitive files like /etc/passwd, /etc/shadow should have restrictive permissions.
+        severity: high
+        resource_types:
+          - docker.security
+        condition:
+          type: all
+          conditions:
+            - field: data.path
+              operator: in
+              value: ["/etc/passwd", "/etc/shadow", "/etc/group"]
+            - field: data.mode
+              operator: in
+              value: ["0644", "0640", "0600", "0400"]
+      
+      - id: "7.3"
+        name: "Ensure no unnecessary services are running"
+        description: |
+          Only essential services should be running in containers.
+        severity: medium
+        resource_types:
+          - docker.process
+        condition:
+          type: all
+          conditions:
+            - field: type
+              operator: equals
+              value: "docker.process"
+            - field: data.status
+              operator: equals
+              value: "running"
+
+metadata:
+  provider: docker
+  category: security
+  compliance_frameworks:
+    - CIS
+  tags:
+    - docker
+    - containers
+    - security
+    - cis
+  references:
+    - name: "CIS Docker Benchmark"
+      url: "https://www.cisecurity.org/benchmark/docker"
+    - name: "Docker Security Best Practices"
+      url: "https://docs.docker.com/engine/security/"
+

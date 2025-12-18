@@ -251,6 +251,41 @@ class IntegrityError(StorageError):
         self.actual_hash = actual_hash
 
 
+class MigrationError(StorageError):
+    """Error during database migration."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        source: str | None = None,
+        phase: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        self.source = source
+        self.phase = phase
+
+
+# =============================================================================
+# Parser Errors
+# =============================================================================
+
+
+class ParserError(AttestfulError):
+    """Error parsing compliance standards or other data files."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        file_path: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        self.file_path = file_path
+
+
 # =============================================================================
 # Validation Errors
 # =============================================================================

@@ -1,0 +1,66 @@
+{
+  "profile": {
+    "uuid": "ab14de92-37db-4bf9-9343-5aed5814da87",
+    "metadata": {
+      "title": "NIST CSF 2.0 Quick Start Profile",
+      "last-modified": "2025-12-17T20:34:29.093908",
+      "version": "1.0.0",
+      "oscal-version": "1.1.2",
+      "props": [
+        {
+          "name": "framework",
+          "value": "NIST-CSF",
+          "uuid": "e1977727-c3da-4794-9628-7896fc5acea2"
+        },
+        {
+          "name": "framework-version",
+          "value": "2.0",
+          "uuid": "76204c89-4db1-421f-92cf-284c1502e241"
+        },
+        {
+          "name": "profile-type",
+          "value": "quick-start",
+          "uuid": "95b9988f-3521-4dc9-9b92-4ae3f15b12ef"
+        },
+        {
+          "name": "control-count",
+          "value": "22",
+          "uuid": "50d8f272-cdcf-4eac-bdf2-c36d10644374"
+        }
+      ]
+    },
+    "imports": [
+      {
+        "href": "./nist-csf-2.0.json",
+        "include-controls": [
+          {
+            "with-ids": [
+              "GV.OC-01",
+              "GV.RM-01",
+              "GV.RR-01",
+              "GV.PO-01",
+              "ID.AM-01",
+              "ID.AM-02",
+              "ID.RA-01",
+              "ID.RA-05",
+              "PR.AA-01",
+              "PR.AA-03",
+              "PR.AA-05",
+              "PR.DS-01",
+              "PR.DS-02",
+              "PR.PS-02",
+              "DE.CM-01",
+              "DE.CM-09",
+              "DE.AE-02",
+              "RS.MA-01",
+              "RS.MA-02",
+              "RS.MI-01",
+              "RC.RP-01",
+              "RC.RP-03"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

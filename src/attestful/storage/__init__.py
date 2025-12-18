@@ -22,6 +22,14 @@ from attestful.storage.evidence import (
     EvidenceStore,
     StoredEvidence,
 )
+from attestful.storage.migrations import (
+    NisifyMigration,
+    NisifySchemaMapper,
+    NisifyEvidenceConverter,
+    NisifyMaturityPreserver,
+    NisifyTrendMigrator,
+    migrate_nisify_database,
+)
 
 __all__ = [
     # Models
@@ -41,4 +49,11 @@ __all__ = [
     # Evidence Store
     "EvidenceStore",
     "StoredEvidence",
+    # Migrations
+    "NisifyMigration",
+    "NisifySchemaMapper",
+    "NisifyEvidenceConverter",
+    "NisifyMaturityPreserver",
+    "NisifyTrendMigrator",
+    "migrate_nisify_database",
 ]

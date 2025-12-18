@@ -378,8 +378,14 @@ class TestSOC2ControlCheckMapping:
 
     def test_all_checks_mapped_to_framework(self):
         """All checks should be mapped to at least one control."""
+        from attestful.frameworks import get_soc2_azure_checks, get_soc2_gcp_checks
+
         framework = get_soc2_framework()
-        checks = get_soc2_aws_checks()
+        # Get all checks (AWS + Azure + GCP)
+        aws_checks = get_soc2_aws_checks()
+        azure_checks = get_soc2_azure_checks()
+        gcp_checks = get_soc2_gcp_checks()
+        all_checks = aws_checks + azure_checks + gcp_checks
 
         # Collect all mapped check IDs
         mapped_check_ids = set()
@@ -387,7 +393,7 @@ class TestSOC2ControlCheckMapping:
             mapped_check_ids.update(control_checks)
 
         # All checks should be mapped
-        all_check_ids = {c.id for c in checks}
+        all_check_ids = {c.id for c in all_checks}
         assert all_check_ids == mapped_check_ids
 
 

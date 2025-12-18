@@ -73,6 +73,46 @@ class TestScanCommands:
         assert "framework" in result.output
         assert "region" in result.output
 
+    def test_scan_kubernetes_help(self, runner):
+        """Test scan kubernetes help."""
+        result = runner.invoke(cli, ["scan", "kubernetes", "--help"])
+        assert result.exit_code == 0
+        assert "framework" in result.output
+        assert "namespace" in result.output
+        assert "kubeconfig" in result.output
+        assert "context" in result.output
+        assert "in-cluster" in result.output
+        assert "severity" in result.output
+
+    def test_scan_kubernetes_framework_choices(self, runner):
+        """Test scan kubernetes framework choices."""
+        result = runner.invoke(cli, ["scan", "kubernetes", "--help"])
+        assert result.exit_code == 0
+        # Verify framework choices are documented
+        assert "soc2" in result.output or "SOC2" in result.output.upper()
+        assert "cis" in result.output or "CIS" in result.output.upper()
+        assert "nist-800-53" in result.output
+
+    def test_scan_kubernetes_options(self, runner):
+        """Test scan kubernetes option flags."""
+        result = runner.invoke(cli, ["scan", "kubernetes", "--help"])
+        assert result.exit_code == 0
+        # Multiple namespaces
+        assert "-n" in result.output
+        assert "--namespace" in result.output
+        # Exclusions
+        assert "--exclude-namespace" in result.output
+        # Output
+        assert "-o" in result.output
+        assert "--output" in result.output
+
+    def test_scan_kubernetes_examples(self, runner):
+        """Test scan kubernetes command examples in help."""
+        result = runner.invoke(cli, ["scan", "kubernetes", "--help"])
+        assert result.exit_code == 0
+        # Examples should be in the help text
+        assert "Examples:" in result.output or "example" in result.output.lower()
+
 
 # =============================================================================
 # Collect Command Tests
@@ -104,6 +144,58 @@ class TestCollectCommands:
         assert "types" in result.output
         assert "output" in result.output
 
+    def test_collect_kubernetes_help(self, runner):
+        """Test collect kubernetes help."""
+        result = runner.invoke(cli, ["collect", "kubernetes", "--help"])
+        assert result.exit_code == 0
+        assert "namespace" in result.output
+        assert "kubeconfig" in result.output
+        assert "context" in result.output
+        assert "in-cluster" in result.output
+        assert "types" in result.output
+        assert "output" in result.output
+
+    def test_collect_kubernetes_evidence_types(self, runner):
+        """Test collect kubernetes evidence types in help."""
+        result = runner.invoke(cli, ["collect", "kubernetes", "--help"])
+        assert result.exit_code == 0
+        # Should document available evidence types
+        assert "cluster_info" in result.output
+        assert "rbac_config" in result.output
+        assert "network_policies" in result.output
+        assert "pod_security" in result.output
+
+    def test_collect_kubernetes_options(self, runner):
+        """Test collect kubernetes option flags."""
+        result = runner.invoke(cli, ["collect", "kubernetes", "--help"])
+        assert result.exit_code == 0
+        # Multiple namespaces
+        assert "-n" in result.output
+        assert "--namespace" in result.output
+        # Exclusions
+        assert "--exclude-namespace" in result.output
+        # Evidence types
+        assert "-t" in result.output
+        assert "--types" in result.output
+        # Output
+        assert "-o" in result.output
+        assert "--output" in result.output
+
+    def test_collect_kubernetes_examples(self, runner):
+        """Test collect kubernetes command examples in help."""
+        result = runner.invoke(cli, ["collect", "kubernetes", "--help"])
+        assert result.exit_code == 0
+        # Examples should be in the help text
+        assert "Examples:" in result.output or "example" in result.output.lower()
+
+    def test_collect_list_shows_kubernetes(self, runner):
+        """Test collect list shows kubernetes as available."""
+        result = runner.invoke(cli, ["collect", "list"])
+        assert result.exit_code == 0
+        assert "kubernetes" in result.output
+        # Should be marked as available (not coming soon)
+        assert "Available" in result.output
+
 
 # =============================================================================
 # Analyze Command Tests
@@ -124,6 +216,132 @@ class TestAnalyzeCommands:
         result = runner.invoke(cli, ["analyze", "gaps", "--framework", "soc2"])
         assert result.exit_code == 0
         assert "Gap Analysis" in result.output
+
+    def test_analyze_crosswalk_help(self, runner):
+        """Test analyze crosswalk help."""
+        result = runner.invoke(cli, ["analyze", "crosswalk", "--help"])
+        assert result.exit_code == 0
+        assert "Cross-framework control mapping" in result.output
+        assert "--source" in result.output
+        assert "--target" in result.output
+        assert "--control" in result.output
+        assert "--strength" in result.output
+        assert "--stats" in result.output
+
+    def test_analyze_crosswalk_specific_control(self, runner):
+        """Test analyze crosswalk for a specific control."""
+        result = runner.invoke(cli, [
+            "analyze", "crosswalk",
+            "--source", "nist-800-53",
+            "--control", "AC-1",
+        ])
+        assert result.exit_code == 0
+        assert "Cross-Framework Control Mapping" in result.output
+        assert "Mappings for AC-1" in result.output
+
+    def test_analyze_crosswalk_with_target(self, runner):
+        """Test analyze crosswalk with target framework."""
+        result = runner.invoke(cli, [
+            "analyze", "crosswalk",
+            "--source", "nist-800-53",
+            "--target", "soc2",
+            "--control", "AC-1",
+        ])
+        assert result.exit_code == 0
+        assert "Cross-Framework Control Mapping" in result.output
+
+    def test_analyze_crosswalk_stats(self, runner):
+        """Test analyze crosswalk statistics."""
+        result = runner.invoke(cli, [
+            "analyze", "crosswalk",
+            "--source", "nist-800-53",
+            "--stats",
+        ])
+        assert result.exit_code == 0
+        assert "Mapping Statistics" in result.output
+        assert "Coverage by Target Framework" in result.output
+
+    def test_analyze_crosswalk_json_output(self, runner):
+        """Test analyze crosswalk JSON output."""
+        result = runner.invoke(cli, [
+            "analyze", "crosswalk",
+            "--source", "soc2",
+            "--control", "CC6.1",
+            "--format", "json",
+        ])
+        assert result.exit_code == 0
+        # Find JSON content in output (skip header lines)
+        lines = result.output.strip().split("\n")
+        # Find the start of JSON object
+        json_start = None
+        for i, line in enumerate(lines):
+            if line.strip().startswith("{"):
+                json_start = i
+                break
+        assert json_start is not None, f"No JSON found in output: {result.output}"
+        json_str = "\n".join(lines[json_start:])
+        output = json.loads(json_str)
+        assert "source_framework" in output
+        assert "mappings" in output
+
+    def test_analyze_crosswalk_strength_filter(self, runner):
+        """Test analyze crosswalk with strength filter."""
+        result = runner.invoke(cli, [
+            "analyze", "crosswalk",
+            "--source", "nist-800-53",
+            "--target", "soc2",
+            "--control", "AC-1",
+            "--strength", "strong",
+        ])
+        assert result.exit_code == 0
+        assert "Cross-Framework Control Mapping" in result.output
+
+    def test_analyze_crosswalk_all_frameworks(self, runner):
+        """Test analyze crosswalk between all framework pairs."""
+        frameworks = ["nist-800-53", "soc2", "iso-27001", "hitrust"]
+        for source in frameworks:
+            result = runner.invoke(cli, [
+                "analyze", "crosswalk",
+                "--source", source,
+                "--stats",
+            ])
+            assert result.exit_code == 0
+            assert "Mapping Statistics" in result.output
+
+    def test_analyze_crosswalk_no_mappings(self, runner):
+        """Test analyze crosswalk for control with no mappings."""
+        result = runner.invoke(cli, [
+            "analyze", "crosswalk",
+            "--source", "nist-800-53",
+            "--control", "NONEXISTENT-99",
+        ])
+        assert result.exit_code == 0
+        assert "No mappings found" in result.output
+
+    def test_analyze_crosswalk_framework_to_framework(self, runner):
+        """Test analyze crosswalk between two frameworks."""
+        result = runner.invoke(cli, [
+            "analyze", "crosswalk",
+            "--source", "soc2",
+            "--target", "iso-27001",
+        ])
+        assert result.exit_code == 0
+        assert "Mappings:" in result.output or "mapping" in result.output.lower()
+
+    def test_analyze_crosswalk_requires_source(self, runner):
+        """Test analyze crosswalk requires source option."""
+        result = runner.invoke(cli, ["analyze", "crosswalk"])
+        assert result.exit_code != 0
+        assert "Missing option" in result.output or "required" in result.output.lower()
+
+    def test_analyze_crosswalk_without_target_or_control(self, runner):
+        """Test analyze crosswalk without target or control shows available frameworks."""
+        result = runner.invoke(cli, [
+            "analyze", "crosswalk",
+            "--source", "nist-800-53",
+        ])
+        assert result.exit_code == 0
+        assert "Available frameworks" in result.output or "Specify --target" in result.output
 
 
 # =============================================================================

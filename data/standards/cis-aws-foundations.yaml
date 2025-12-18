@@ -1,0 +1,1856 @@
+id: cis-aws-foundations
+name: CIS AWS Foundations Benchmark
+version: "1.5.0"
+description: |
+  The CIS Amazon Web Services Foundations Benchmark provides prescriptive guidance for
+  configuring security options for a subset of Amazon Web Services with an emphasis on
+  foundational, testable, and architecture agnostic settings.
+
+metadata:
+  framework: CIS
+  category: Cloud Security
+  provider: AWS
+  last_updated: "2024-01-15"
+
+checks:
+  - id: cis-1.1
+    name: Avoid the use of root account
+    description: |
+      The root account has unrestricted access to all resources in the AWS account.
+      It is highly recommended that the use of this account be avoided for everyday tasks.
+    severity: critical
+    resource_types:
+      - aws_iam_user
+      - aws_cloudtrail_event
+    condition: |
+      resource.get('type') == 'aws_iam_user' and resource.get('name') != 'root'
+    remediation: |
+      1. Create individual IAM users for daily operations
+      2. Enable MFA for the root account
+      3. Store root account credentials securely
+      4. Use root account only for tasks that require it
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
+      - https://www.cisecurity.org/benchmark/amazon_web_services
+    metadata:
+      cis_control: "1.1"
+      cis_level: 1
+
+  - id: cis-1.2
+    name: Ensure MFA is enabled for all IAM users with console password
+    description: |
+      Multi-Factor Authentication (MFA) adds an extra layer of protection on top of
+      a username and password. With MFA enabled, when a user signs in to an AWS website,
+      they will be prompted for their username and password as well as for an authentication
+      code from their AWS MFA device.
+    severity: high
+    resource_types:
+      - aws_iam_user
+    condition: |
+      resource.get('type') == 'aws_iam_user' and
+      resource.get('raw', {}).get('password_enabled') == True and
+      resource.get('raw', {}).get('mfa_enabled') == True
+    remediation: |
+      1. Sign in to the AWS Management Console
+      2. Navigate to IAM > Users
+      3. Select the user
+      4. Click on Security credentials tab
+      5. Click on Manage next to Assigned MFA device
+      6. Follow the wizard to enable MFA
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html
+    metadata:
+      cis_control: "1.2"
+      cis_level: 1
+
+  - id: cis-2.1.1
+    name: Ensure S3 bucket has encryption enabled
+    description: |
+      Amazon S3 default encryption provides a way to set the default encryption behavior
+      for an S3 bucket. You can set default encryption on a bucket so that all objects
+      are encrypted when they are stored in the bucket.
+    severity: high
+    resource_types:
+      - aws_s3_bucket
+    condition: |
+      resource.get('type') == 'aws_s3_bucket' and
+      resource.get('raw', {}).get('encryption', {}).get('enabled') == True
+    remediation: |
+      1. Open the Amazon S3 console
+      2. Select the bucket
+      3. Choose Properties
+      4. Choose Default encryption
+      5. Select either AES-256 or AWS-KMS
+      6. Choose Save
+    references:
+      - https://docs.aws.amazon.com/AmazonS3/latest/userguide/default-bucket-encryption.html
+    metadata:
+      cis_control: "2.1.1"
+      cis_level: 2
+
+  - id: cis-2.1.2
+    name: Ensure S3 bucket has versioning enabled
+    description: |
+      Versioning is a means of keeping multiple variants of an object in the same bucket.
+      You can use versioning to preserve, retrieve, and restore every version of every
+      object stored in your Amazon S3 bucket.
+    severity: medium
+    resource_types:
+      - aws_s3_bucket
+    condition: |
+      resource.get('type') == 'aws_s3_bucket' and
+      resource.get('raw', {}).get('versioning', {}).get('enabled') == True
+    remediation: |
+      1. Open the Amazon S3 console
+      2. Select the bucket
+      3. Choose Properties
+      4. Choose Versioning
+      5. Select Enable versioning
+      6. Choose Save
+    references:
+      - https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html
+    metadata:
+      cis_control: "2.1.2"
+      cis_level: 2
+
+  - id: cis-2.1.3
+    name: Ensure S3 bucket has access logging enabled
+    description: |
+      Server access logging provides detailed records for the requests that are made to
+      a bucket. Server access logs are useful for many applications including security
+      and access audits.
+    severity: medium
+    resource_types:
+      - aws_s3_bucket
+    condition: |
+      resource.get('type') == 'aws_s3_bucket' and
+      resource.get('raw', {}).get('logging', {}).get('enabled') == True
+    remediation: |
+      1. Open the Amazon S3 console
+      2. Select the bucket
+      3. Choose Properties
+      4. Choose Server access logging
+      5. Select Enable logging
+      6. Specify target bucket and prefix
+      7. Choose Save
+    references:
+      - https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html
+    metadata:
+      cis_control: "2.1.3"
+      cis_level: 2
+
+  - id: cis-3.1
+    name: Ensure CloudTrail is enabled in all regions
+    description: |
+      AWS CloudTrail is a web service that records AWS API calls for your account and
+      delivers log files to you. The recorded information includes the identity of the
+      API caller, the time of the API call, the source IP address of the API caller,
+      and more.
+    severity: critical
+    resource_types:
+      - aws_cloudtrail
+    condition: |
+      resource.get('type') == 'aws_cloudtrail' and
+      resource.get('raw', {}).get('IsMultiRegionTrail') == True and
+      resource.get('raw', {}).get('is_logging') == True
+    remediation: |
+      1. Open the CloudTrail console
+      2. Choose Trails
+      3. Choose Create trail
+      4. Enable "Apply trail to all regions"
+      5. Configure S3 bucket for log storage
+      6. Choose Create
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail.html
+    metadata:
+      cis_control: "3.1"
+      cis_level: 1
+
+  - id: cis-4.1
+    name: Ensure no security groups allow ingress from 0.0.0.0/0 to port 22
+    description: |
+      Security groups provide stateful filtering of ingress/egress network traffic to
+      AWS resources. It is recommended that no security group allows unrestricted
+      ingress access to port 22 (SSH).
+    severity: critical
+    resource_types:
+      - aws_security_group
+    condition: |
+      resource.get('type') == 'aws_security_group' and
+      not any(rule.get('cidr') == '0.0.0.0/0' and rule.get('port') == 22 for rule in resource.get('raw', {}).get('ingress_rules', []))
+    remediation: |
+      1. Open the Amazon VPC console
+      2. Select Security Groups
+      3. Select the security group
+      4. Choose Inbound Rules
+      5. Remove or modify rules allowing 0.0.0.0/0 to port 22
+      6. Add specific IP ranges instead
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+    metadata:
+      cis_control: "4.1"
+      cis_level: 1
+
+  - id: cis-4.2
+    name: Ensure no security groups allow ingress from 0.0.0.0/0 to port 3389
+    description: |
+      Security groups provide stateful filtering of ingress/egress network traffic to
+      AWS resources. It is recommended that no security group allows unrestricted
+      ingress access to port 3389 (RDP).
+    severity: critical
+    resource_types:
+      - aws_security_group
+    condition: |
+      resource.get('type') == 'aws_security_group' and
+      not any(rule.get('cidr') == '0.0.0.0/0' and rule.get('port') == 3389 for rule in resource.get('raw', {}).get('ingress_rules', []))
+    remediation: |
+      1. Open the Amazon VPC console
+      2. Select Security Groups
+      3. Select the security group
+      4. Choose Inbound Rules
+      5. Remove or modify rules allowing 0.0.0.0/0 to port 3389
+      6. Add specific IP ranges instead
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+    metadata:
+      cis_control: "4.2"
+      cis_level: 1
+
+  - id: cis-4.3
+    name: Ensure the default security group restricts all traffic
+    description: |
+      A VPC comes with a default security group whose initial settings deny all inbound
+      traffic, allow all outbound traffic, and allow all traffic between instances
+      assigned to the security group. It is recommended that the default security group
+      restrict all traffic.
+    severity: high
+    resource_types:
+      - aws_security_group
+    condition: |
+      resource.get('type') == 'aws_security_group' and
+      (resource.get('name') != 'default' or len(resource.get('raw', {}).get('ingress_rules', [])) == 0)
+    remediation: |
+      1. Open the Amazon VPC console
+      2. Select Security Groups
+      3. Select the default security group
+      4. Choose Inbound Rules
+      5. Remove all inbound rules
+      6. Choose Outbound Rules
+      7. Remove all outbound rules
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+    metadata:
+      cis_control: "4.3"
+      cis_level: 2
+
+  - id: cis-2.2.1
+    name: Ensure EBS volume encryption is enabled
+    description: |
+      Elastic Block Store (EBS) supports encryption of volumes. This ensures that data
+      at rest is encrypted. It is recommended that EBS volume encryption be enabled.
+    severity: high
+    resource_types:
+      - aws_ebs_volume
+    condition: |
+      resource.get('type') == 'aws_ebs_volume' and
+      resource.get('raw', {}).get('Encrypted') == True
+    remediation: |
+      1. Open the Amazon EC2 console
+      2. Choose Volumes
+      3. Select the volume
+      4. Choose Actions > Create Snapshot
+      5. Create encrypted volume from snapshot
+      6. Replace original volume with encrypted volume
+    references:
+      - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html
+    metadata:
+      cis_control: "2.2.1"
+      cis_level: 2
+
+  - id: cis-2.3.1
+    name: Ensure RDS instances are encrypted
+    description: |
+      Amazon RDS encrypted DB instances provide an additional layer of data protection
+      by securing your data from unauthorized access to the underlying storage.
+    severity: high
+    resource_types:
+      - aws_rds_instance
+    condition: |
+      resource.get('type') == 'aws_rds_instance' and
+      resource.get('raw', {}).get('StorageEncrypted') == True
+    remediation: |
+      1. Open the Amazon RDS console
+      2. Create a snapshot of the unencrypted DB instance
+      3. Copy the snapshot and enable encryption
+      4. Restore the encrypted snapshot to a new DB instance
+      5. Update applications to use the new endpoint
+      6. Delete the old unencrypted instance
+    references:
+      - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html
+    metadata:
+      cis_control: "2.3.1"
+      cis_level: 2
+
+  - id: cis-2.3.2
+    name: Ensure RDS instances have backup retention enabled
+    description: |
+      AWS RDS automated backups allow point-in-time recovery of your database instance.
+      It is recommended to enable automated backups with appropriate retention period.
+    severity: medium
+    resource_types:
+      - aws_rds_instance
+    condition: |
+      resource.get('type') == 'aws_rds_instance' and
+      resource.get('raw', {}).get('BackupRetentionPeriod', 0) > 0
+    remediation: |
+      1. Open the Amazon RDS console
+      2. Select the DB instance
+      3. Choose Modify
+      4. Set Backup retention period to at least 7 days
+      5. Choose Continue
+      6. Choose Apply immediately
+      7. Choose Modify DB Instance
+    references:
+      - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
+    metadata:
+      cis_control: "2.3.2"
+      cis_level: 1
+
+  - id: cis-2.3.3
+    name: Ensure RDS instances are not publicly accessible
+    description: |
+      Amazon RDS database instances should not be publicly accessible to minimize
+      security risks. Access should be restricted to specific IP addresses or security groups.
+    severity: critical
+    resource_types:
+      - aws_rds_instance
+    condition: |
+      resource.get('type') == 'aws_rds_instance' and
+      resource.get('raw', {}).get('PubliclyAccessible') == False
+    remediation: |
+      1. Open the Amazon RDS console
+      2. Select the DB instance
+      3. Choose Modify
+      4. Under Network & Security, set Publicly accessible to No
+      5. Choose Continue
+      6. Choose Apply immediately
+      7. Choose Modify DB Instance
+    references:
+      - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html
+    metadata:
+      cis_control: "2.3.3"
+      cis_level: 1
+
+  - id: cis-1.3
+    name: Ensure credentials unused for 90 days or greater are disabled
+    description: |
+      AWS IAM users can access AWS resources using different types of credentials, such as
+      passwords or access keys. It is recommended that all credentials that have been unused
+      in 90 or greater days be deactivated or removed.
+    severity: medium
+    resource_types:
+      - aws_iam_user
+    condition: |
+      resource.get('type') == 'aws_iam_user' and
+      resource.get('raw', {}).get('password_last_used_days', 0) < 90 and
+      resource.get('raw', {}).get('access_key_last_used_days', 0) < 90
+    remediation: |
+      1. Open the IAM console
+      2. Choose Users
+      3. Select the user
+      4. Choose Security credentials tab
+      5. Deactivate or delete unused credentials
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_finding-unused.html
+    metadata:
+      cis_control: "1.3"
+      cis_level: 1
+
+  - id: cis-1.4
+    name: Ensure access keys are rotated every 90 days or less
+    description: |
+      Access keys consist of an access key ID and secret access key, which are used to sign
+      programmatic requests that you make to AWS. It is recommended that all access keys be
+      regularly rotated.
+    severity: medium
+    resource_types:
+      - aws_iam_user
+    condition: |
+      resource.get('type') == 'aws_iam_user' and
+      resource.get('raw', {}).get('access_key_age_days', 0) <= 90
+    remediation: |
+      1. Open the IAM console
+      2. Choose Users
+      3. Select the user
+      4. Choose Security credentials tab
+      5. Create new access key
+      6. Update applications to use new key
+      7. Deactivate old access key
+      8. Delete old access key after verification
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
+    metadata:
+      cis_control: "1.4"
+      cis_level: 1
+
+  - id: cis-1.5
+    name: Ensure IAM password policy requires at least one uppercase letter
+    description: |
+      Password policies are used to enforce password complexity requirements. IAM password
+      policies can require passwords to contain at least one uppercase letter.
+    severity: low
+    resource_types:
+      - aws_iam_account_password_policy
+    condition: |
+      resource.get('type') == 'aws_iam_account_password_policy' and
+      resource.get('raw', {}).get('RequireUppercaseCharacters') == True
+    remediation: |
+      1. Open the IAM console
+      2. Choose Account settings
+      3. Under Password policy, choose Change password policy
+      4. Select "Require at least one uppercase letter"
+      5. Choose Apply password policy
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html
+    metadata:
+      cis_control: "1.5"
+      cis_level: 1
+
+  - id: cis-1.6
+    name: Ensure IAM password policy requires at least one lowercase letter
+    description: |
+      Password policies are used to enforce password complexity requirements. IAM password
+      policies can require passwords to contain at least one lowercase letter.
+    severity: low
+    resource_types:
+      - aws_iam_account_password_policy
+    condition: |
+      resource.get('type') == 'aws_iam_account_password_policy' and
+      resource.get('raw', {}).get('RequireLowercaseCharacters') == True
+    remediation: |
+      1. Open the IAM console
+      2. Choose Account settings
+      3. Under Password policy, choose Change password policy
+      4. Select "Require at least one lowercase letter"
+      5. Choose Apply password policy
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html
+    metadata:
+      cis_control: "1.6"
+      cis_level: 1
+
+  - id: cis-1.7
+    name: Ensure IAM password policy requires at least one symbol
+    description: |
+      Password policies are used to enforce password complexity requirements. IAM password
+      policies can require passwords to contain at least one symbol.
+    severity: low
+    resource_types:
+      - aws_iam_account_password_policy
+    condition: |
+      resource.get('type') == 'aws_iam_account_password_policy' and
+      resource.get('raw', {}).get('RequireSymbols') == True
+    remediation: |
+      1. Open the IAM console
+      2. Choose Account settings
+      3. Under Password policy, choose Change password policy
+      4. Select "Require at least one non-alphanumeric character"
+      5. Choose Apply password policy
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html
+    metadata:
+      cis_control: "1.7"
+      cis_level: 1
+
+  - id: cis-1.8
+    name: Ensure IAM password policy requires at least one number
+    description: |
+      Password policies are used to enforce password complexity requirements. IAM password
+      policies can require passwords to contain at least one number.
+    severity: low
+    resource_types:
+      - aws_iam_account_password_policy
+    condition: |
+      resource.get('type') == 'aws_iam_account_password_policy' and
+      resource.get('raw', {}).get('RequireNumbers') == True
+    remediation: |
+      1. Open the IAM console
+      2. Choose Account settings
+      3. Under Password policy, choose Change password policy
+      4. Select "Require at least one number"
+      5. Choose Apply password policy
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html
+    metadata:
+      cis_control: "1.8"
+      cis_level: 1
+
+  - id: cis-1.9
+    name: Ensure IAM password policy requires minimum length of 14 or greater
+    description: |
+      Password policies are used to enforce password complexity requirements. IAM password
+      policies can require passwords to be of a minimum length.
+    severity: medium
+    resource_types:
+      - aws_iam_account_password_policy
+    condition: |
+      resource.get('type') == 'aws_iam_account_password_policy' and
+      resource.get('raw', {}).get('MinimumPasswordLength', 0) >= 14
+    remediation: |
+      1. Open the IAM console
+      2. Choose Account settings
+      3. Under Password policy, choose Change password policy
+      4. Set "Minimum password length" to 14 or greater
+      5. Choose Apply password policy
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html
+    metadata:
+      cis_control: "1.9"
+      cis_level: 1
+
+  - id: cis-1.10
+    name: Ensure IAM password policy prevents password reuse
+    description: |
+      IAM password policies can prevent the reuse of a given number of previous passwords.
+      It is recommended that the password policy prevent the reuse of passwords.
+    severity: low
+    resource_types:
+      - aws_iam_account_password_policy
+    condition: |
+      resource.get('type') == 'aws_iam_account_password_policy' and
+      resource.get('raw', {}).get('PasswordReusePrevention', 0) >= 24
+    remediation: |
+      1. Open the IAM console
+      2. Choose Account settings
+      3. Under Password policy, choose Change password policy
+      4. Set "Number of passwords to remember" to 24
+      5. Choose Apply password policy
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html
+    metadata:
+      cis_control: "1.10"
+      cis_level: 1
+
+  - id: cis-1.11
+    name: Ensure IAM password policy expires passwords within 90 days or less
+    description: |
+      IAM password policies can require passwords to be rotated or expired after a given
+      number of days. It is recommended that the password policy require password rotation.
+    severity: low
+    resource_types:
+      - aws_iam_account_password_policy
+    condition: |
+      resource.get('type') == 'aws_iam_account_password_policy' and
+      resource.get('raw', {}).get('MaxPasswordAge', 999) <= 90 and
+      resource.get('raw', {}).get('ExpirePasswords') == True
+    remediation: |
+      1. Open the IAM console
+      2. Choose Account settings
+      3. Under Password policy, choose Change password policy
+      4. Select "Enable password expiration"
+      5. Set "Password expiration period" to 90 days or less
+      6. Choose Apply password policy
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html
+    metadata:
+      cis_control: "1.11"
+      cis_level: 1
+
+  - id: cis-1.12
+    name: Ensure no root account access key exists
+    description: |
+      The root account is the most privileged user in an AWS account. AWS Access Keys provide
+      programmatic access to a given AWS account. It is recommended that all access keys
+      associated with the root account be removed.
+    severity: critical
+    resource_types:
+      - aws_iam_user
+    condition: |
+      resource.get('type') == 'aws_iam_user' and
+      (resource.get('name') != 'root' or not resource.get('raw', {}).get('has_access_keys', False))
+    remediation: |
+      1. Sign in to the AWS Management Console as root
+      2. Choose your account name in the navigation bar
+      3. Choose My Security Credentials
+      4. In the Access keys section, delete any existing access keys
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
+    metadata:
+      cis_control: "1.12"
+      cis_level: 1
+
+  - id: cis-1.13
+    name: Ensure MFA is enabled for the root account
+    description: |
+      The root account is the most privileged user in an AWS account. MFA adds an extra layer
+      of protection on top of a user name and password. It is recommended that MFA be enabled
+      for the root account.
+    severity: critical
+    resource_types:
+      - aws_iam_user
+    condition: |
+      resource.get('type') == 'aws_iam_user' and
+      (resource.get('name') != 'root' or resource.get('raw', {}).get('mfa_enabled') == True)
+    remediation: |
+      1. Sign in to the AWS Management Console as root
+      2. Choose your account name in the navigation bar
+      3. Choose My Security Credentials
+      4. In the Multi-factor authentication (MFA) section, choose Activate MFA
+      5. Follow the wizard to configure MFA
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html
+    metadata:
+      cis_control: "1.13"
+      cis_level: 1
+
+  - id: cis-1.14
+    name: Ensure hardware MFA is enabled for the root account
+    description: |
+      The root account is the most privileged user in an AWS account. MFA adds an extra layer
+      of protection. Hardware MFA provides additional security over virtual MFA.
+    severity: high
+    resource_types:
+      - aws_iam_user
+    condition: |
+      resource.get('type') == 'aws_iam_user' and
+      (resource.get('name') != 'root' or resource.get('raw', {}).get('hardware_mfa_enabled') == True)
+    remediation: |
+      1. Sign in to the AWS Management Console as root
+      2. Choose your account name in the navigation bar
+      3. Choose My Security Credentials
+      4. In the Multi-factor authentication (MFA) section, choose Activate MFA
+      5. Choose "Hardware MFA device"
+      6. Follow the wizard to configure hardware MFA
+    references:
+      - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_physical.html
+    metadata:
+      cis_control: "1.14"
+      cis_level: 2
+
+  - id: cis-3.2
+    name: Ensure CloudTrail log file validation is enabled
+    description: |
+      CloudTrail log file validation creates a digitally signed digest file containing a hash
+      of each log that CloudTrail writes to S3. These digest files can be used to determine
+      whether a log file was modified, deleted, or unchanged after CloudTrail delivered it.
+    severity: medium
+    resource_types:
+      - aws_cloudtrail
+    condition: |
+      resource.get('type') == 'aws_cloudtrail' and
+      resource.get('raw', {}).get('LogFileValidationEnabled') == True
+    remediation: |
+      1. Open the CloudTrail console
+      2. Choose Trails
+      3. Select the trail
+      4. Under General details, choose Edit
+      5. Under Additional settings, select "Enable log file validation"
+      6. Choose Save changes
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
+    metadata:
+      cis_control: "3.2"
+      cis_level: 2
+
+  - id: cis-3.3
+    name: Ensure the S3 bucket used to store CloudTrail logs is not publicly accessible
+    description: |
+      CloudTrail logs a record of every API call made in your AWS account. These logs are
+      stored in an S3 bucket. It is recommended that the bucket policy prevent public access
+      to the CloudTrail logs.
+    severity: critical
+    resource_types:
+      - aws_s3_bucket
+    condition: |
+      resource.get('type') == 'aws_s3_bucket' and
+      (not resource.get('raw', {}).get('is_cloudtrail_bucket', False) or
+       not resource.get('raw', {}).get('public_access', {}).get('block_public_acls', False))
+    remediation: |
+      1. Open the S3 console
+      2. Select the CloudTrail bucket
+      3. Choose Permissions
+      4. Choose Block public access
+      5. Choose Edit
+      6. Select "Block all public access"
+      7. Choose Save changes
+    references:
+      - https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+    metadata:
+      cis_control: "3.3"
+      cis_level: 1
+
+  - id: cis-3.4
+    name: Ensure CloudTrail trails are integrated with CloudWatch Logs
+    description: |
+      AWS CloudTrail is a web service that records AWS API calls made in a given AWS account.
+      The recorded information includes the identity of the API caller, the time of the API call,
+      and more. CloudWatch Logs is a web service that enables you to monitor, store, and access
+      log files from various sources. Integration enables real-time analysis of CloudTrail logs.
+    severity: medium
+    resource_types:
+      - aws_cloudtrail
+    condition: |
+      resource.get('type') == 'aws_cloudtrail' and
+      resource.get('raw', {}).get('CloudWatchLogsLogGroupArn') is not None and
+      len(resource.get('raw', {}).get('CloudWatchLogsLogGroupArn', '')) > 0
+    remediation: |
+      1. Open the CloudTrail console
+      2. Choose Trails
+      3. Select the trail
+      4. Under CloudWatch Logs, choose Configure
+      5. Create a new log group or select an existing one
+      6. Create or select an IAM role
+      7. Choose Allow
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/send-cloudtrail-events-to-cloudwatch-logs.html
+    metadata:
+      cis_control: "3.4"
+      cis_level: 1
+
+  - id: cis-3.5
+    name: Ensure AWS Config is enabled in all regions
+    description: |
+      AWS Config is a web service that performs configuration management of supported AWS
+      resources within your account and delivers log files to you. It is recommended that
+      AWS Config be enabled in all regions.
+    severity: medium
+    resource_types:
+      - aws_config_recorder
+    condition: |
+      resource.get('type') == 'aws_config_recorder' and
+      resource.get('raw', {}).get('recording', False) == True and
+      resource.get('raw', {}).get('recordingGroup', {}).get('allSupported', False) == True
+    remediation: |
+      1. Open the AWS Config console
+      2. Choose Get started
+      3. Select "Record all resources supported in this region"
+      4. Choose an S3 bucket for configuration snapshots
+      5. Choose an SNS topic for notifications
+      6. Choose Next
+      7. Review and choose Confirm
+    references:
+      - https://docs.aws.amazon.com/config/latest/developerguide/gs-console.html
+    metadata:
+      cis_control: "3.5"
+      cis_level: 1
+
+  - id: cis-3.6
+    name: Ensure S3 bucket access logging is enabled on the CloudTrail S3 bucket
+    description: |
+      S3 Bucket Access Logging generates a log that contains access records for each request
+      made to your S3 bucket. It is recommended that bucket access logging be enabled on the
+      CloudTrail S3 bucket.
+    severity: low
+    resource_types:
+      - aws_s3_bucket
+    condition: |
+      resource.get('type') == 'aws_s3_bucket' and
+      (not resource.get('raw', {}).get('is_cloudtrail_bucket', False) or
+       resource.get('raw', {}).get('logging', {}).get('enabled', False) == True)
+    remediation: |
+      1. Open the S3 console
+      2. Select the CloudTrail bucket
+      3. Choose Properties
+      4. Choose Server access logging
+      5. Choose Enable logging
+      6. Select a target bucket
+      7. Choose Save
+    references:
+      - https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html
+    metadata:
+      cis_control: "3.6"
+      cis_level: 1
+
+  - id: cis-3.7
+    name: Ensure CloudTrail logs are encrypted at rest using KMS CMKs
+    description: |
+      AWS CloudTrail is a web service that records AWS API calls for an account and makes those
+      logs available to users and resources in accordance with IAM policies. CloudTrail logs can
+      be encrypted using AWS Key Management Service (KMS) Customer Master Keys (CMKs).
+    severity: medium
+    resource_types:
+      - aws_cloudtrail
+    condition: |
+      resource.get('type') == 'aws_cloudtrail' and
+      resource.get('raw', {}).get('KmsKeyId') is not None and
+      len(resource.get('raw', {}).get('KmsKeyId', '')) > 0
+    remediation: |
+      1. Open the CloudTrail console
+      2. Choose Trails
+      3. Select the trail
+      4. Under General details, choose Edit
+      5. Under Additional settings, select "Encrypt log files with SSE-KMS"
+      6. Choose a KMS key
+      7. Choose Save changes
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/encrypting-cloudtrail-log-files-with-aws-kms.html
+    metadata:
+      cis_control: "3.7"
+      cis_level: 2
+
+  - id: cis-3.8
+    name: Ensure rotation for customer created CMKs is enabled
+    description: |
+      AWS Key Management Service (KMS) allows customers to rotate the backing key which is key
+      material stored within the KMS which is tied to the key ID of the Customer Created Customer
+      Master Key (CMK). It is recommended that CMK key rotation be enabled.
+    severity: medium
+    resource_types:
+      - aws_kms_key
+    condition: |
+      resource.get('type') == 'aws_kms_key' and
+      resource.get('raw', {}).get('KeyRotationEnabled', False) == True
+    remediation: |
+      1. Open the KMS console
+      2. Choose Customer managed keys
+      3. Select the key
+      4. Choose Key rotation tab
+      5. Select "Automatically rotate this CMK every year"
+      6. Choose Save
+    references:
+      - https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html
+    metadata:
+      cis_control: "3.8"
+      cis_level: 2
+
+  - id: cis-2.4.1
+    name: Ensure VPC flow logging is enabled in all VPCs
+    description: |
+      VPC Flow Logs is a feature that enables you to capture information about the IP traffic
+      going to and from network interfaces in your VPC. After you've created a flow log, you can
+      view and retrieve its data in CloudWatch Logs. It is recommended that VPC Flow Logs be
+      enabled for packet "Rejects" for VPCs.
+    severity: medium
+    resource_types:
+      - aws_vpc
+    condition: |
+      resource.get('type') == 'aws_vpc' and
+      resource.get('raw', {}).get('flow_logs_enabled', False) == True
+    remediation: |
+      1. Open the VPC console
+      2. Select the VPC
+      3. Choose Actions > Create flow log
+      4. For Filter, choose Reject
+      5. For Destination, choose Send to CloudWatch Logs
+      6. Select a log group
+      7. Select an IAM role
+      8. Choose Create flow log
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html
+    metadata:
+      cis_control: "2.4.1"
+      cis_level: 2
+
+  - id: cis-4.4
+    name: Ensure routing tables for VPC peering are least access
+    description: |
+      Once a VPC peering connection is established, routing tables must be updated to establish
+      any connections between the peered VPCs. These routes can be as specific as desired - even
+      peering a VPC to only a single host on the other side of the connection.
+    severity: medium
+    resource_types:
+      - aws_route_table
+    condition: |
+      resource.get('type') == 'aws_route_table' and
+      not any(route.get('DestinationCidrBlock') == '0.0.0.0/0' and
+              route.get('VpcPeeringConnectionId') is not None
+              for route in resource.get('raw', {}).get('Routes', []))
+    remediation: |
+      1. Open the VPC console
+      2. Choose Route Tables
+      3. Select the route table
+      4. Choose Routes tab
+      5. Review routes with VPC peering connections
+      6. Remove overly permissive routes (0.0.0.0/0)
+      7. Add specific CIDR blocks instead
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-routing.html
+    metadata:
+      cis_control: "4.4"
+      cis_level: 2
+
+  - id: cis-4.5
+    name: Ensure Network ACLs do not allow ingress from 0.0.0.0/0 to port 22
+    description: |
+      Network Access Control Lists (NACLs) provide stateless filtering of ingress/egress network
+      traffic to AWS resources. It is recommended that no NACL allows unrestricted ingress access
+      to port 22 (SSH).
+    severity: high
+    resource_types:
+      - aws_network_acl
+    condition: |
+      resource.get('type') == 'aws_network_acl' and
+      not any(entry.get('CidrBlock') == '0.0.0.0/0' and
+              entry.get('Protocol') == '6' and
+              entry.get('RuleAction') == 'allow' and
+              entry.get('Egress') == False and
+              (entry.get('PortRange', {}).get('From', 0) <= 22 <= entry.get('PortRange', {}).get('To', 0))
+              for entry in resource.get('raw', {}).get('Entries', []))
+    remediation: |
+      1. Open the VPC console
+      2. Choose Network ACLs
+      3. Select the NACL
+      4. Choose Inbound Rules
+      5. Remove or modify rules allowing 0.0.0.0/0 to port 22
+      6. Add specific IP ranges instead
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
+    metadata:
+      cis_control: "4.5"
+      cis_level: 2
+
+  - id: cis-4.6
+    name: Ensure Network ACLs do not allow ingress from 0.0.0.0/0 to port 3389
+    description: |
+      Network Access Control Lists (NACLs) provide stateless filtering of ingress/egress network
+      traffic to AWS resources. It is recommended that no NACL allows unrestricted ingress access
+      to port 3389 (RDP).
+    severity: high
+    resource_types:
+      - aws_network_acl
+    condition: |
+      resource.get('type') == 'aws_network_acl' and
+      not any(entry.get('CidrBlock') == '0.0.0.0/0' and
+              entry.get('Protocol') == '6' and
+              entry.get('RuleAction') == 'allow' and
+              entry.get('Egress') == False and
+              (entry.get('PortRange', {}).get('From', 0) <= 3389 <= entry.get('PortRange', {}).get('To', 0))
+              for entry in resource.get('raw', {}).get('Entries', []))
+    remediation: |
+      1. Open the VPC console
+      2. Choose Network ACLs
+      3. Select the NACL
+      4. Choose Inbound Rules
+      5. Remove or modify rules allowing 0.0.0.0/0 to port 3389
+      6. Add specific IP ranges instead
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
+    metadata:
+      cis_control: "4.6"
+      cis_level: 2
+
+  - id: cis-5.1
+    name: Ensure no security groups allow ingress from 0.0.0.0/0 to all ports
+    description: |
+      Security groups provide stateful filtering of ingress/egress network traffic to AWS
+      resources. It is recommended that no security group allows unrestricted ingress access
+      to all ports.
+    severity: critical
+    resource_types:
+      - aws_security_group
+    condition: |
+      resource.get('type') == 'aws_security_group' and
+      not any(rule.get('cidr') == '0.0.0.0/0' and
+              (rule.get('from_port', -1) == -1 or rule.get('to_port', -1) == -1)
+              for rule in resource.get('raw', {}).get('ingress_rules', []))
+    remediation: |
+      1. Open the VPC console
+      2. Choose Security Groups
+      3. Select the security group
+      4. Choose Inbound Rules
+      5. Remove rules allowing 0.0.0.0/0 to all ports
+      6. Add specific port ranges and IP addresses
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+    metadata:
+      cis_control: "5.1"
+      cis_level: 1
+
+  - id: cis-5.2
+    name: Ensure no security groups allow ingress from ::/0 to port 22
+    description: |
+      Security groups provide stateful filtering of ingress/egress network traffic to AWS
+      resources. It is recommended that no security group allows unrestricted ingress access
+      from IPv6 to port 22 (SSH).
+    severity: critical
+    resource_types:
+      - aws_security_group
+    condition: |
+      resource.get('type') == 'aws_security_group' and
+      not any(rule.get('cidr') == '::/0' and rule.get('port') == 22
+              for rule in resource.get('raw', {}).get('ingress_rules', []))
+    remediation: |
+      1. Open the VPC console
+      2. Choose Security Groups
+      3. Select the security group
+      4. Choose Inbound Rules
+      5. Remove or modify rules allowing ::/0 to port 22
+      6. Add specific IPv6 ranges instead
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+    metadata:
+      cis_control: "5.2"
+      cis_level: 1
+
+  - id: cis-5.3
+    name: Ensure no security groups allow ingress from ::/0 to port 3389
+    description: |
+      Security groups provide stateful filtering of ingress/egress network traffic to AWS
+      resources. It is recommended that no security group allows unrestricted ingress access
+      from IPv6 to port 3389 (RDP).
+    severity: critical
+    resource_types:
+      - aws_security_group
+    condition: |
+      resource.get('type') == 'aws_security_group' and
+      not any(rule.get('cidr') == '::/0' and rule.get('port') == 3389
+              for rule in resource.get('raw', {}).get('ingress_rules', []))
+    remediation: |
+      1. Open the VPC console
+      2. Choose Security Groups
+      3. Select the security group
+      4. Choose Inbound Rules
+      5. Remove or modify rules allowing ::/0 to port 3389
+      6. Add specific IPv6 ranges instead
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+    metadata:
+      cis_control: "5.3"
+      cis_level: 1
+
+  - id: cis-2.1.4
+    name: Ensure S3 bucket policy does not allow public access
+    description: |
+      Amazon S3 provides a number of security features to consider as you develop and implement
+      your own security policies. It is recommended that S3 bucket policies do not allow public
+      access to the bucket.
+    severity: critical
+    resource_types:
+      - aws_s3_bucket
+    condition: |
+      resource.get('type') == 'aws_s3_bucket' and
+      resource.get('raw', {}).get('public_access', {}).get('block_public_policy', True) == True
+    remediation: |
+      1. Open the S3 console
+      2. Select the bucket
+      3. Choose Permissions
+      4. Choose Block public access
+      5. Choose Edit
+      6. Select "Block public and cross-account access to buckets and objects through any public bucket or access point policies"
+      7. Choose Save changes
+    references:
+      - https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+    metadata:
+      cis_control: "2.1.4"
+      cis_level: 1
+
+  - id: cis-2.1.5
+    name: Ensure S3 buckets are configured with Block Public Access
+    description: |
+      Amazon S3 Block Public Access provides settings for access points, buckets, and accounts
+      to help you manage public access to Amazon S3 resources. It is recommended that Block
+      Public Access be enabled at the account level.
+    severity: high
+    resource_types:
+      - aws_s3_bucket
+    condition: |
+      resource.get('type') == 'aws_s3_bucket' and
+      resource.get('raw', {}).get('public_access', {}).get('block_public_acls', True) == True and
+      resource.get('raw', {}).get('public_access', {}).get('ignore_public_acls', True) == True and
+      resource.get('raw', {}).get('public_access', {}).get('block_public_policy', True) == True and
+      resource.get('raw', {}).get('public_access', {}).get('restrict_public_buckets', True) == True
+    remediation: |
+      1. Open the S3 console
+      2. Select the bucket
+      3. Choose Permissions
+      4. Choose Block public access
+      5. Choose Edit
+      6. Select all four options
+      7. Choose Save changes
+    references:
+      - https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+    metadata:
+      cis_control: "2.1.5"
+      cis_level: 1
+
+  - id: cis-2.2.2
+    name: Ensure EC2 instances use IMDSv2
+    description: |
+      Instance Metadata Service Version 2 (IMDSv2) is a session-oriented method to request
+      instance metadata. It is recommended that all EC2 instances use IMDSv2 to protect against
+      SSRF vulnerabilities.
+    severity: high
+    resource_types:
+      - aws_ec2_instance
+    condition: |
+      resource.get('type') == 'aws_ec2_instance' and
+      resource.get('raw', {}).get('MetadataOptions', {}).get('HttpTokens') == 'required'
+    remediation: |
+      1. Open the EC2 console
+      2. Select the instance
+      3. Choose Actions > Instance settings > Modify instance metadata options
+      4. For IMDSv2, choose Required
+      5. Choose Save
+    references:
+      - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html
+    metadata:
+      cis_control: "2.2.2"
+      cis_level: 2
+
+  - id: cis-2.2.3
+    name: Ensure EC2 instances are not using default security groups
+    description: |
+      EC2 instances should not use the default security group. Default security groups allow
+      all traffic between instances assigned to the same security group.
+    severity: medium
+    resource_types:
+      - aws_ec2_instance
+    condition: |
+      resource.get('type') == 'aws_ec2_instance' and
+      not any(sg.get('GroupName') == 'default'
+              for sg in resource.get('raw', {}).get('SecurityGroups', []))
+    remediation: |
+      1. Open the EC2 console
+      2. Select the instance
+      3. Choose Actions > Security > Change security groups
+      4. Remove the default security group
+      5. Add appropriate custom security groups
+      6. Choose Save
+    references:
+      - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html
+    metadata:
+      cis_control: "2.2.3"
+      cis_level: 1
+
+  - id: cis-2.2.4
+    name: Ensure EC2 instances have detailed monitoring enabled
+    description: |
+      Detailed monitoring provides data in 1-minute periods for EC2 instances. It is recommended
+      that detailed monitoring be enabled for production instances to enable faster response to
+      performance issues.
+    severity: low
+    resource_types:
+      - aws_ec2_instance
+    condition: |
+      resource.get('type') == 'aws_ec2_instance' and
+      resource.get('raw', {}).get('Monitoring', {}).get('State') == 'enabled'
+    remediation: |
+      1. Open the EC2 console
+      2. Select the instance
+      3. Choose Actions > Monitor and troubleshoot > Manage detailed monitoring
+      4. Select "Enable"
+      5. Choose Save
+    references:
+      - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch-new.html
+    metadata:
+      cis_control: "2.2.4"
+      cis_level: 2
+
+  - id: cis-2.5.1
+    name: Ensure Lambda functions are not publicly accessible
+    description: |
+      AWS Lambda functions should not be publicly accessible. Public access allows anyone on
+      the internet to invoke your function, potentially leading to unexpected charges and
+      security issues.
+    severity: critical
+    resource_types:
+      - aws_lambda_function
+    condition: |
+      resource.get('type') == 'aws_lambda_function' and
+      not resource.get('raw', {}).get('is_public', False)
+    remediation: |
+      1. Open the Lambda console
+      2. Select the function
+      3. Choose Configuration > Permissions
+      4. Review resource-based policy
+      5. Remove any statements with Principal: "*"
+      6. Add specific principals instead
+    references:
+      - https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html
+    metadata:
+      cis_control: "2.5.1"
+      cis_level: 1
+
+  - id: cis-2.5.2
+    name: Ensure Lambda functions use latest runtime versions
+    description: |
+      AWS Lambda supports multiple language runtimes. It is recommended that Lambda functions
+      use the latest runtime versions to benefit from security patches and new features.
+    severity: medium
+    resource_types:
+      - aws_lambda_function
+    condition: |
+      resource.get('type') == 'aws_lambda_function' and
+      not resource.get('raw', {}).get('runtime_deprecated', False)
+    remediation: |
+      1. Open the Lambda console
+      2. Select the function
+      3. Choose Code tab
+      4. Update Runtime to latest version
+      5. Test the function
+      6. Choose Deploy
+    references:
+      - https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
+    metadata:
+      cis_control: "2.5.2"
+      cis_level: 2
+
+  - id: cis-2.5.3
+    name: Ensure Lambda functions have DLQ configured
+    description: |
+      Dead Letter Queues (DLQ) allow you to capture information about failed Lambda function
+      invocations. It is recommended that Lambda functions have DLQ configured for error handling.
+    severity: low
+    resource_types:
+      - aws_lambda_function
+    condition: |
+      resource.get('type') == 'aws_lambda_function' and
+      resource.get('raw', {}).get('DeadLetterConfig', {}).get('TargetArn') is not None
+    remediation: |
+      1. Open the Lambda console
+      2. Select the function
+      3. Choose Configuration > Asynchronous invocation
+      4. Under Dead-letter queue service, choose SQS or SNS
+      5. Select a queue or topic
+      6. Choose Save
+    references:
+      - https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html
+    metadata:
+      cis_control: "2.5.3"
+      cis_level: 2
+
+  # ============================================================================
+  # Section 4: Monitoring
+  # ============================================================================
+
+  - id: cis-4.1
+    name: Ensure a log metric filter and alarm exist for unauthorized API calls
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for unauthorized API calls.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      # Check if there's a metric filter with pattern for unauthorized API calls
+      # Pattern should match: errorCode = "*UnauthorizedOperation" or errorCode = "AccessDenied*"
+      import re
+
+      # Get all metric filters
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      # Look for filter matching unauthorized API calls pattern
+      unauthorized_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          # Check if pattern contains unauthorized/access denied patterns
+          if ('UnauthorizedOperation' in pattern or 'AccessDenied' in pattern) and 'errorCode' in pattern:
+              unauthorized_filter = mf
+              break
+
+      if not unauthorized_filter:
+          False
+      else:
+          # Check if there's an alarm for this metric
+          metric_name = unauthorized_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+
+          # Check if any alarm monitors this metric
+          alarm_exists = any(
+              alarm.get('raw', {}).get('MetricName') == metric_name
+              for alarm in alarms
+          )
+
+          alarm_exists
+    remediation: |
+      1. Create a metric filter for CloudTrail log group:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name UnauthorizedAPICalls \
+           --filter-pattern '{ ($.errorCode = "*UnauthorizedOperation") || ($.errorCode = "AccessDenied*") }' \
+           --metric-transformations metricName=UnauthorizedAPICalls,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm:
+         aws cloudwatch put-metric-alarm \
+           --alarm-name UnauthorizedAPICallsAlarm \
+           --metric-name UnauthorizedAPICalls \
+           --namespace CloudTrailMetrics \
+           --statistic Sum \
+           --period 300 \
+           --threshold 1 \
+           --comparison-operator GreaterThanOrEqualToThreshold \
+           --evaluation-periods 1
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.1"
+      cis_level: 1
+
+  - id: cis-4.2
+    name: Ensure a log metric filter and alarm exist for Management Console sign-in without MFA
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for console logins that are not protected by MFA.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      # Check for metric filter matching console sign-in without MFA
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      mfa_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          # Pattern should check for ConsoleLogin without MFA
+          if 'ConsoleLogin' in pattern and 'mfaAuthenticated' in pattern:
+              mfa_filter = mf
+              break
+
+      if not mfa_filter:
+          False
+      else:
+          metric_name = mfa_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name ConsoleSignInWithoutMFA \
+           --filter-pattern '{ ($.eventName = "ConsoleLogin") && ($.additionalEventData.MFAUsed != "Yes") }' \
+           --metric-transformations metricName=ConsoleSignInWithoutMFA,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.2"
+      cis_level: 1
+
+  - id: cis-4.3
+    name: Ensure a log metric filter and alarm exist for usage of root account
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for root login attempts.
+    severity: high
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      root_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          if 'Root' in pattern or 'root' in pattern:
+              root_filter = mf
+              break
+
+      if not root_filter:
+          False
+      else:
+          metric_name = root_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name RootAccountUsage \
+           --filter-pattern '{ $.userIdentity.type = "Root" && $.userIdentity.invokedBy NOT EXISTS && $.eventType != "AwsServiceEvent" }' \
+           --metric-transformations metricName=RootAccountUsage,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.3"
+      cis_level: 1
+
+  - id: cis-4.4
+    name: Ensure a log metric filter and alarm exist for IAM policy changes
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for detecting changes to IAM policies.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      iam_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          # Pattern should include IAM policy change events
+          iam_events = ['DeleteGroupPolicy', 'DeleteRolePolicy', 'DeleteUserPolicy',
+                       'PutGroupPolicy', 'PutRolePolicy', 'PutUserPolicy',
+                       'CreatePolicy', 'DeletePolicy', 'AttachRolePolicy', 'DetachRolePolicy']
+          if any(event in pattern for event in iam_events):
+              iam_filter = mf
+              break
+
+      if not iam_filter:
+          False
+      else:
+          metric_name = iam_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name IAMPolicyChanges \
+           --filter-pattern '{($.eventName=DeleteGroupPolicy)||($.eventName=DeleteRolePolicy)||($.eventName=DeleteUserPolicy)||($.eventName=PutGroupPolicy)||($.eventName=PutRolePolicy)||($.eventName=PutUserPolicy)||($.eventName=CreatePolicy)||($.eventName=DeletePolicy)||($.eventName=CreatePolicyVersion)||($.eventName=DeletePolicyVersion)||($.eventName=AttachRolePolicy)||($.eventName=DetachRolePolicy)||($.eventName=AttachUserPolicy)||($.eventName=DetachUserPolicy)||($.eventName=AttachGroupPolicy)||($.eventName=DetachGroupPolicy)}' \
+           --metric-transformations metricName=IAMPolicyChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.4"
+      cis_level: 1
+
+  - id: cis-4.5
+    name: Ensure a log metric filter and alarm exist for CloudTrail configuration changes
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for detecting changes to CloudTrail's configurations.
+    severity: high
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      ct_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          ct_events = ['CreateTrail', 'UpdateTrail', 'DeleteTrail', 'StartLogging', 'StopLogging']
+          if any(event in pattern for event in ct_events):
+              ct_filter = mf
+              break
+
+      if not ct_filter:
+          False
+      else:
+          metric_name = ct_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name CloudTrailChanges \
+           --filter-pattern '{ ($.eventName = CreateTrail) || ($.eventName = UpdateTrail) || ($.eventName = DeleteTrail) || ($.eventName = StartLogging) || ($.eventName = StopLogging) }' \
+           --metric-transformations metricName=CloudTrailChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.5"
+      cis_level: 1
+
+  - id: cis-4.6
+    name: Ensure a log metric filter and alarm exist for AWS Management Console authentication failures
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for failed console authentication attempts.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      auth_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          if 'ConsoleLogin' in pattern and ('Failed' in pattern or 'errorMessage' in pattern):
+              auth_filter = mf
+              break
+
+      if not auth_filter:
+          False
+      else:
+          metric_name = auth_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name ConsoleAuthenticationFailures \
+           --filter-pattern '{ ($.eventName = ConsoleLogin) && ($.errorMessage = "Failed authentication") }' \
+           --metric-transformations metricName=ConsoleAuthenticationFailures,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.6"
+      cis_level: 2
+
+  - id: cis-4.7
+    name: Ensure a log metric filter and alarm exist for disabling or scheduled deletion of customer managed keys
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for customer managed Key Management Service (KMS) Key deletion.
+    severity: high
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      kms_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          if ('DisableKey' in pattern or 'ScheduleKeyDeletion' in pattern):
+              kms_filter = mf
+              break
+
+      if not kms_filter:
+          False
+      else:
+          metric_name = kms_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name KMSKeyDeletion \
+           --filter-pattern '{ ($.eventSource = kms.amazonaws.com) && (($.eventName=DisableKey)||($.eventName=ScheduleKeyDeletion)) }' \
+           --metric-transformations metricName=KMSKeyDeletion,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.7"
+      cis_level: 2
+
+  - id: cis-4.8
+    name: Ensure a log metric filter and alarm exist for S3 bucket policy changes
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for changes made to S3 bucket policies.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      s3_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          s3_events = ['PutBucketAcl', 'PutBucketPolicy', 'PutBucketCors', 'PutBucketLifecycle',
+                      'PutBucketReplication', 'DeleteBucketPolicy', 'DeleteBucketCors',
+                      'DeleteBucketLifecycle', 'DeleteBucketReplication']
+          if any(event in pattern for event in s3_events):
+              s3_filter = mf
+              break
+
+      if not s3_filter:
+          False
+      else:
+          metric_name = s3_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name S3BucketPolicyChanges \
+           --filter-pattern '{ ($.eventSource = s3.amazonaws.com) && (($.eventName = PutBucketAcl) || ($.eventName = PutBucketPolicy) || ($.eventName = PutBucketCors) || ($.eventName = PutBucketLifecycle) || ($.eventName = PutBucketReplication) || ($.eventName = DeleteBucketPolicy) || ($.eventName = DeleteBucketCors) || ($.eventName = DeleteBucketLifecycle) || ($.eventName = DeleteBucketReplication)) }' \
+           --metric-transformations metricName=S3BucketPolicyChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.8"
+      cis_level: 2
+
+  - id: cis-4.9
+    name: Ensure a log metric filter and alarm exist for AWS Config configuration changes
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is recommended that a metric filter
+      and alarm be established for detecting changes to AWS Config configurations.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      config_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          config_events = ['PutConfigurationRecorder', 'StopConfigurationRecorder',
+                          'DeleteDeliveryChannel', 'PutDeliveryChannel']
+          if any(event in pattern for event in config_events):
+              config_filter = mf
+              break
+
+      if not config_filter:
+          False
+      else:
+          metric_name = config_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name AWSConfigChanges \
+           --filter-pattern '{ ($.eventSource = config.amazonaws.com) && (($.eventName=StopConfigurationRecorder)||($.eventName=DeleteDeliveryChannel)||($.eventName=PutDeliveryChannel)||($.eventName=PutConfigurationRecorder)) }' \
+           --metric-transformations metricName=AWSConfigChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.9"
+      cis_level: 2
+
+  - id: cis-4.10
+    name: Ensure a log metric filter and alarm exist for security group changes
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. Security Groups are a stateful packet
+      filter that controls ingress and egress traffic within a VPC. It is recommended that a metric
+      filter and alarm be established for detecting changes to Security Groups.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      sg_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          sg_events = ['AuthorizeSecurityGroupIngress', 'AuthorizeSecurityGroupEgress',
+                      'RevokeSecurityGroupIngress', 'RevokeSecurityGroupEgress',
+                      'CreateSecurityGroup', 'DeleteSecurityGroup']
+          if any(event in pattern for event in sg_events):
+              sg_filter = mf
+              break
+
+      if not sg_filter:
+          False
+      else:
+          metric_name = sg_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name SecurityGroupChanges \
+           --filter-pattern '{ ($.eventName = AuthorizeSecurityGroupIngress) || ($.eventName = AuthorizeSecurityGroupEgress) || ($.eventName = RevokeSecurityGroupIngress) || ($.eventName = RevokeSecurityGroupEgress) || ($.eventName = CreateSecurityGroup) || ($.eventName = DeleteSecurityGroup) }' \
+           --metric-transformations metricName=SecurityGroupChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.10"
+      cis_level: 2
+
+  - id: cis-4.11
+    name: Ensure a log metric filter and alarm exist for changes to Network Access Control Lists (NACL)
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. NACLs are used as a stateless packet
+      filter to control ingress and egress traffic for subnets within a VPC. It is recommended that a
+      metric filter and alarm be established for changes made to NACLs.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      nacl_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          nacl_events = ['CreateNetworkAcl', 'CreateNetworkAclEntry', 'DeleteNetworkAcl',
+                        'DeleteNetworkAclEntry', 'ReplaceNetworkAclEntry', 'ReplaceNetworkAclAssociation']
+          if any(event in pattern for event in nacl_events):
+              nacl_filter = mf
+              break
+
+      if not nacl_filter:
+          False
+      else:
+          metric_name = nacl_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name NACLChanges \
+           --filter-pattern '{ ($.eventName = CreateNetworkAcl) || ($.eventName = CreateNetworkAclEntry) || ($.eventName = DeleteNetworkAcl) || ($.eventName = DeleteNetworkAclEntry) || ($.eventName = ReplaceNetworkAclEntry) || ($.eventName = ReplaceNetworkAclAssociation) }' \
+           --metric-transformations metricName=NACLChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.11"
+      cis_level: 2
+
+  - id: cis-4.12
+    name: Ensure a log metric filter and alarm exist for changes to network gateways
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. Network gateways are required to send/receive
+      traffic to a destination outside of a VPC. It is recommended that a metric filter and alarm be
+      established for changes to network gateways.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      gw_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          gw_events = ['CreateCustomerGateway', 'DeleteCustomerGateway', 'AttachInternetGateway',
+                      'CreateInternetGateway', 'DeleteInternetGateway', 'DetachInternetGateway']
+          if any(event in pattern for event in gw_events):
+              gw_filter = mf
+              break
+
+      if not gw_filter:
+          False
+      else:
+          metric_name = gw_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name NetworkGatewayChanges \
+           --filter-pattern '{ ($.eventName = CreateCustomerGateway) || ($.eventName = DeleteCustomerGateway) || ($.eventName = AttachInternetGateway) || ($.eventName = CreateInternetGateway) || ($.eventName = DeleteInternetGateway) || ($.eventName = DetachInternetGateway) }' \
+           --metric-transformations metricName=NetworkGatewayChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.12"
+      cis_level: 1
+
+  - id: cis-4.13
+    name: Ensure a log metric filter and alarm exist for route table changes
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. Routing tables are used to route network
+      traffic between subnets and to network gateways. It is recommended that a metric filter and alarm
+      be established for changes to route tables.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      rt_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          rt_events = ['CreateRoute', 'CreateRouteTable', 'ReplaceRoute', 'ReplaceRouteTableAssociation',
+                      'DeleteRouteTable', 'DeleteRoute', 'DisassociateRouteTable']
+          if any(event in pattern for event in rt_events):
+              rt_filter = mf
+              break
+
+      if not rt_filter:
+          False
+      else:
+          metric_name = rt_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name RouteTableChanges \
+           --filter-pattern '{ ($.eventName = CreateRoute) || ($.eventName = CreateRouteTable) || ($.eventName = ReplaceRoute) || ($.eventName = ReplaceRouteTableAssociation) || ($.eventName = DeleteRouteTable) || ($.eventName = DeleteRoute) || ($.eventName = DisassociateRouteTable) }' \
+           --metric-transformations metricName=RouteTableChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.13"
+      cis_level: 1
+
+  - id: cis-4.14
+    name: Ensure a log metric filter and alarm exist for VPC changes
+    description: |
+      Real-time monitoring of API calls can be achieved by directing CloudTrail Logs to CloudWatch Logs
+      and establishing corresponding metric filters and alarms. It is possible to have more than one VPC
+      within an account. It is also possible to create a peer connection between two VPCs enabling network
+      traffic to route between VPCs. It is recommended that a metric filter and alarm be established for
+      changes made to VPCs.
+    severity: medium
+    resource_types:
+      - aws_cloudwatch_metric_filter
+      - aws_cloudwatch_alarm
+    condition: |
+      metric_filters = [r for r in resources if r.get('type') == 'aws_cloudwatch_metric_filter']
+
+      vpc_filter = None
+      for mf in metric_filters:
+          pattern = mf.get('raw', {}).get('filterPattern', '')
+          vpc_events = ['CreateVpc', 'DeleteVpc', 'ModifyVpcAttribute', 'AcceptVpcPeeringConnection',
+                       'CreateVpcPeeringConnection', 'DeleteVpcPeeringConnection', 'RejectVpcPeeringConnection',
+                       'AttachClassicLinkVpc', 'DetachClassicLinkVpc', 'DisableVpcClassicLink', 'EnableVpcClassicLink']
+          if any(event in pattern for event in vpc_events):
+              vpc_filter = mf
+              break
+
+      if not vpc_filter:
+          False
+      else:
+          metric_name = vpc_filter.get('raw', {}).get('metricTransformations', [{}])[0].get('metricName')
+          alarms = [r for r in resources if r.get('type') == 'aws_cloudwatch_alarm']
+          alarm_exists = any(alarm.get('raw', {}).get('MetricName') == metric_name for alarm in alarms)
+          alarm_exists
+    remediation: |
+      1. Create a metric filter:
+         aws logs put-metric-filter \
+           --log-group-name <cloudtrail_log_group> \
+           --filter-name VPCChanges \
+           --filter-pattern '{ ($.eventName = CreateVpc) || ($.eventName = DeleteVpc) || ($.eventName = ModifyVpcAttribute) || ($.eventName = AcceptVpcPeeringConnection) || ($.eventName = CreateVpcPeeringConnection) || ($.eventName = DeleteVpcPeeringConnection) || ($.eventName = RejectVpcPeeringConnection) || ($.eventName = AttachClassicLinkVpc) || ($.eventName = DetachClassicLinkVpc) || ($.eventName = DisableVpcClassicLink) || ($.eventName = EnableVpcClassicLink) }' \
+           --metric-transformations metricName=VPCChanges,metricNamespace=CloudTrailMetrics,metricValue=1
+
+      2. Create a CloudWatch alarm for the metric
+    references:
+      - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+    metadata:
+      cis_control: "4.14"
+      cis_level: 1
+

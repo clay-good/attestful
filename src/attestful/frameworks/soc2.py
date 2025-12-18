@@ -1127,19 +1127,867 @@ def get_soc2_aws_checks() -> list[CheckDefinition]:
     ]
 
 
-def create_soc2_evaluator() -> Evaluator:
+def get_soc2_azure_checks() -> list[CheckDefinition]:
+    """
+    Get automated SOC 2 checks for Azure resources.
+
+    Returns:
+        List of check definitions mapped to SOC 2 Trust Services Criteria.
+    """
+    return [
+        # =====================================================================
+        # CC6.1 - Logical Access Security
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc6.1-azure-storage-encryption",
+            title="Azure Storage Account Encryption Enabled",
+            description=(
+                "Ensure Azure Storage accounts have encryption enabled. "
+                "Encryption protects data at rest from unauthorized access."
+            ),
+            severity="critical",
+            resource_types=["storage_account"],
+            condition=Condition(
+                path="raw_data.encryption.services.blob.enabled",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation=(
+                "Azure Storage encryption is enabled by default and cannot be disabled. "
+                "If encryption is not showing, verify the storage account configuration."
+            ),
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SC-28"]},
+            tags=["encryption", "storage", "data-protection", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-azure-sql-encryption",
+            title="Azure SQL TDE Enabled",
+            description=(
+                "Ensure Azure SQL databases have Transparent Data Encryption (TDE) enabled. "
+                "TDE encrypts data at rest to protect against unauthorized access."
+            ),
+            severity="critical",
+            resource_types=["sql_database"],
+            condition=Condition(
+                path="raw_data.transparent_data_encryption.status",
+                operator=Operator.EQUALS,
+                value="Enabled",
+            ),
+            remediation="Enable Transparent Data Encryption for Azure SQL databases.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SC-28"]},
+            tags=["encryption", "sql", "data-protection", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-azure-disk-encryption",
+            title="Azure Disk Encryption Enabled",
+            description=(
+                "Ensure Azure managed disks are encrypted. "
+                "Disk encryption protects VM data at rest."
+            ),
+            severity="high",
+            resource_types=["disk"],
+            condition=Condition(
+                path="raw_data.encryption.type",
+                operator=Operator.EXISTS,
+            ),
+            remediation="Enable Azure Disk Encryption or use platform-managed encryption.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SC-28"]},
+            tags=["encryption", "disk", "vm", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-azure-keyvault-soft-delete",
+            title="Azure Key Vault Soft Delete Enabled",
+            description=(
+                "Ensure Azure Key Vault has soft delete enabled. "
+                "Soft delete protects against accidental or malicious key deletion."
+            ),
+            severity="high",
+            resource_types=["key_vault"],
+            condition=Condition(
+                path="raw_data.properties.enable_soft_delete",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable soft delete for Key Vault (enabled by default for new vaults).",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SC-12"]},
+            tags=["keyvault", "key-protection", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-azure-keyvault-purge-protection",
+            title="Azure Key Vault Purge Protection Enabled",
+            description=(
+                "Ensure Azure Key Vault has purge protection enabled. "
+                "Purge protection prevents permanent deletion of keys during retention period."
+            ),
+            severity="high",
+            resource_types=["key_vault"],
+            condition=Condition(
+                path="raw_data.properties.enable_purge_protection",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable purge protection for Key Vault.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SC-12"]},
+            tags=["keyvault", "key-protection", "azure"],
+        ),
+        # =====================================================================
+        # CC6.3 - Network Security
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc6.3-azure-nsg-no-public-ssh",
+            title="Azure NSG No Unrestricted SSH",
+            description=(
+                "Ensure Network Security Groups do not allow unrestricted SSH access. "
+                "Unrestricted SSH access is a critical security vulnerability."
+            ),
+            severity="critical",
+            resource_types=["network_security_group"],
+            condition=ConditionGroup(
+                logic=LogicOperator.NOT,
+                conditions=[
+                    Condition(
+                        path="raw_data.security_rules",
+                        operator=Operator.CONTAINS,
+                        value="0.0.0.0/0:22",
+                    ),
+                ],
+            ),
+            remediation="Restrict SSH access to specific IP ranges or use Azure Bastion.",
+            frameworks={"soc2": ["CC6.3"], "nist-800-53": ["AC-4", "SC-7"]},
+            tags=["nsg", "network", "ssh", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.3-azure-nsg-no-public-rdp",
+            title="Azure NSG No Unrestricted RDP",
+            description=(
+                "Ensure Network Security Groups do not allow unrestricted RDP access. "
+                "Unrestricted RDP access is a critical security vulnerability."
+            ),
+            severity="critical",
+            resource_types=["network_security_group"],
+            condition=ConditionGroup(
+                logic=LogicOperator.NOT,
+                conditions=[
+                    Condition(
+                        path="raw_data.security_rules",
+                        operator=Operator.CONTAINS,
+                        value="0.0.0.0/0:3389",
+                    ),
+                ],
+            ),
+            remediation="Restrict RDP access to specific IP ranges or use Azure Bastion.",
+            frameworks={"soc2": ["CC6.3"], "nist-800-53": ["AC-4", "SC-7"]},
+            tags=["nsg", "network", "rdp", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.3-azure-vnet-flow-logs",
+            title="Azure VNet Flow Logs Enabled",
+            description=(
+                "Ensure Virtual Network has NSG flow logs enabled. "
+                "Flow logs capture network traffic for security monitoring."
+            ),
+            severity="high",
+            resource_types=["virtual_network"],
+            condition=Condition(
+                path="raw_data.flow_logs_enabled",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation=(
+                "Enable NSG flow logs:\n"
+                "1. Navigate to Network Watcher\n"
+                "2. Select NSG flow logs\n"
+                "3. Configure flow logs for the associated NSGs"
+            ),
+            frameworks={"soc2": ["CC6.3"], "nist-800-53": ["AU-2", "AU-12"]},
+            tags=["vnet", "flow-logs", "monitoring", "azure"],
+        ),
+        # =====================================================================
+        # CC6.6 - External Access Protection
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc6.6-azure-storage-public-access-disabled",
+            title="Azure Storage Public Access Disabled",
+            description=(
+                "Ensure Azure Storage accounts have public blob access disabled. "
+                "Public storage is a common source of data breaches."
+            ),
+            severity="critical",
+            resource_types=["storage_account"],
+            condition=Condition(
+                path="raw_data.allow_blob_public_access",
+                operator=Operator.IS_FALSE,
+            ),
+            remediation="Disable public blob access in storage account configuration.",
+            frameworks={"soc2": ["CC6.6"], "nist-800-53": ["AC-3", "AC-21"]},
+            tags=["storage", "public-access", "data-protection", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.6-azure-sql-not-public",
+            title="Azure SQL Not Publicly Accessible",
+            description=(
+                "Ensure Azure SQL servers do not allow public network access. "
+                "Public databases are vulnerable to attacks from the internet."
+            ),
+            severity="critical",
+            resource_types=["sql_server"],
+            condition=Condition(
+                path="raw_data.public_network_access",
+                operator=Operator.EQUALS,
+                value="Disabled",
+            ),
+            remediation="Disable public network access and use private endpoints.",
+            frameworks={"soc2": ["CC6.6"], "nist-800-53": ["AC-3", "SC-7"]},
+            tags=["sql", "public-access", "network", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.6-azure-storage-https-only",
+            title="Azure Storage HTTPS Only",
+            description=(
+                "Ensure Azure Storage accounts enforce HTTPS traffic only. "
+                "HTTPS ensures data is encrypted in transit."
+            ),
+            severity="high",
+            resource_types=["storage_account"],
+            condition=Condition(
+                path="raw_data.enable_https_traffic_only",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable 'Secure transfer required' in storage account settings.",
+            frameworks={"soc2": ["CC6.6", "CC6.7"], "nist-800-53": ["SC-8"]},
+            tags=["storage", "https", "encryption-in-transit", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.6-azure-storage-tls-version",
+            title="Azure Storage Minimum TLS Version",
+            description=(
+                "Ensure Azure Storage accounts enforce TLS 1.2 minimum. "
+                "Older TLS versions have known vulnerabilities."
+            ),
+            severity="high",
+            resource_types=["storage_account"],
+            condition=Condition(
+                path="raw_data.minimum_tls_version",
+                operator=Operator.EQUALS,
+                value="TLS1_2",
+            ),
+            remediation="Set minimum TLS version to 1.2 in storage account settings.",
+            frameworks={"soc2": ["CC6.6", "CC6.7"], "nist-800-53": ["SC-8"]},
+            tags=["storage", "tls", "encryption-in-transit", "azure"],
+        ),
+        # =====================================================================
+        # CC7.2 - System Monitoring
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc7.2-azure-activity-log-retention",
+            title="Azure Activity Log Retention",
+            description=(
+                "Ensure Azure Activity Log has adequate retention. "
+                "Activity logs provide audit trail for security and compliance."
+            ),
+            severity="high",
+            resource_types=["diagnostic_settings"],
+            condition=Condition(
+                path="raw_data.retention_days",
+                operator=Operator.GREATER_THAN_OR_EQUAL,
+                value=90,
+            ),
+            remediation="Configure Activity Log to retain for at least 90 days.",
+            frameworks={"soc2": ["CC7.2"], "nist-800-53": ["AU-11"]},
+            tags=["activity-log", "logging", "retention", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc7.2-azure-defender-enabled",
+            title="Microsoft Defender for Cloud Enabled",
+            description=(
+                "Ensure Microsoft Defender for Cloud is enabled. "
+                "Defender provides threat detection and security recommendations."
+            ),
+            severity="high",
+            resource_types=["security_center_status"],
+            condition=Condition(
+                path="raw_data.pricing_tier",
+                operator=Operator.EQUALS,
+                value="Standard",
+            ),
+            remediation="Enable Microsoft Defender for Cloud Standard tier.",
+            frameworks={"soc2": ["CC7.2", "CC7.4"], "nist-800-53": ["SI-4", "IR-4"]},
+            tags=["defender", "threat-detection", "monitoring", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc7.2-azure-sql-auditing",
+            title="Azure SQL Auditing Enabled",
+            description=(
+                "Ensure Azure SQL server has auditing enabled. "
+                "Auditing provides activity logging for databases."
+            ),
+            severity="high",
+            resource_types=["sql_server"],
+            condition=Condition(
+                path="raw_data.auditing_state",
+                operator=Operator.EQUALS,
+                value="Enabled",
+            ),
+            remediation="Enable auditing for Azure SQL servers.",
+            frameworks={"soc2": ["CC7.2"], "nist-800-53": ["AU-2", "AU-3"]},
+            tags=["sql", "auditing", "logging", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc7.2-azure-sql-threat-detection",
+            title="Azure SQL Threat Detection Enabled",
+            description=(
+                "Ensure Azure SQL has Advanced Threat Protection enabled. "
+                "ATP detects anomalous database activities."
+            ),
+            severity="high",
+            resource_types=["sql_server"],
+            condition=Condition(
+                path="raw_data.threat_detection_state",
+                operator=Operator.EQUALS,
+                value="Enabled",
+            ),
+            remediation="Enable Advanced Threat Protection for Azure SQL servers.",
+            frameworks={"soc2": ["CC7.2", "CC7.4"], "nist-800-53": ["SI-4"]},
+            tags=["sql", "threat-detection", "monitoring", "azure"],
+        ),
+        # =====================================================================
+        # CC7.3 - Backup and Recovery
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc7.3-azure-vm-backup",
+            title="Azure VM Backup Enabled",
+            description=(
+                "Ensure Azure VMs have backup enabled. "
+                "Backups enable recovery from data loss or disasters."
+            ),
+            severity="high",
+            resource_types=["virtual_machine"],
+            condition=Condition(
+                path="raw_data.backup_enabled",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable Azure Backup for virtual machines.",
+            frameworks={"soc2": ["CC7.3", "A1.2"], "nist-800-53": ["CP-9"]},
+            tags=["vm", "backup", "disaster-recovery", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc7.3-azure-sql-backup-retention",
+            title="Azure SQL Backup Retention",
+            description=(
+                "Ensure Azure SQL has adequate backup retention. "
+                "Point-in-time restore requires sufficient backup retention."
+            ),
+            severity="medium",
+            resource_types=["sql_database"],
+            condition=Condition(
+                path="raw_data.backup_retention_days",
+                operator=Operator.GREATER_THAN_OR_EQUAL,
+                value=7,
+            ),
+            remediation="Configure backup retention to at least 7 days.",
+            frameworks={"soc2": ["CC7.3", "A1.2"], "nist-800-53": ["CP-9"]},
+            tags=["sql", "backup", "disaster-recovery", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-cc7.3-azure-storage-soft-delete",
+            title="Azure Storage Blob Soft Delete",
+            description=(
+                "Ensure Azure Storage has blob soft delete enabled. "
+                "Soft delete enables recovery of deleted blobs."
+            ),
+            severity="medium",
+            resource_types=["storage_account"],
+            condition=Condition(
+                path="raw_data.blob_soft_delete_enabled",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable blob soft delete in storage account data protection settings.",
+            frameworks={"soc2": ["CC7.3", "A1.2"], "nist-800-53": ["CP-9"]},
+            tags=["storage", "soft-delete", "data-protection", "azure"],
+        ),
+        # =====================================================================
+        # CC8.1 - Change Management
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc8.1-azure-policy-assigned",
+            title="Azure Policy Assigned",
+            description=(
+                "Ensure Azure Policy is assigned for governance. "
+                "Azure Policy enforces organizational standards and compliance."
+            ),
+            severity="medium",
+            resource_types=["policy_assignments"],
+            condition=Condition(
+                path="raw_data.assignments",
+                operator=Operator.IS_NOT_EMPTY,
+            ),
+            remediation="Assign Azure Policy initiatives for compliance governance.",
+            frameworks={"soc2": ["CC8.1"], "nist-800-53": ["CM-2", "CM-3"]},
+            tags=["policy", "governance", "compliance", "azure"],
+        ),
+        # =====================================================================
+        # A1.2 - Availability
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-a1.2-azure-lb-multi-zone",
+            title="Azure Load Balancer Zone Redundant",
+            description=(
+                "Ensure Azure Load Balancer uses zone-redundant frontend. "
+                "Zone redundancy provides high availability across zones."
+            ),
+            severity="medium",
+            resource_types=["load_balancer"],
+            condition=Condition(
+                path="raw_data.sku.tier",
+                operator=Operator.EQUALS,
+                value="Regional",
+            ),
+            remediation="Use Standard SKU Load Balancer with zone-redundant frontend.",
+            frameworks={"soc2": ["A1.2"], "nist-800-53": ["CP-10"]},
+            tags=["load-balancer", "availability", "zones", "azure"],
+        ),
+        CheckDefinition(
+            id="soc2-a1.2-azure-sql-geo-redundant",
+            title="Azure SQL Geo-Redundant Backup",
+            description=(
+                "Ensure Azure SQL uses geo-redundant backups. "
+                "Geo-redundant backups enable regional disaster recovery."
+            ),
+            severity="medium",
+            resource_types=["sql_database"],
+            condition=Condition(
+                path="raw_data.requested_backup_storage_redundancy",
+                operator=Operator.EQUALS,
+                value="Geo",
+            ),
+            remediation="Configure geo-redundant backup storage for SQL databases.",
+            frameworks={"soc2": ["A1.2"], "nist-800-53": ["CP-10"]},
+            tags=["sql", "backup", "geo-redundant", "azure"],
+        ),
+    ]
+
+
+def get_soc2_gcp_checks() -> list[CheckDefinition]:
+    """
+    Get automated SOC 2 checks for GCP resources.
+
+    Returns:
+        List of check definitions mapped to SOC 2 Trust Services Criteria.
+    """
+    return [
+        # =====================================================================
+        # CC6.1 - Logical Access Security
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc6.1-gcp-bucket-uniform-access",
+            title="GCP Storage Bucket Uniform Access Enabled",
+            description=(
+                "Ensure GCP Cloud Storage buckets use uniform bucket-level access. "
+                "Uniform access simplifies permission management and improves security."
+            ),
+            severity="high",
+            resource_types=["storage_bucket"],
+            condition=Condition(
+                path="raw_data.uniform_bucket_level_access.enabled",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable uniform bucket-level access in the bucket settings.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["AC-3"]},
+            tags=["storage", "access-control", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-gcp-bucket-public-prevention",
+            title="GCP Storage Bucket Public Access Prevention",
+            description=(
+                "Ensure GCP Cloud Storage buckets have public access prevention enabled. "
+                "This prevents accidental exposure of sensitive data."
+            ),
+            severity="critical",
+            resource_types=["storage_bucket"],
+            condition=Condition(
+                path="raw_data.public_access_prevention",
+                operator=Operator.EQUALS,
+                value="enforced",
+            ),
+            remediation=(
+                "Enable public access prevention for the bucket or set it at the organization level."
+            ),
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["AC-3", "AC-22"]},
+            tags=["storage", "public-access", "data-protection", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-gcp-bucket-versioning",
+            title="GCP Storage Bucket Versioning Enabled",
+            description=(
+                "Ensure GCP Cloud Storage buckets have versioning enabled. "
+                "Versioning protects against accidental deletion and allows recovery."
+            ),
+            severity="medium",
+            resource_types=["storage_bucket"],
+            condition=Condition(
+                path="raw_data.versioning_enabled",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable object versioning for the Cloud Storage bucket.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["CP-9"]},
+            tags=["storage", "versioning", "data-protection", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-gcp-bucket-cmek",
+            title="GCP Storage Bucket Customer-Managed Encryption",
+            description=(
+                "Ensure GCP Cloud Storage buckets use customer-managed encryption keys (CMEK). "
+                "CMEK provides additional control over encryption key lifecycle."
+            ),
+            severity="medium",
+            resource_types=["storage_bucket"],
+            condition=Condition(
+                path="raw_data.default_kms_key_name",
+                operator=Operator.EXISTS,
+            ),
+            remediation="Configure a Cloud KMS key for bucket encryption.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SC-12", "SC-28"]},
+            tags=["storage", "encryption", "cmek", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-gcp-kms-rotation",
+            title="GCP KMS Key Rotation Enabled",
+            description=(
+                "Ensure GCP Cloud KMS keys have automatic rotation enabled. "
+                "Key rotation limits the impact of key compromise."
+            ),
+            severity="high",
+            resource_types=["kms_key"],
+            condition=Condition(
+                path="raw_data.rotation_period",
+                operator=Operator.EXISTS,
+            ),
+            remediation="Configure automatic key rotation for Cloud KMS keys.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SC-12"]},
+            tags=["kms", "encryption", "key-rotation", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-gcp-vm-shielded",
+            title="GCP VM Shielded Instance Enabled",
+            description=(
+                "Ensure GCP Compute Engine VMs use shielded instance features. "
+                "Shielded VMs protect against rootkits and boot-level malware."
+            ),
+            severity="high",
+            resource_types=["compute_instance"],
+            condition=ConditionGroup(
+                logic=LogicOperator.AND,
+                conditions=[
+                    Condition(
+                        path="raw_data.shielded_instance_config.enable_secure_boot",
+                        operator=Operator.IS_TRUE,
+                    ),
+                    Condition(
+                        path="raw_data.shielded_instance_config.enable_vtpm",
+                        operator=Operator.IS_TRUE,
+                    ),
+                ],
+            ),
+            remediation="Enable shielded VM features (Secure Boot, vTPM) for the instance.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SI-7"]},
+            tags=["compute", "shielded-vm", "security", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-gcp-vm-no-public-ip",
+            title="GCP VM No External IP Address",
+            description=(
+                "Ensure GCP Compute Engine VMs do not have external IP addresses. "
+                "VMs should use Cloud NAT or private Google access instead."
+            ),
+            severity="medium",
+            resource_types=["compute_instance"],
+            condition=ConditionGroup(
+                logic=LogicOperator.NOT,
+                conditions=[
+                    Condition(
+                        path="raw_data.network_interfaces[0].access_configs",
+                        operator=Operator.EXISTS,
+                    ),
+                ],
+            ),
+            remediation=(
+                "Remove external IP addresses and use Cloud NAT for outbound connectivity."
+            ),
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["AC-4", "SC-7"]},
+            tags=["compute", "network", "public-ip", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.1-gcp-disk-cmek",
+            title="GCP Disk Customer-Managed Encryption",
+            description=(
+                "Ensure GCP persistent disks use customer-managed encryption keys. "
+                "CMEK provides additional control over data encryption."
+            ),
+            severity="medium",
+            resource_types=["compute_disk"],
+            condition=Condition(
+                path="raw_data.disk_encryption_key.kms_key_name",
+                operator=Operator.EXISTS,
+            ),
+            remediation="Configure a Cloud KMS key for disk encryption.",
+            frameworks={"soc2": ["CC6.1"], "nist-800-53": ["SC-28"]},
+            tags=["compute", "disk", "encryption", "cmek", "gcp"],
+        ),
+        # =====================================================================
+        # CC6.2 - User Registration and Authorization
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc6.2-gcp-sa-no-user-keys",
+            title="GCP Service Account No User-Managed Keys",
+            description=(
+                "Ensure GCP service accounts do not have user-managed keys. "
+                "User-managed keys are a security risk and should be avoided."
+            ),
+            severity="high",
+            resource_types=["iam_service_account"],
+            condition=ConditionGroup(
+                logic=LogicOperator.NOT,
+                conditions=[
+                    Condition(
+                        path="raw_data.keys",
+                        operator=Operator.CONTAINS,
+                        value="USER_MANAGED",
+                    ),
+                ],
+            ),
+            remediation=(
+                "Use workload identity, service account impersonation, or attached service accounts "
+                "instead of user-managed keys."
+            ),
+            frameworks={"soc2": ["CC6.2"], "nist-800-53": ["IA-2", "IA-5"]},
+            tags=["iam", "service-account", "keys", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.2-gcp-sa-disabled",
+            title="GCP Unused Service Accounts Disabled",
+            description=(
+                "Ensure unused GCP service accounts are disabled. "
+                "Unused accounts increase the attack surface."
+            ),
+            severity="medium",
+            resource_types=["iam_service_account"],
+            condition=Condition(
+                path="raw_data.disabled",
+                operator=Operator.IS_FALSE,
+            ),
+            remediation="Disable or delete unused service accounts.",
+            frameworks={"soc2": ["CC6.2"], "nist-800-53": ["AC-2"]},
+            tags=["iam", "service-account", "hygiene", "gcp"],
+        ),
+        # =====================================================================
+        # CC6.3 - Network Security
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc6.3-gcp-firewall-no-public-ssh",
+            title="GCP Firewall No Unrestricted SSH",
+            description=(
+                "Ensure GCP firewall rules do not allow unrestricted SSH access. "
+                "SSH should be restricted to specific IP ranges or use IAP."
+            ),
+            severity="critical",
+            resource_types=["compute_firewall"],
+            condition=ConditionGroup(
+                logic=LogicOperator.NOT,
+                conditions=[
+                    ConditionGroup(
+                        logic=LogicOperator.AND,
+                        conditions=[
+                            Condition(
+                                path="raw_data.source_ranges",
+                                operator=Operator.CONTAINS,
+                                value="0.0.0.0/0",
+                            ),
+                            Condition(
+                                path="raw_data.allowed",
+                                operator=Operator.CONTAINS,
+                                value="22",
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            remediation=(
+                "Restrict SSH access to specific IP ranges or use Identity-Aware Proxy (IAP)."
+            ),
+            frameworks={"soc2": ["CC6.3"], "nist-800-53": ["AC-4", "SC-7"]},
+            tags=["firewall", "network", "ssh", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.3-gcp-firewall-no-public-rdp",
+            title="GCP Firewall No Unrestricted RDP",
+            description=(
+                "Ensure GCP firewall rules do not allow unrestricted RDP access. "
+                "RDP should be restricted to specific IP ranges."
+            ),
+            severity="critical",
+            resource_types=["compute_firewall"],
+            condition=ConditionGroup(
+                logic=LogicOperator.NOT,
+                conditions=[
+                    ConditionGroup(
+                        logic=LogicOperator.AND,
+                        conditions=[
+                            Condition(
+                                path="raw_data.source_ranges",
+                                operator=Operator.CONTAINS,
+                                value="0.0.0.0/0",
+                            ),
+                            Condition(
+                                path="raw_data.allowed",
+                                operator=Operator.CONTAINS,
+                                value="3389",
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            remediation="Restrict RDP access to specific IP ranges.",
+            frameworks={"soc2": ["CC6.3"], "nist-800-53": ["AC-4", "SC-7"]},
+            tags=["firewall", "network", "rdp", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.3-gcp-firewall-logging",
+            title="GCP Firewall Rule Logging Enabled",
+            description=(
+                "Ensure GCP firewall rules have logging enabled. "
+                "Logging provides visibility into network traffic for security monitoring."
+            ),
+            severity="medium",
+            resource_types=["compute_firewall"],
+            condition=Condition(
+                path="raw_data.log_config.enable",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable logging for firewall rules.",
+            frameworks={"soc2": ["CC6.3", "CC7.2"], "nist-800-53": ["AU-3", "SI-4"]},
+            tags=["firewall", "logging", "monitoring", "gcp"],
+        ),
+        CheckDefinition(
+            id="soc2-cc6.3-gcp-subnet-flow-logs",
+            title="GCP VPC Flow Logs Enabled",
+            description=(
+                "Ensure GCP VPC subnets have flow logs enabled. "
+                "Flow logs provide visibility into network traffic for security analysis."
+            ),
+            severity="medium",
+            resource_types=["compute_subnetwork"],
+            condition=Condition(
+                path="raw_data.log_config.enable",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable VPC flow logs for the subnet.",
+            frameworks={"soc2": ["CC6.3", "CC7.2"], "nist-800-53": ["AU-3", "SI-4"]},
+            tags=["network", "vpc", "flow-logs", "monitoring", "gcp"],
+        ),
+        # =====================================================================
+        # CC6.6 - Incident Response
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc6.6-gcp-bucket-logging",
+            title="GCP Storage Bucket Logging Enabled",
+            description=(
+                "Ensure GCP Cloud Storage buckets have access logging enabled. "
+                "Logging is essential for security monitoring and incident response."
+            ),
+            severity="medium",
+            resource_types=["storage_bucket"],
+            condition=Condition(
+                path="raw_data.logging.log_bucket",
+                operator=Operator.EXISTS,
+            ),
+            remediation="Configure a logging bucket for access logs.",
+            frameworks={"soc2": ["CC6.6", "CC7.2"], "nist-800-53": ["AU-2", "AU-3"]},
+            tags=["storage", "logging", "monitoring", "gcp"],
+        ),
+        # =====================================================================
+        # CC7.2 - System Monitoring
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc7.2-gcp-vm-integrity-monitoring",
+            title="GCP VM Integrity Monitoring Enabled",
+            description=(
+                "Ensure GCP VMs have integrity monitoring enabled. "
+                "Integrity monitoring detects unauthorized changes to boot components."
+            ),
+            severity="medium",
+            resource_types=["compute_instance"],
+            condition=Condition(
+                path="raw_data.shielded_instance_config.enable_integrity_monitoring",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable integrity monitoring in shielded VM settings.",
+            frameworks={"soc2": ["CC7.2"], "nist-800-53": ["SI-7"]},
+            tags=["compute", "integrity", "monitoring", "gcp"],
+        ),
+        # =====================================================================
+        # CC7.3 - Change Detection
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-cc7.3-gcp-vm-deletion-protection",
+            title="GCP VM Deletion Protection Enabled",
+            description=(
+                "Ensure GCP Compute Engine VMs have deletion protection enabled. "
+                "This prevents accidental deletion of critical workloads."
+            ),
+            severity="low",
+            resource_types=["compute_instance"],
+            condition=Condition(
+                path="raw_data.deletion_protection",
+                operator=Operator.IS_TRUE,
+            ),
+            remediation="Enable deletion protection for critical VMs.",
+            frameworks={"soc2": ["CC7.3"], "nist-800-53": ["CM-3"]},
+            tags=["compute", "deletion-protection", "change-management", "gcp"],
+        ),
+        # =====================================================================
+        # A1.2 - Recovery
+        # =====================================================================
+        CheckDefinition(
+            id="soc2-a1.2-gcp-bucket-retention",
+            title="GCP Storage Bucket Retention Policy",
+            description=(
+                "Ensure GCP Cloud Storage buckets have retention policies configured. "
+                "Retention policies protect data from deletion for compliance purposes."
+            ),
+            severity="medium",
+            resource_types=["storage_bucket"],
+            condition=Condition(
+                path="raw_data.retention_policy.retention_period",
+                operator=Operator.EXISTS,
+            ),
+            remediation="Configure a retention policy for the bucket.",
+            frameworks={"soc2": ["A1.2"], "nist-800-53": ["CP-9"]},
+            tags=["storage", "retention", "backup", "gcp"],
+        ),
+    ]
+
+
+def create_soc2_evaluator(provider: str | None = None) -> Evaluator:
     """
     Create an evaluator pre-loaded with SOC 2 checks.
 
+    Args:
+        provider: Cloud provider to filter checks for ('aws', 'azure', 'gcp', or None for all).
+
     Returns:
-        Evaluator with all SOC 2 checks registered.
+        Evaluator with SOC 2 checks registered.
     """
     evaluator = Evaluator()
 
-    for check in get_soc2_aws_checks():
-        evaluator.register_check(check)
+    if provider is None or provider == "aws":
+        for check in get_soc2_aws_checks():
+            evaluator.register_check(check)
 
-    logger.info(f"Created SOC 2 evaluator with {len(evaluator._checks)} checks")
+    if provider is None or provider == "azure":
+        for check in get_soc2_azure_checks():
+            evaluator.register_check(check)
+
+    if provider is None or provider == "gcp":
+        for check in get_soc2_gcp_checks():
+            evaluator.register_check(check)
+
+    logger.info(f"Created SOC 2 evaluator with {len(evaluator._checks)} checks (provider={provider})")
     return evaluator
 
 
@@ -1155,8 +2003,9 @@ def get_soc2_framework() -> SOC2Framework:
         controls=SOC2_CONTROLS,
     )
 
-    # Build check mappings
-    for check in get_soc2_aws_checks():
+    # Build check mappings from all providers
+    all_checks = get_soc2_aws_checks() + get_soc2_azure_checks() + get_soc2_gcp_checks()
+    for check in all_checks:
         soc2_controls = check.frameworks.get("soc2", [])
         for control_id in soc2_controls:
             if control_id not in framework.check_mappings:

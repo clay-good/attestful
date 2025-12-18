@@ -586,3 +586,739 @@ def create_ssp_from_scan_results(
     generator.add_check_results(check_results)
 
     return generator.generate()
+
+
+# =============================================================================
+# SSP Diff
+# =============================================================================
+
+
+@dataclass
+class SSPDifference:
+    """
+    Represents a difference between two SSPs.
+
+    Attributes:
+        category: Category of the difference (control, component, parameter, etc.)
+        change_type: Type of change (added, removed, modified)
+        path: Path to the changed element
+        old_value: Previous value (None if added)
+        new_value: New value (None if removed)
+        description: Human-readable description of the change
+    """
+
+    category: str
+    change_type: str  # added, removed, modified
+    path: str
+    old_value: Any
+    new_value: Any
+    description: str
+
+
+@dataclass
+class SSPDiffResult:
+    """
+    Result of comparing two SSPs.
+
+    Attributes:
+        ssp1_uuid: UUID of the first SSP
+        ssp2_uuid: UUID of the second SSP
+        differences: List of differences found
+        summary: Summary statistics
+    """
+
+    ssp1_uuid: str
+    ssp2_uuid: str
+    differences: list[SSPDifference]
+    summary: dict[str, int]
+
+    def has_differences(self) -> bool:
+        """Check if there are any differences."""
+        return len(self.differences) > 0
+
+    def get_by_category(self, category: str) -> list[SSPDifference]:
+        """Get differences by category."""
+        return [d for d in self.differences if d.category == category]
+
+    def get_by_change_type(self, change_type: str) -> list[SSPDifference]:
+        """Get differences by change type."""
+        return [d for d in self.differences if d.change_type == change_type]
+
+
+class SSPDiff:
+    """
+    Compare two OSCAL System Security Plans and identify differences.
+
+    Identifies differences in:
+    - Control implementations
+    - Component configurations
+    - Responsibility assignments
+    - Parameter values
+    - System characteristics
+
+    Example:
+        diff = SSPDiff()
+        result = diff.compare(ssp1, ssp2)
+
+        if result.has_differences():
+            for difference in result.differences:
+                print(f"{difference.change_type}: {difference.description}")
+
+            # Get only control changes
+            control_changes = result.get_by_category("control")
+    """
+
+    def compare(
+        self,
+        ssp1: SystemSecurityPlan,
+        ssp2: SystemSecurityPlan,
+    ) -> SSPDiffResult:
+        """
+        Compare two SSPs and identify all differences.
+
+        Args:
+            ssp1: First SSP (baseline/original)
+            ssp2: Second SSP (comparison/updated)
+
+        Returns:
+            SSPDiffResult containing all differences
+        """
+        differences: list[SSPDifference] = []
+
+        # Compare system characteristics
+        differences.extend(self._compare_system_characteristics(ssp1, ssp2))
+
+        # Compare components
+        differences.extend(self._compare_components(ssp1, ssp2))
+
+        # Compare control implementations
+        differences.extend(self._compare_control_implementations(ssp1, ssp2))
+
+        # Compare users
+        differences.extend(self._compare_users(ssp1, ssp2))
+
+        # Compare metadata
+        differences.extend(self._compare_metadata(ssp1, ssp2))
+
+        # Build summary
+        summary = {
+            "total": len(differences),
+            "added": len([d for d in differences if d.change_type == "added"]),
+            "removed": len([d for d in differences if d.change_type == "removed"]),
+            "modified": len([d for d in differences if d.change_type == "modified"]),
+            "controls": len([d for d in differences if d.category == "control"]),
+            "components": len([d for d in differences if d.category == "component"]),
+            "parameters": len([d for d in differences if d.category == "parameter"]),
+            "responsibilities": len([d for d in differences if d.category == "responsibility"]),
+        }
+
+        return SSPDiffResult(
+            ssp1_uuid=str(ssp1.uuid),
+            ssp2_uuid=str(ssp2.uuid),
+            differences=differences,
+            summary=summary,
+        )
+
+    def _compare_system_characteristics(
+        self,
+        ssp1: SystemSecurityPlan,
+        ssp2: SystemSecurityPlan,
+    ) -> list[SSPDifference]:
+        """Compare system characteristics between two SSPs."""
+        differences: list[SSPDifference] = []
+
+        char1 = ssp1.system_characteristics
+        char2 = ssp2.system_characteristics
+
+        if not char1 or not char2:
+            return differences
+
+        # Compare system name
+        name1 = char1.system_name or ""
+        name2 = char2.system_name or ""
+        if name1 != name2:
+            differences.append(SSPDifference(
+                category="system",
+                change_type="modified",
+                path="system-characteristics.system-name",
+                old_value=name1,
+                new_value=name2,
+                description=f"System name changed from '{name1}' to '{name2}'",
+            ))
+
+        # Compare description
+        desc1 = char1.description or ""
+        desc2 = char2.description or ""
+        if desc1 != desc2:
+            differences.append(SSPDifference(
+                category="system",
+                change_type="modified",
+                path="system-characteristics.description",
+                old_value=desc1[:100] + "..." if len(desc1) > 100 else desc1,
+                new_value=desc2[:100] + "..." if len(desc2) > 100 else desc2,
+                description="System description changed",
+            ))
+
+        # Compare status
+        status1 = char1.status.state if char1.status else None
+        status2 = char2.status.state if char2.status else None
+        if status1 != status2:
+            differences.append(SSPDifference(
+                category="system",
+                change_type="modified",
+                path="system-characteristics.status",
+                old_value=status1,
+                new_value=status2,
+                description=f"System status changed from '{status1}' to '{status2}'",
+            ))
+
+        return differences
+
+    def _compare_components(
+        self,
+        ssp1: SystemSecurityPlan,
+        ssp2: SystemSecurityPlan,
+    ) -> list[SSPDifference]:
+        """Compare system components between two SSPs."""
+        differences: list[SSPDifference] = []
+
+        impl1 = ssp1.system_implementation
+        impl2 = ssp2.system_implementation
+
+        comps1 = {str(c.uuid): c for c in (impl1.components or [])} if impl1 else {}
+        comps2 = {str(c.uuid): c for c in (impl2.components or [])} if impl2 else {}
+
+        # Find added components
+        for uuid, comp in comps2.items():
+            if uuid not in comps1:
+                differences.append(SSPDifference(
+                    category="component",
+                    change_type="added",
+                    path=f"system-implementation.components.{uuid}",
+                    old_value=None,
+                    new_value=comp.title,
+                    description=f"Component '{comp.title}' added",
+                ))
+
+        # Find removed components
+        for uuid, comp in comps1.items():
+            if uuid not in comps2:
+                differences.append(SSPDifference(
+                    category="component",
+                    change_type="removed",
+                    path=f"system-implementation.components.{uuid}",
+                    old_value=comp.title,
+                    new_value=None,
+                    description=f"Component '{comp.title}' removed",
+                ))
+
+        # Find modified components
+        for uuid in comps1:
+            if uuid in comps2:
+                comp1 = comps1[uuid]
+                comp2 = comps2[uuid]
+
+                if comp1.title != comp2.title:
+                    differences.append(SSPDifference(
+                        category="component",
+                        change_type="modified",
+                        path=f"system-implementation.components.{uuid}.title",
+                        old_value=comp1.title,
+                        new_value=comp2.title,
+                        description=f"Component title changed from '{comp1.title}' to '{comp2.title}'",
+                    ))
+
+                status1 = comp1.status.state if comp1.status else None
+                status2 = comp2.status.state if comp2.status else None
+                if status1 != status2:
+                    differences.append(SSPDifference(
+                        category="component",
+                        change_type="modified",
+                        path=f"system-implementation.components.{uuid}.status",
+                        old_value=status1,
+                        new_value=status2,
+                        description=f"Component '{comp1.title}' status changed from '{status1}' to '{status2}'",
+                    ))
+
+        return differences
+
+    def _compare_control_implementations(
+        self,
+        ssp1: SystemSecurityPlan,
+        ssp2: SystemSecurityPlan,
+    ) -> list[SSPDifference]:
+        """Compare control implementations between two SSPs."""
+        differences: list[SSPDifference] = []
+
+        impl1 = ssp1.control_implementation
+        impl2 = ssp2.control_implementation
+
+        if not impl1 and not impl2:
+            return differences
+
+        reqs1 = {r.control_id: r for r in (impl1.implemented_requirements or [])} if impl1 else {}
+        reqs2 = {r.control_id: r for r in (impl2.implemented_requirements or [])} if impl2 else {}
+
+        # Find added controls
+        for control_id in reqs2:
+            if control_id not in reqs1:
+                differences.append(SSPDifference(
+                    category="control",
+                    change_type="added",
+                    path=f"control-implementation.implemented-requirements.{control_id}",
+                    old_value=None,
+                    new_value=control_id,
+                    description=f"Control implementation '{control_id}' added",
+                ))
+
+        # Find removed controls
+        for control_id in reqs1:
+            if control_id not in reqs2:
+                differences.append(SSPDifference(
+                    category="control",
+                    change_type="removed",
+                    path=f"control-implementation.implemented-requirements.{control_id}",
+                    old_value=control_id,
+                    new_value=None,
+                    description=f"Control implementation '{control_id}' removed",
+                ))
+
+        # Find modified controls
+        for control_id in reqs1:
+            if control_id in reqs2:
+                req1 = reqs1[control_id]
+                req2 = reqs2[control_id]
+
+                # Compare parameters
+                params1 = {p.param_id: p.values for p in (req1.set_parameters or [])}
+                params2 = {p.param_id: p.values for p in (req2.set_parameters or [])}
+
+                for param_id in set(params1.keys()) | set(params2.keys()):
+                    val1 = params1.get(param_id)
+                    val2 = params2.get(param_id)
+                    if val1 != val2:
+                        differences.append(SSPDifference(
+                            category="parameter",
+                            change_type="added" if val1 is None else ("removed" if val2 is None else "modified"),
+                            path=f"control-implementation.implemented-requirements.{control_id}.set-parameters.{param_id}",
+                            old_value=val1,
+                            new_value=val2,
+                            description=f"Parameter '{param_id}' for control '{control_id}' changed",
+                        ))
+
+                # Compare responsible roles
+                roles1 = set(req1.responsible_roles or []) if hasattr(req1, 'responsible_roles') and req1.responsible_roles else set()
+                roles2 = set(req2.responsible_roles or []) if hasattr(req2, 'responsible_roles') and req2.responsible_roles else set()
+
+                for role in roles2 - roles1:
+                    differences.append(SSPDifference(
+                        category="responsibility",
+                        change_type="added",
+                        path=f"control-implementation.implemented-requirements.{control_id}.responsible-roles",
+                        old_value=None,
+                        new_value=role,
+                        description=f"Role '{role}' added to control '{control_id}'",
+                    ))
+
+                for role in roles1 - roles2:
+                    differences.append(SSPDifference(
+                        category="responsibility",
+                        change_type="removed",
+                        path=f"control-implementation.implemented-requirements.{control_id}.responsible-roles",
+                        old_value=role,
+                        new_value=None,
+                        description=f"Role '{role}' removed from control '{control_id}'",
+                    ))
+
+        return differences
+
+    def _compare_users(
+        self,
+        ssp1: SystemSecurityPlan,
+        ssp2: SystemSecurityPlan,
+    ) -> list[SSPDifference]:
+        """Compare system users between two SSPs."""
+        differences: list[SSPDifference] = []
+
+        impl1 = ssp1.system_implementation
+        impl2 = ssp2.system_implementation
+
+        users1 = {str(u.uuid): u for u in (impl1.users or [])} if impl1 else {}
+        users2 = {str(u.uuid): u for u in (impl2.users or [])} if impl2 else {}
+
+        # Find added users
+        for uuid, user in users2.items():
+            if uuid not in users1:
+                differences.append(SSPDifference(
+                    category="user",
+                    change_type="added",
+                    path=f"system-implementation.users.{uuid}",
+                    old_value=None,
+                    new_value=user.title,
+                    description=f"User type '{user.title}' added",
+                ))
+
+        # Find removed users
+        for uuid, user in users1.items():
+            if uuid not in users2:
+                differences.append(SSPDifference(
+                    category="user",
+                    change_type="removed",
+                    path=f"system-implementation.users.{uuid}",
+                    old_value=user.title,
+                    new_value=None,
+                    description=f"User type '{user.title}' removed",
+                ))
+
+        return differences
+
+    def _compare_metadata(
+        self,
+        ssp1: SystemSecurityPlan,
+        ssp2: SystemSecurityPlan,
+    ) -> list[SSPDifference]:
+        """Compare metadata between two SSPs."""
+        differences: list[SSPDifference] = []
+
+        meta1 = ssp1.metadata
+        meta2 = ssp2.metadata
+
+        # Compare version
+        ver1 = meta1.version or ""
+        ver2 = meta2.version or ""
+        if ver1 != ver2:
+            differences.append(SSPDifference(
+                category="metadata",
+                change_type="modified",
+                path="metadata.version",
+                old_value=ver1,
+                new_value=ver2,
+                description=f"SSP version changed from '{ver1}' to '{ver2}'",
+            ))
+
+        # Compare title
+        title1 = meta1.title or ""
+        title2 = meta2.title or ""
+        if title1 != title2:
+            differences.append(SSPDifference(
+                category="metadata",
+                change_type="modified",
+                path="metadata.title",
+                old_value=title1,
+                new_value=title2,
+                description=f"SSP title changed from '{title1}' to '{title2}'",
+            ))
+
+        return differences
+
+
+# =============================================================================
+# SSP Validation
+# =============================================================================
+
+
+@dataclass
+class SSPValidationIssue:
+    """
+    Represents a validation issue found in an SSP.
+
+    Attributes:
+        severity: Severity level (error, warning, info)
+        category: Category of the issue
+        path: Path to the problematic element
+        message: Human-readable description
+        control_id: Related control ID (if applicable)
+    """
+
+    severity: str  # error, warning, info
+    category: str
+    path: str
+    message: str
+    control_id: str | None = None
+
+
+@dataclass
+class SSPValidationResult:
+    """
+    Result of validating an SSP.
+
+    Attributes:
+        is_valid: Whether the SSP passed validation (no errors)
+        issues: List of validation issues found
+        summary: Summary statistics
+    """
+
+    is_valid: bool
+    issues: list[SSPValidationIssue]
+    summary: dict[str, int]
+
+    def get_errors(self) -> list[SSPValidationIssue]:
+        """Get only error-level issues."""
+        return [i for i in self.issues if i.severity == "error"]
+
+    def get_warnings(self) -> list[SSPValidationIssue]:
+        """Get only warning-level issues."""
+        return [i for i in self.issues if i.severity == "warning"]
+
+    def get_by_category(self, category: str) -> list[SSPValidationIssue]:
+        """Get issues by category."""
+        return [i for i in self.issues if i.category == category]
+
+
+class SSPValidator:
+    """
+    Validate an OSCAL SSP against a profile.
+
+    Validates:
+    - All required controls are implemented
+    - No implementations for excluded controls
+    - Parameter values satisfy constraints
+    - Responsibility assignments are complete
+
+    Example:
+        validator = SSPValidator()
+        result = validator.validate(ssp, profile_controls=["AC-1", "AC-2", "AC-3"])
+
+        if not result.is_valid:
+            for error in result.get_errors():
+                print(f"ERROR: {error.message}")
+    """
+
+    def validate(
+        self,
+        ssp: SystemSecurityPlan,
+        *,
+        profile_controls: list[str] | None = None,
+        excluded_controls: list[str] | None = None,
+        required_roles: list[str] | None = None,
+    ) -> SSPValidationResult:
+        """
+        Validate an SSP against requirements.
+
+        Args:
+            ssp: The SSP to validate
+            profile_controls: List of control IDs required by the profile
+            excluded_controls: List of control IDs that should not be implemented
+            required_roles: List of roles that must be assigned
+
+        Returns:
+            SSPValidationResult with all issues found
+        """
+        issues: list[SSPValidationIssue] = []
+
+        # Validate structure
+        issues.extend(self._validate_structure(ssp))
+
+        # Validate control implementations
+        if profile_controls:
+            issues.extend(self._validate_required_controls(ssp, profile_controls))
+
+        if excluded_controls:
+            issues.extend(self._validate_excluded_controls(ssp, excluded_controls))
+
+        # Validate responsibilities
+        if required_roles:
+            issues.extend(self._validate_responsibilities(ssp, required_roles))
+
+        # Validate parameters
+        issues.extend(self._validate_parameters(ssp))
+
+        # Build summary
+        summary = {
+            "total_issues": len(issues),
+            "errors": len([i for i in issues if i.severity == "error"]),
+            "warnings": len([i for i in issues if i.severity == "warning"]),
+            "info": len([i for i in issues if i.severity == "info"]),
+        }
+
+        return SSPValidationResult(
+            is_valid=summary["errors"] == 0,
+            issues=issues,
+            summary=summary,
+        )
+
+    def _validate_structure(self, ssp: SystemSecurityPlan) -> list[SSPValidationIssue]:
+        """Validate SSP structural requirements."""
+        issues: list[SSPValidationIssue] = []
+
+        # Check metadata
+        if not ssp.metadata:
+            issues.append(SSPValidationIssue(
+                severity="error",
+                category="structure",
+                path="metadata",
+                message="SSP must have metadata",
+            ))
+        elif not ssp.metadata.title:
+            issues.append(SSPValidationIssue(
+                severity="error",
+                category="structure",
+                path="metadata.title",
+                message="SSP metadata must have a title",
+            ))
+
+        # Check system characteristics
+        if not ssp.system_characteristics:
+            issues.append(SSPValidationIssue(
+                severity="error",
+                category="structure",
+                path="system-characteristics",
+                message="SSP must have system characteristics",
+            ))
+        else:
+            if not ssp.system_characteristics.system_name:
+                issues.append(SSPValidationIssue(
+                    severity="error",
+                    category="structure",
+                    path="system-characteristics.system-name",
+                    message="System characteristics must have a system name",
+                ))
+            if not ssp.system_characteristics.system_ids:
+                issues.append(SSPValidationIssue(
+                    severity="warning",
+                    category="structure",
+                    path="system-characteristics.system-ids",
+                    message="System characteristics should have at least one system ID",
+                ))
+
+        # Check system implementation
+        if not ssp.system_implementation:
+            issues.append(SSPValidationIssue(
+                severity="error",
+                category="structure",
+                path="system-implementation",
+                message="SSP must have system implementation",
+            ))
+
+        # Check control implementation
+        if not ssp.control_implementation:
+            issues.append(SSPValidationIssue(
+                severity="error",
+                category="structure",
+                path="control-implementation",
+                message="SSP must have control implementation",
+            ))
+
+        # Check import-profile
+        if not ssp.import_profile:
+            issues.append(SSPValidationIssue(
+                severity="error",
+                category="structure",
+                path="import-profile",
+                message="SSP must import a profile",
+            ))
+
+        return issues
+
+    def _validate_required_controls(
+        self,
+        ssp: SystemSecurityPlan,
+        required_controls: list[str],
+    ) -> list[SSPValidationIssue]:
+        """Validate that all required controls are implemented."""
+        issues: list[SSPValidationIssue] = []
+
+        if not ssp.control_implementation:
+            return issues
+
+        implemented = {
+            r.control_id
+            for r in (ssp.control_implementation.implemented_requirements or [])
+        }
+
+        for control_id in required_controls:
+            if control_id not in implemented:
+                issues.append(SSPValidationIssue(
+                    severity="error",
+                    category="control",
+                    path="control-implementation.implemented-requirements",
+                    message=f"Required control '{control_id}' is not implemented",
+                    control_id=control_id,
+                ))
+
+        return issues
+
+    def _validate_excluded_controls(
+        self,
+        ssp: SystemSecurityPlan,
+        excluded_controls: list[str],
+    ) -> list[SSPValidationIssue]:
+        """Validate that excluded controls are not implemented."""
+        issues: list[SSPValidationIssue] = []
+
+        if not ssp.control_implementation:
+            return issues
+
+        implemented = {
+            r.control_id
+            for r in (ssp.control_implementation.implemented_requirements or [])
+        }
+
+        for control_id in excluded_controls:
+            if control_id in implemented:
+                issues.append(SSPValidationIssue(
+                    severity="error",
+                    category="control",
+                    path=f"control-implementation.implemented-requirements.{control_id}",
+                    message=f"Control '{control_id}' is excluded but has implementation",
+                    control_id=control_id,
+                ))
+
+        return issues
+
+    def _validate_responsibilities(
+        self,
+        ssp: SystemSecurityPlan,
+        required_roles: list[str],
+    ) -> list[SSPValidationIssue]:
+        """Validate responsibility assignments."""
+        issues: list[SSPValidationIssue] = []
+
+        if not ssp.control_implementation:
+            return issues
+
+        for req in (ssp.control_implementation.implemented_requirements or []):
+            # Check if control has any responsibility assignment
+            has_responsibility = False
+
+            if hasattr(req, 'responsible_roles') and req.responsible_roles:
+                has_responsibility = True
+
+            if req.by_components:
+                for by_comp in req.by_components:
+                    if hasattr(by_comp, 'responsible_roles') and by_comp.responsible_roles:
+                        has_responsibility = True
+                        break
+
+            if not has_responsibility:
+                issues.append(SSPValidationIssue(
+                    severity="warning",
+                    category="responsibility",
+                    path=f"control-implementation.implemented-requirements.{req.control_id}",
+                    message=f"Control '{req.control_id}' has no responsibility assignment",
+                    control_id=req.control_id,
+                ))
+
+        return issues
+
+    def _validate_parameters(self, ssp: SystemSecurityPlan) -> list[SSPValidationIssue]:
+        """Validate parameter values."""
+        issues: list[SSPValidationIssue] = []
+
+        if not ssp.control_implementation:
+            return issues
+
+        for req in (ssp.control_implementation.implemented_requirements or []):
+            if req.set_parameters:
+                for param in req.set_parameters:
+                    # Check for empty parameter values
+                    if not param.values:
+                        issues.append(SSPValidationIssue(
+                            severity="warning",
+                            category="parameter",
+                            path=f"control-implementation.implemented-requirements.{req.control_id}.set-parameters.{param.param_id}",
+                            message=f"Parameter '{param.param_id}' for control '{req.control_id}' has no values",
+                            control_id=req.control_id,
+                        ))
+
+        return issues

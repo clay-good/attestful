@@ -826,11 +826,62 @@ def get_aws_checks() -> list[CheckDefinition]:
 
 
 def create_default_evaluator() -> Evaluator:
-    """Create an evaluator with default built-in checks."""
+    """Create an evaluator with default built-in checks from all frameworks."""
     evaluator = Evaluator()
 
+    # Load built-in AWS checks
     for check in get_aws_checks():
         evaluator.register_check(check)
+
+    # Load SOC 2 framework checks
+    try:
+        from attestful.frameworks.soc2 import (
+            get_soc2_aws_checks,
+            get_soc2_azure_checks,
+            get_soc2_gcp_checks,
+        )
+
+        for check in get_soc2_aws_checks():
+            if check.id not in evaluator._checks:
+                evaluator.register_check(check)
+        for check in get_soc2_azure_checks():
+            if check.id not in evaluator._checks:
+                evaluator.register_check(check)
+        for check in get_soc2_gcp_checks():
+            if check.id not in evaluator._checks:
+                evaluator.register_check(check)
+    except ImportError:
+        logger.debug("SOC 2 framework checks not available")
+
+    # Load NIST 800-53 framework checks
+    try:
+        from attestful.frameworks.nist_800_53 import get_nist_800_53_aws_checks
+
+        for check in get_nist_800_53_aws_checks():
+            if check.id not in evaluator._checks:
+                evaluator.register_check(check)
+    except ImportError:
+        logger.debug("NIST 800-53 framework checks not available")
+
+    # Load ISO 27001 framework checks
+    try:
+        from attestful.frameworks.iso_27001 import get_iso_27001_aws_checks
+
+        for check in get_iso_27001_aws_checks():
+            if check.id not in evaluator._checks:
+                evaluator.register_check(check)
+    except ImportError:
+        logger.debug("ISO 27001 framework checks not available")
+
+    # Load HITRUST framework checks
+    try:
+        from attestful.frameworks.hitrust import get_hitrust_aws_checks
+
+        for check in get_hitrust_aws_checks():
+            if check.id not in evaluator._checks:
+                evaluator.register_check(check)
+    except ImportError:
+        logger.debug("HITRUST framework checks not available")
 
     logger.info(f"Created evaluator with {len(evaluator._checks)} built-in checks")
     return evaluator

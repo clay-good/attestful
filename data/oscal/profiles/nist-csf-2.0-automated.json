@@ -1,0 +1,82 @@
+{
+  "profile": {
+    "uuid": "38221e38-8789-451a-b62a-c386e85eff43",
+    "metadata": {
+      "title": "NIST CSF 2.0 Automated Evidence Profile",
+      "last-modified": "2025-12-17T20:34:29.094086",
+      "version": "1.0.0",
+      "oscal-version": "1.1.2",
+      "props": [
+        {
+          "name": "framework",
+          "value": "NIST-CSF",
+          "uuid": "aaf5dd59-3d4f-4191-8e16-dae6d9dcd1ad"
+        },
+        {
+          "name": "framework-version",
+          "value": "2.0",
+          "uuid": "434a8db2-6453-450c-b195-19b8dc1349ee"
+        },
+        {
+          "name": "profile-type",
+          "value": "automated",
+          "uuid": "e21d1ec9-ec4c-4012-ab88-135cf2aee162"
+        },
+        {
+          "name": "api-collectible-only",
+          "value": "true",
+          "uuid": "6cb133d7-7fca-4b96-bc41-1dc8ec665ec6"
+        }
+      ]
+    },
+    "imports": [
+      {
+        "href": "./nist-csf-2.0.json",
+        "include-controls": [
+          {
+            "with-ids": [
+              "GV.SC-04",
+              "ID.AM-01",
+              "ID.AM-02",
+              "ID.AM-04",
+              "ID.AM-07",
+              "ID.RA-01",
+              "ID.RA-02",
+              "ID.RA-07",
+              "PR.AA-01",
+              "PR.AA-03",
+              "PR.AA-04",
+              "PR.AA-05",
+              "PR.DS-01",
+              "PR.DS-02",
+              "PR.DS-10",
+              "PR.DS-11",
+              "PR.PS-01",
+              "PR.PS-02",
+              "PR.PS-04",
+              "PR.PS-05",
+              "PR.IR-01",
+              "PR.IR-03",
+              "PR.IR-04",
+              "DE.CM-01",
+              "DE.CM-03",
+              "DE.CM-06",
+              "DE.CM-09",
+              "DE.AE-02",
+              "DE.AE-03",
+              "DE.AE-06",
+              "DE.AE-07",
+              "DE.AE-08",
+              "RS.MA-02",
+              "RS.MA-03",
+              "RS.MA-04",
+              "RS.MI-01",
+              "RC.RP-03",
+              "RC.RP-05"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

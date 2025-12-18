@@ -1,0 +1,3472 @@
+{
+  "component-definition": {
+    "uuid": "4831f413-e37d-48e9-87d2-5356a7490e78",
+    "metadata": {
+      "title": "Attestful Evidence Platforms - NIST CSF 2.0",
+      "last-modified": "2025-12-17T20:37:42.800051",
+      "version": "1.0.0",
+      "oscal-version": "1.1.2",
+      "props": [
+        {
+          "name": "framework",
+          "value": "NIST-CSF",
+          "uuid": "cec27341-c324-4101-b49e-efa6bf2cd522"
+        },
+        {
+          "name": "framework-version",
+          "value": "2.0",
+          "uuid": "9f93ce21-159a-4155-8819-e817104ff66d"
+        },
+        {
+          "name": "component-count",
+          "value": "15",
+          "uuid": "be535b14-8d97-4fcc-b4c0-fa226726964e"
+        }
+      ]
+    },
+    "components": [
+      {
+        "uuid": "144a253e-d0f9-4073-adc1-82eb1ad9a731",
+        "type": "service",
+        "title": "Okta Identity Management",
+        "description": "Identity and access management platform providing SSO, MFA, and user lifecycle management.",
+        "purpose": "Provides evidence for identity management, authentication, and access control.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "okta",
+            "uuid": "3a0bc7ca-062a-4351-ad15-2c90764bfa8b"
+          },
+          {
+            "name": "control-count",
+            "value": "4",
+            "uuid": "74619ff4-5830-410f-b8df-ace428582a6f"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "d0911251-26c8-4e27-ba24-9d5746d4cce0",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Okta Identity Management",
+            "implemented-requirements": [
+              {
+                "uuid": "2dc73948-f8dd-4f92-aefe-88088bb08805",
+                "control-id": "PR.AA-01",
+                "description": "Evidence from Okta Identity Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "601dc6fa-e7ce-4614-8cdd-7150afe9ddfa"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "okta",
+                    "uuid": "dc0d53f6-62e7-4e3d-a0a8-758256a53a5a"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "user_inventory",
+                    "uuid": "ef19488a-50f4-4043-ac15-a781cc8231f7",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "identity_provider_config",
+                    "uuid": "a6936969-d502-42c8-81ed-0d6eeffdced1",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "f706307e-660c-4a52-abab-fcc4b4f74a79",
+                "control-id": "PR.AA-03",
+                "description": "Evidence from Okta Identity Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "1a91dad4-ed02-40fb-8e06-641f8404e141"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "okta",
+                    "uuid": "cfad12e1-8c2a-4b95-8e37-6aa5b6bdb0be"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "mfa_status",
+                    "uuid": "d7d7ec75-04c2-49ce-9a48-090fa7928c83",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "authentication_logs",
+                    "uuid": "7a361653-8616-4e37-8350-63166b470793",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "sso_config",
+                    "uuid": "bd9795f4-9821-4cfb-932b-05ab62ab4a8a",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "d84beafe-5e76-4e99-a0e6-f448e59b7755",
+                "control-id": "PR.AA-04",
+                "description": "Evidence from Okta Identity Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "643f93b7-c901-4c46-9697-7f06863eca23"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "okta",
+                    "uuid": "76f0d3aa-b4d2-436c-99cc-249ef683f6f4"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "sso_config",
+                    "uuid": "805fdbb7-f3e7-4ed4-bf8f-479948eb9ee8",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "2e3d3d6e-af41-4103-bf3f-dbef2edb0e06",
+                "control-id": "PR.AA-05",
+                "description": "Evidence from Okta Identity Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "54436b9c-3474-4045-859e-372267e4b75c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "okta",
+                    "uuid": "3fe2a078-f84f-450f-a78b-6504a291d4ea"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "access_policies",
+                    "uuid": "e34742ed-5a54-4044-957b-59b3fa4ab3c6",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "rbac_config",
+                    "uuid": "b7f4f113-0029-4e8b-834b-d5a117f171ea",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "access_reviews",
+                    "uuid": "fd597e25-8fea-4eac-bcfe-89a7afcd7e6f",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "1e705be6-dbfe-45a8-8320-6a6be16d3c44",
+        "type": "software",
+        "title": "Jamf Pro Endpoint Management",
+        "description": "Apple device management platform for macOS, iOS, and tvOS devices.",
+        "purpose": "Provides evidence for endpoint security, device inventory, and configuration management.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "jamf",
+            "uuid": "f6cb20b2-d8a9-47fa-9382-ce042ae3f302"
+          },
+          {
+            "name": "control-count",
+            "value": "4",
+            "uuid": "175fec8d-9dec-438a-adc8-f597e1c9516d"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "31a4d8e4-473a-44e1-8d81-7d4728ead964",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Jamf Pro Endpoint Management",
+            "implemented-requirements": [
+              {
+                "uuid": "6270753c-5898-4bf5-aeb2-04c15ef33522",
+                "control-id": "ID.AM-01",
+                "description": "Evidence from Jamf Pro Endpoint Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "e4b0e0ac-8037-4ee3-9a57-a864c85fec18"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jamf",
+                    "uuid": "e07a371f-92aa-41f6-ae55-1548551aba6d"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "device_inventory",
+                    "uuid": "6c252f25-f21c-47ca-85f5-40c3cdb57af1",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "jamf_inventory",
+                    "uuid": "e6b929f6-e41b-4978-8135-32c4382f8bab",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "08d8b4a4-e399-4673-8cd2-b56f00797f8a",
+                "control-id": "ID.AM-02",
+                "description": "Evidence from Jamf Pro Endpoint Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "301e51a1-4b59-453b-b9a8-4411d4e86988"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jamf",
+                    "uuid": "a03bdb2a-5748-4be1-bfe0-7b45a4640b28"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "software_inventory",
+                    "uuid": "d7c6fdcc-bf85-4b4c-a88c-04a1bca7f2cc",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "application_catalog",
+                    "uuid": "733bca66-29fb-4516-9b99-ee21fa176949",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "f49074bd-0f94-4d68-ba93-0093af7683fd",
+                "control-id": "PR.PS-02",
+                "description": "Evidence from Jamf Pro Endpoint Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "48e44763-4f53-41b0-a6bf-bab53cddebee"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jamf",
+                    "uuid": "cf13e6c1-e6d6-43da-b03f-d63773e8d2ab"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "patch_status",
+                    "uuid": "24824469-df24-4bb9-9ac0-a90a47819241",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "ab7c1317-bdaf-4c43-9c77-bf11dd6d1f32",
+                "control-id": "DE.CM-09",
+                "description": "Evidence from Jamf Pro Endpoint Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "2e0c1eb6-0df5-4f8c-a7d5-31eee0db8658"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jamf",
+                    "uuid": "294bcc4e-9c37-4b05-a1f6-1aa95d1fe7da"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "endpoint_monitoring",
+                    "uuid": "177d6582-ec08-40d4-87cc-370a44ff3e69",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "b3447e79-bd43-45d8-aa1d-3c34ecbb2ea1",
+        "type": "service",
+        "title": "Google Workspace",
+        "description": "Cloud productivity and collaboration suite including Gmail, Drive, and admin controls.",
+        "purpose": "Provides evidence for user management, security policies, and collaboration controls.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "google_workspace",
+            "uuid": "7b8f666d-2cfc-4380-9a3c-27dba756ccfb"
+          },
+          {
+            "name": "control-count",
+            "value": "16",
+            "uuid": "e9ff8dda-a4f0-4c34-9aad-f5ad1358fcf0"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "e2ad937b-e101-46b5-aa73-1c6d40a0a34a",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Google Workspace",
+            "implemented-requirements": [
+              {
+                "uuid": "0de3ae27-615d-4142-9634-678427b9e171",
+                "control-id": "GV.OC-01",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "7c9690dd-a1c2-4553-a1f0-ef0046c2f2c7"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "724cc995-681a-4649-81fd-f5f72c305eba"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "bb38e0cb-6b67-44b0-829d-ca013adce576",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "9f9355fb-19fd-4ed1-b435-36c1c2d5b89a",
+                "control-id": "GV.OC-02",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "f27c2a92-4572-4e6b-a968-cae2cec994fb"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "8f221f47-8b58-4d9c-af72-12d669495843"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "03ee3056-e3aa-4cee-8b54-49696caacaa2",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "379b6926-3376-47a7-91b2-ee7cec2ccf60",
+                "control-id": "GV.OC-03",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "bea9b82c-ce8f-428f-b5c5-1aa73e171b89"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "88b66170-c8e7-4ae1-abe1-b62153205ab7"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "8d461259-d049-47af-8c64-d11cb00673b2",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "8adbb476-3936-45d6-860f-848f3c1c56ca",
+                "control-id": "GV.RM-01",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "84b3310f-98f5-4b55-b80e-90fc348d7c09"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "642f991c-003b-4cf2-91d8-802257361350"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "ec579291-afb0-4354-8cfb-e913eb7d6a2d",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "5c39c3f0-525a-4ca0-bcc7-661831f1fe3d",
+                "control-id": "GV.RM-02",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "9a69fcfd-c625-409b-bb37-a9c9027fba4c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "515a35b4-8ada-4c5c-803b-275f218cd27a"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "0c79a706-78b1-4928-818d-1d94848dab0e",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "d9f98acf-8ec5-4bb4-8997-d26f3cb35176",
+                "control-id": "GV.RM-04",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "9eedc89a-6a7b-4e60-9b74-16f0b3781b7a"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "60e0bdfa-9d9b-43c7-b7b8-ac44fad5cbe0"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "15486a12-18d8-4ad4-845b-26ec2560ffbe",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "569bdc55-47ab-4748-98b0-86bbd848e7ff",
+                "control-id": "GV.PO-01",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "d803f87e-77f0-4525-bb61-bcd5e0f43c7b"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "7c6d44ec-4e96-4eee-aa06-4570f54c81d1"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "f39d257c-d7c5-45be-829c-9e9601e2eb69",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "f455a944-9558-407f-bdcf-dbed860524e4",
+                "control-id": "GV.PO-02",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "f250ccdd-47b9-4107-aecd-6277e82d5fbd"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "84281b58-cf7a-4874-bd2d-6c033804bc6c"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "f6863b1c-2536-4e56-b747-89db2236cbed",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "fee21d82-e1d3-46d4-bed3-9ca4ac92ab5a",
+                "control-id": "ID.AM-01",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "a8701f8e-2885-408b-adb4-4afeeba94e06"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "bc84cc3a-087d-4be7-962d-5ba707c7e9b8"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "device_inventory",
+                    "uuid": "c497c0e1-2cb2-4514-b765-93c69f51827c",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "5d1c966c-cf58-496c-bc78-a5776d87612b",
+                "control-id": "ID.AM-02",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "d2a0586c-27f2-4e1b-ba1e-0d5ed612ef99"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "b1105359-7919-43e8-8123-13d4e01d99dc"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "application_catalog",
+                    "uuid": "621ae504-a61f-4d67-b5a1-5ad68cbe0c87",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "6c3c053d-f933-45b2-86c3-046188a6c4ae",
+                "control-id": "PR.AA-01",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "8aeef57b-42f5-4cc4-87ba-9633a39cc2d9"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "98440bcf-7235-46a4-a59b-14b0e54c9d6a"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "user_inventory",
+                    "uuid": "3bce0417-c40a-4462-a8c6-5ef7f061325a",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "bee04ff1-96d2-41a4-815a-aea7b55999ae",
+                "control-id": "PR.AA-03",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "f5971264-d8e5-4033-8665-8ff3852eadd2"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "d3993d32-f028-4b9c-a386-7f291a9e9c20"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "mfa_status",
+                    "uuid": "e61feb82-a3ea-4228-ac2b-0de3782f977c",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "authentication_logs",
+                    "uuid": "f52e8602-520b-41c7-9bec-e5d45346c754",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "sso_config",
+                    "uuid": "b423aa0a-efb5-49fc-95da-29f6f7eef9e5",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "096a443b-0faa-4c6f-90ec-b872cf1024cc",
+                "control-id": "PR.AA-04",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "21d7328f-ca10-41ed-9755-da3c9580e1c3"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "023bf131-a4a1-459b-b10d-258ba736d040"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "sso_config",
+                    "uuid": "1eec7c3e-291a-4e25-bcba-1b07f6905654",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "17f0d333-5ee0-44f0-ab3c-0fcd4819469c",
+                "control-id": "PR.AT-01",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "85b75ec0-7cd1-43f5-ac91-6311a1d8c999"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "ebc0a9ac-8fd6-45c3-a339-18fec1d4791f"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "training_records",
+                    "uuid": "207c3c22-c7f7-48b9-b302-268c471de62a",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "d4d5ae58-22ae-4ce4-9d90-067ea4ceae98",
+                "control-id": "PR.DS-10",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "e703c8a6-baba-4a31-a1a7-aacc7e1c9918"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "1b56b71d-8886-4391-92ed-9c3e45a943e1"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "dlp_config",
+                    "uuid": "d0b776f9-199e-4248-8256-684162c6e8a9",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "00e16c74-ac47-4dc0-b4b7-0426f55b4ce6",
+                "control-id": "PR.PS-04",
+                "description": "Evidence from Google Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "162d9502-cd53-4aeb-bc75-2b147da2ed74"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "google_workspace",
+                    "uuid": "5720e0b4-9c44-4148-b114-b6595a698ace"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "audit_logs",
+                    "uuid": "4f8d95fa-9709-49d4-9bf2-f1508da94bcd",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "a4f86553-1f59-4710-8a55-b9ee3935e382",
+        "type": "service",
+        "title": "Snowflake Data Cloud",
+        "description": "Cloud data platform for data warehousing, data lakes, and analytics.",
+        "purpose": "Provides evidence for data access controls, query auditing, and data governance.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "snowflake",
+            "uuid": "9ce7eaee-bc3a-4939-b151-067e7a337b21"
+          },
+          {
+            "name": "control-count",
+            "value": "3",
+            "uuid": "e7869c17-e4a5-4204-81b6-1cb62bc7fc4d"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "13461316-3d26-4729-90ee-907ed8d274b0",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Snowflake Data Cloud",
+            "implemented-requirements": [
+              {
+                "uuid": "f0dfb466-da2a-42a1-8587-c25181bf05d5",
+                "control-id": "PR.AA-05",
+                "description": "Evidence from Snowflake Data Cloud.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "50dc1d5f-6557-498f-9c2d-16650139ced4"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "snowflake",
+                    "uuid": "864c9c4c-a896-4a6e-9e32-5ef7cd9954d8"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "rbac_config",
+                    "uuid": "95d6e7f3-482e-4a38-8cb4-07099f23b2f1",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "df3f7b48-0434-4765-8fba-eb29c7d92267",
+                "control-id": "PR.DS-01",
+                "description": "Evidence from Snowflake Data Cloud.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "ea38f727-86cd-42e9-81b5-c5b08468dda5"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "snowflake",
+                    "uuid": "40ce5f8c-8365-4b08-81b5-cb779fede6be"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "encryption_status",
+                    "uuid": "73f0736f-98df-4dae-b41b-af34e8a015dc",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "data_protection_config",
+                    "uuid": "92ffc3ad-664b-4ef6-9ab1-7d84cbef3799",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "ec016397-3d7a-40e7-a731-d2e54cde2e9d",
+                "control-id": "PR.PS-04",
+                "description": "Evidence from Snowflake Data Cloud.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "d10f06be-5a9b-4e05-83cb-7cb744e600d9"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "snowflake",
+                    "uuid": "28d009b3-020d-459b-8dd8-2400a20c730e"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "audit_logs",
+                    "uuid": "99605124-c212-4a6f-affe-678b17c4688e",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "02cc4da8-be73-4c42-b3d6-9bb16f8eb86d",
+        "type": "service",
+        "title": "Datadog Monitoring",
+        "description": "Cloud monitoring and security platform for infrastructure and applications.",
+        "purpose": "Provides evidence for continuous monitoring, alerting, and security signals.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "datadog",
+            "uuid": "9aa166ed-2b8f-41c5-b62d-97aa54accac9"
+          },
+          {
+            "name": "control-count",
+            "value": "11",
+            "uuid": "bbc4e4e8-4e5c-44b3-b8f8-b8da5e80558d"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "136f536e-edf4-431b-aa9e-90de818433d7",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Datadog Monitoring",
+            "implemented-requirements": [
+              {
+                "uuid": "04d042e0-f0c9-4dc5-a7e7-2ee72cf090c8",
+                "control-id": "ID.RA-01",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "f245f137-2791-4b24-bf21-9d26c0862569"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "5d43dbd7-d4f0-405b-8d47-931b985f4833"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_findings",
+                    "uuid": "90cf8337-d698-433a-8cf5-9edde13c340a",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "519fb2a5-3f5a-4792-a0dc-6b2a03db0d12",
+                "control-id": "PR.AA-03",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "238ca9f0-bd68-49d7-be12-fe16460aeef3"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "d8f9d7d7-cbaf-4b04-be7c-d8f9b090e4e0"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "authentication_logs",
+                    "uuid": "f682f1ab-1bed-42ea-bdd4-99660df65242",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "2ff3638e-9b8a-44e5-a9b7-656940f0e611",
+                "control-id": "PR.DS-10",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "9f77caf8-2d80-4df6-bb79-642bb7972edd"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "f90c0762-6966-4caa-bfc0-31b170f0c5bd"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "dlp_config",
+                    "uuid": "17ca636f-f7ab-4db4-b125-534e173079ba",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "3c45f150-d9c0-4e59-ae0f-54218e2084da",
+                "control-id": "PR.PS-04",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "2174dd2c-253d-4a9f-bdac-8409fec22b5b"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "309d076e-f6a9-434f-b4da-82f333b49692"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "logging_config",
+                    "uuid": "eece6828-d400-4d7b-b36a-ea9fb9a51c31",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "a5be23a7-12ef-4b67-98ed-fef2d57e0ca2",
+                "control-id": "PR.IR-04",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "fb5e80ef-0baf-4769-8272-01022e0e3ebd"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "a19cd2f5-7486-48e6-9e77-8b6d7129b39f"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "capacity_monitoring",
+                    "uuid": "1de137ab-4a51-4919-9039-05be90d15949",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "ac268e49-54c9-48a6-a951-ffa4ffe3d69f",
+                "control-id": "DE.CM-01",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "067c86a3-ce14-4058-b4df-e21a12b0d683"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "b4b46edf-ace1-4422-947d-7a044be6da0c"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "network_monitoring",
+                    "uuid": "0a1bb6b3-1c6d-48de-b9d5-98ca738d00bb",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "ids_alerts",
+                    "uuid": "c3c29d6c-0e78-423b-a453-30198998555b",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "6f5fce0a-7f87-40b0-84a1-3bfb750986b8",
+                "control-id": "DE.CM-09",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "6641c245-eaa9-4f45-ab94-0076a9851181"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "757d3d7e-0eff-4e07-93e6-a0bb826d4e52"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "endpoint_monitoring",
+                    "uuid": "074a8b7a-0152-4675-bc8d-d224b61d89a8",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "edr_alerts",
+                    "uuid": "60641626-4eb1-4678-89f5-2349830c7174",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "6b689ab5-1dbc-4e53-9986-8a2842caca21",
+                "control-id": "DE.AE-02",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "e959a75c-78df-4747-a63b-1ef0a05cb088"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "f4beb4ae-1c16-4a1a-8371-e0777836c6de"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "siem_config",
+                    "uuid": "6b07edc1-2a67-406f-a6e9-51bb4fb06df4",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_findings",
+                    "uuid": "3c756f92-ee6b-401a-90a7-68c13b5e0930",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "34b2c5c2-da65-4f88-bc4f-bddb8cf0436a",
+                "control-id": "DE.AE-08",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "5b41db42-8b85-4e4c-88a5-1abd76c388b9"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "156b6aec-95ea-42b3-933e-df3f50cbb8a8"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_log",
+                    "uuid": "782cde34-a325-4107-8235-dda854e352b1",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "cd12a469-b85a-42fb-affe-2dbc95586323",
+                "control-id": "RS.MA-02",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "34f1842f-3f85-4a99-8068-aa3ceb0a930c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "19df1733-656c-4ac7-b9f3-72f34c34e64e"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_log",
+                    "uuid": "090a0288-ca28-440a-af16-243acd5265a4",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "3a37b3aa-3177-406b-a5c5-ba690960b29a",
+                "control-id": "RS.MI-01",
+                "description": "Evidence from Datadog Monitoring.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "8e3c283c-b40c-4f73-8733-1ee361a23a4d"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "datadog",
+                    "uuid": "8d00a194-c3e2-4bbc-b951-727a11e65592"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "containment_procedures",
+                    "uuid": "ff246f6c-a795-4dfc-a718-c37af1ba98d6",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "c62d0470-c557-4077-9283-9f31e6491d51",
+        "type": "service",
+        "title": "GitLab DevSecOps",
+        "description": "DevSecOps platform for source control, CI/CD, and security scanning.",
+        "purpose": "Provides evidence for secure development, code review, and vulnerability scanning.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "gitlab",
+            "uuid": "3173b357-2761-4c55-9574-fa60c26b7226"
+          },
+          {
+            "name": "control-count",
+            "value": "3",
+            "uuid": "33111f86-8294-4c80-96d7-cf0436601ec4"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "542a65ad-8742-4662-af3d-0ee20de3806b",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for GitLab DevSecOps",
+            "implemented-requirements": [
+              {
+                "uuid": "eef5cefe-1410-4185-bca3-fc1cf078fa0a",
+                "control-id": "ID.RA-01",
+                "description": "Evidence from GitLab DevSecOps.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "ee04db31-6931-414d-af86-8e403b9b6ae1"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gitlab",
+                    "uuid": "f3a27699-a5e1-4778-b9e0-368577db25cf"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vulnerability_scan",
+                    "uuid": "05fa3871-784e-494e-a7b9-a037b7aedec1",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_findings",
+                    "uuid": "e619875f-3529-4382-9749-ed90c7c2eccc",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "c0e7a51d-37d3-4258-b954-4589d1b798bf",
+                "control-id": "PR.PS-06",
+                "description": "Evidence from GitLab DevSecOps.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "d3853b6d-563b-4323-9c38-231746d33a5f"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gitlab",
+                    "uuid": "cb7fddaf-ecbf-4eb3-a20d-cf8c93f8ae6a"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "sdlc_policy",
+                    "uuid": "e7f9f88f-a89c-419e-b310-9838b8c15914",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "code_review_records",
+                    "uuid": "83b10855-2352-423f-8329-4faf949f4a8a",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "5428f312-b526-4dc9-b5fe-64bd6da45448",
+                "control-id": "DE.AE-02",
+                "description": "Evidence from GitLab DevSecOps.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "83199bd4-19ee-4666-af73-f19a9a05fcc0"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gitlab",
+                    "uuid": "07f5a7d7-aac6-4336-8a54-3e28b97c9cde"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_findings",
+                    "uuid": "9b237b27-2a87-41c6-b27b-5428cbeaef20",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "2973b50d-2a73-46e1-8049-a438fec91238",
+        "type": "service",
+        "title": "Jira Project Management",
+        "description": "Project and issue tracking platform for agile development.",
+        "purpose": "Provides evidence for change management, issue tracking, and workflow documentation.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "jira",
+            "uuid": "5f12e7b2-d45b-47b0-ad6c-d8442df7bc40"
+          },
+          {
+            "name": "control-count",
+            "value": "7",
+            "uuid": "30505788-79c1-4d3a-8115-321c15a66d01"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "844a4278-9b4e-4a2e-a150-3d19e293d9ce",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Jira Project Management",
+            "implemented-requirements": [
+              {
+                "uuid": "ca8fd7a1-ce82-4848-b1db-478b6da8837b",
+                "control-id": "ID.IM-04",
+                "description": "Evidence from Jira Project Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "7677f742-fdab-4e48-9274-2c33dcecbe48"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jira",
+                    "uuid": "8f9eb5f2-fb57-4287-9db0-274a4a8e71b0"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_response_plan",
+                    "uuid": "df6dfa60-6535-4061-a108-23e0641bf8a6",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "8aa8b8dd-e10c-4a12-9e8b-b7d2c9dd5e76",
+                "control-id": "PR.PS-06",
+                "description": "Evidence from Jira Project Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "894f0cf5-2f18-4ee4-8641-ce2aff13ef3c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jira",
+                    "uuid": "602eb939-cec3-4902-8cfa-658831eb8ac6"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "sdlc_policy",
+                    "uuid": "5416d295-7d1d-4861-850f-94a7ce832c71",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "e2288f0a-9d99-40f2-8b76-e7374a9becb0",
+                "control-id": "DE.AE-08",
+                "description": "Evidence from Jira Project Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "1ecfd6f4-ebfb-438c-8b9b-78e20ef9e0d0"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jira",
+                    "uuid": "e8b8aea2-fe4b-4163-b763-088dee2344bf"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_log",
+                    "uuid": "7a872fa4-bb9f-4441-b95f-9226dd571c83",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "83b6caf3-d59c-495e-8e2d-0f8d54b37953",
+                "control-id": "RS.MA-01",
+                "description": "Evidence from Jira Project Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "551dd96c-05c7-4982-99ed-e8c16c89050f"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jira",
+                    "uuid": "0fda373b-816e-490a-a565-73fc61ef8f8d"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_response_plan",
+                    "uuid": "246e55ab-2550-417f-8d19-46aca08f4e23",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "8f91c350-69ff-4c4f-a317-b478fd6338ba",
+                "control-id": "RS.MA-02",
+                "description": "Evidence from Jira Project Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "4753a416-7ec4-43a8-bac0-4d4c3599a931"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jira",
+                    "uuid": "ac6fa6a3-3708-44f6-a07f-f47fa4f7cc64"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_log",
+                    "uuid": "aca77a83-9378-4dc8-948f-b65670b0b288",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "53758e0e-3f8c-4afd-a78b-dd3bc2cfb54c",
+                "control-id": "RS.MA-04",
+                "description": "Evidence from Jira Project Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "bb39e664-7264-4deb-9085-fba88fdabf17"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jira",
+                    "uuid": "370e17e8-92bf-41b3-bc6d-2c274aad6c2a"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "escalation_procedures",
+                    "uuid": "27cc3f30-c5f5-4a14-a45e-0856a43e1ed8",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "7445a727-b407-4170-97d3-3791c7583a2d",
+                "control-id": "RS.MI-01",
+                "description": "Evidence from Jira Project Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "1e0e6f3a-0947-4246-b604-14b76464aa73"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "jira",
+                    "uuid": "35e899d0-8f77-4e32-932f-5f63cee6a16d"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "containment_procedures",
+                    "uuid": "d19d6d25-56d5-4944-9199-43e20117d8a2",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "3e579bf3-5121-4f37-a950-e1be20147974",
+        "type": "service",
+        "title": "Zendesk Support",
+        "description": "Customer service and support platform.",
+        "purpose": "Provides evidence for support processes and customer communication.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "zendesk",
+            "uuid": "3b5752bd-9462-4506-85a9-e88fa4dc9a32"
+          },
+          {
+            "name": "control-count",
+            "value": "1",
+            "uuid": "0c385014-24b3-42a7-9e66-8c00270a4efd"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "faea1988-0477-43f7-aabb-8d524a6706a4",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Zendesk Support",
+            "implemented-requirements": [
+              {
+                "uuid": "046ec89b-c162-46e4-91da-98cfe341c5a2",
+                "control-id": "RS.CO-02",
+                "description": "Evidence from Zendesk Support.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "17110642-beac-466d-9691-026b541bc23f"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "zendesk",
+                    "uuid": "411c80a2-6365-4013-90f3-0f88b295ab4f"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "communication_logs",
+                    "uuid": "14e5f20c-d1e2-496d-aee0-0e4d213bc7c5",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "2f83037e-2963-4f73-a84c-6be6b28c9b6c",
+        "type": "service",
+        "title": "Zoom Communications",
+        "description": "Video conferencing and communications platform.",
+        "purpose": "Provides evidence for communication security and meeting controls.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "zoom",
+            "uuid": "35fc9268-b2f3-478e-9aad-498b080cbd93"
+          },
+          {
+            "name": "control-count",
+            "value": "1",
+            "uuid": "4b7b5e01-4664-450c-811f-f2eb546c313b"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "acc5cadd-0476-43bb-84d4-749c66f1ecc7",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Zoom Communications",
+            "implemented-requirements": [
+              {
+                "uuid": "a06fb134-903c-4917-bf04-d9031333d436",
+                "control-id": "RS.CO-02",
+                "description": "Evidence from Zoom Communications.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "86f986b7-aa45-4fbd-b73e-369bcf2e627c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "zoom",
+                    "uuid": "4f0b37ff-fd37-4e2e-9f07-d2983eafdeb2"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "communication_logs",
+                    "uuid": "1fef225c-495a-48c0-a18f-c02a71c6b509",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "dc124208-43c0-4814-b9cf-ccaeaef5bb60",
+        "type": "service",
+        "title": "Notion Workspace",
+        "description": "Collaborative workspace for documentation and knowledge management.",
+        "purpose": "Provides evidence for documentation practices and information sharing.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "notion",
+            "uuid": "d360a693-e132-4115-9665-daf324ae9e99"
+          },
+          {
+            "name": "control-count",
+            "value": "14",
+            "uuid": "a6dc0412-e48a-477b-bb54-b6ef545967f5"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "a98bafb0-7f39-4e0f-8d9d-b2f712211dda",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Notion Workspace",
+            "implemented-requirements": [
+              {
+                "uuid": "bbdfa557-e928-4030-b320-b31c8b54781c",
+                "control-id": "GV.OC-01",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "ff861d13-a808-4a18-8da6-7c898557a0bf"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "a54b9137-542b-4366-821b-55b333ad123c"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "5468840a-6f04-4698-84c6-377624348087",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "455d2744-2139-42c0-b96e-f30767d6cf82",
+                "control-id": "GV.OC-02",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "90b025f7-733e-4a42-bc3a-9df88f688dc4"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "6af94c97-441e-4b48-8f28-312df3b72bbd"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "5839b5ce-6c64-4ef3-8845-dfc0ea9796ba",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "0cd3ed5e-3ab5-43d5-9919-5e5823cce344",
+                "control-id": "GV.OC-03",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "d8a5cc01-5d5a-4be6-811c-f94db552582b"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "4272c16e-c593-4d41-a4a4-fd3a62c13161"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "79a9f86d-b2c1-44bd-999e-f724536cad7a",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "24d0bfcc-ac22-4cf9-8d4a-8f1891d5b8d9",
+                "control-id": "GV.OC-05",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "4d9ef691-c3ec-4d06-855e-7e4ea5f00d7a"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "8bc0f392-2559-4840-91c6-356799831287"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vendor_inventory",
+                    "uuid": "0e530717-2a94-4342-839e-02ec1da60ea4",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "6f1743c8-c0b2-4b15-bfe1-ef3ebc30688a",
+                "control-id": "GV.RM-01",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "95211b57-e03a-4fa1-83b3-40efb2278e9e"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "78515bd6-e3ec-4d4d-a5d6-d46d8f044f35"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "29543110-f723-42b3-9a42-d772bae002d0",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "366a89c5-1499-4d76-9330-ec21a8ef6e31",
+                "control-id": "GV.RM-02",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "9245b45e-4f8b-45d0-b1c3-83b020193314"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "bf02135c-1106-4a25-be13-12bcaeefdf96"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "fa9f975a-5355-4a27-91cc-0c86a214f6b7",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "c7748d5b-fb87-482e-8e7d-634b9484c726",
+                "control-id": "GV.RM-04",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "11090d21-4e0e-437f-a8e5-08c3a44c852c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "79685809-ce83-4cd3-acd9-d426d2c096bc"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "f5afd434-7a2a-48a3-a884-7a073181fb19",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "9f730650-c7bf-453c-951c-10724f42e3c2",
+                "control-id": "GV.PO-01",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "32bae766-2680-4875-886c-42579a46112c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "315844fa-3b61-4522-b938-e64c2468a7b9"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_policy",
+                    "uuid": "f479849f-6b04-4da0-943c-aa5cb39243bf",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "3ee25f64-f3a7-4b67-a32f-a534d38fee99",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "8b7d86e8-a1f3-4361-a8fb-c64b39ed2a6c",
+                "control-id": "GV.PO-02",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "545af3ee-a79f-4992-a9af-52e73e2ffc95"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "d2a874c1-d8d0-4c78-a42c-84b18f036770"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "3fdf753d-b101-47de-a0b9-c084d7803bd3",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "3cb88e86-d9bf-44e1-a03b-603f51810fc1",
+                "control-id": "GV.SC-04",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "6b6a948b-0c64-4d7e-bd2a-036a681ac3c3"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "b17a5032-0c29-43a0-9d24-c43f6c839af9"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vendor_inventory",
+                    "uuid": "74888c0d-b36d-4846-8f61-1388c80fcd58",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "70ff9589-2963-4682-b0aa-6ef438467608",
+                "control-id": "ID.AM-04",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "10c4ea93-b1d5-4f66-b848-ea2acd7260ee"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "8770a3e1-416b-4f6b-9930-dc6cdbd6dd65"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vendor_inventory",
+                    "uuid": "7f095cd0-7546-4a71-b57a-ea9a63a98b58",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "fa49a6bb-0bbe-40cd-b787-1dcb0f0c30de",
+                "control-id": "ID.IM-04",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "8468d89b-53f6-498e-ace0-1686834d4e3c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "6dbe9f2e-8dc2-4716-b7ca-864b677b6fcd"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_response_plan",
+                    "uuid": "aad91cfa-f8d6-439e-9d9a-5a38b32ebfb9",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "69f73590-4006-4350-aefd-d59bbfe9f0e4",
+                "control-id": "PR.AT-01",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "dcdc1a65-0f92-41fa-a11d-b9a1c95fa676"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "9c24aea5-cace-44f0-9c49-2c58f8331b10"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "training_records",
+                    "uuid": "f06805b7-d985-45c3-b330-b93e1eb59dc8",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "5a657c96-6c08-4bd6-b656-e9e5bdc12835",
+                "control-id": "RS.MA-01",
+                "description": "Evidence from Notion Workspace.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "e5f02ed0-851b-4fdc-9c76-c205d7da7214"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "notion",
+                    "uuid": "7f2d9250-a622-4960-bab5-79372ae064f8"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_response_plan",
+                    "uuid": "610ed288-563b-426e-8d13-31af3951c3c3",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "163b7d3e-163c-4f3f-9590-bb2acaad7f15",
+        "type": "service",
+        "title": "Slab Knowledge Base",
+        "description": "Knowledge management platform for documentation.",
+        "purpose": "Provides evidence for policy documentation and knowledge sharing.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "slab",
+            "uuid": "15e7cb4b-ac4a-4874-8fdf-9dd6b0555a92"
+          },
+          {
+            "name": "control-count",
+            "value": "10",
+            "uuid": "17814b2e-a54f-48d7-9bcd-af742fe62447"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "47fed977-bb95-47d2-8680-68e5123d31ff",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Slab Knowledge Base",
+            "implemented-requirements": [
+              {
+                "uuid": "3bc43726-bcb3-4329-a150-56643e159ec9",
+                "control-id": "GV.OC-01",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "0b1764cf-c739-4d02-80a8-950661d31f54"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "1dd8d4cd-3155-4718-830b-b73ff9165e01"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "14a46eb8-6f58-4c99-8521-743f8240900c",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "10dc9cbd-1460-47b1-9d9e-045d7dfaf4db",
+                "control-id": "GV.OC-02",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "45c7f3bc-29e4-4cfe-b852-e5430740fa47"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "5cd21c76-1c88-471c-906d-12cd0b073428"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "2796e05f-5368-4014-8856-8e70ddd92caa",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "137b6002-fbbd-46f4-99d4-80e37bf7d1a3",
+                "control-id": "GV.OC-03",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "e101d9d6-e1d9-4abb-94cf-18be7e8faa24"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "c54e290d-0793-41e1-8f4d-8eb3c96bbfa6"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "1902c1f4-07b1-4f4b-ab7f-041b1b5d08cc",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "2dd3f4f0-413a-4f00-81e7-8e4526831ca6",
+                "control-id": "GV.RM-01",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "05d79ea4-55e7-4742-84af-1f30a3f88b54"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "ab20a46a-0b00-4435-90bb-23e19ef5bc5d"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "1ce520bd-94e0-49b5-9a87-76dadf921c63",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "0ce2b55f-431f-46f6-b6a8-6b1c2f967250",
+                "control-id": "GV.RM-02",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "c2fb8420-83d3-4fd6-8d37-b31b4c8a43d2"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "4c667231-1e88-4358-8808-303c427970ad"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "d45ed86b-1702-4d7b-9b33-0e7324c3a908",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "33e31463-3759-4393-99d6-02b23e3f5b52",
+                "control-id": "GV.RM-04",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "8a290df3-6b56-4c76-a0dd-d0fbde1a8b36"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "b2f2ec22-30b7-4c59-a850-e9f0c251e267"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "dc702342-8264-4b6b-ac5d-eb43f121b461",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "d947685e-003d-4f62-9837-36ad4e37aa19",
+                "control-id": "GV.PO-01",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "3f04f81d-dd99-4397-bfb5-56fd3fcc1895"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "26640f25-aada-4003-ae29-edf4d689f502"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_policy",
+                    "uuid": "21e05ad1-7b67-4b13-96bb-155696d634d1",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "1798320a-29e7-4d5e-bd96-d3c49f9ac01d",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "a066a712-d12f-469e-89a0-e2f17a6b6bc8",
+                "control-id": "GV.PO-02",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "09ef3be2-de62-46d8-8ae5-8da45ca70720"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "5f9da026-0dde-4c92-b767-e068210f20ce"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "policy_document",
+                    "uuid": "182df6e8-9bc5-4ee8-bdde-ae61e0cb68d3",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "efad7953-2652-40fe-8d32-d0ddcbecaa16",
+                "control-id": "ID.IM-04",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "78eb0982-9f62-4b7c-a713-585d416a14c1"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "b7816758-3f46-4102-b49f-d1820bb65a7e"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_response_plan",
+                    "uuid": "f12ff43f-eb87-4ec5-a77f-8189b101e82e",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "6e859c90-57f4-400f-97ed-ebd5fdbb8e00",
+                "control-id": "RS.MA-01",
+                "description": "Evidence from Slab Knowledge Base.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "9584f0cf-8b5f-4755-8d7d-0b57a45cd198"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "slab",
+                    "uuid": "3b5dcbf2-f3cf-494c-b6f1-ad5ba9ae1da3"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "incident_response_plan",
+                    "uuid": "3dff43e9-0a24-424e-8da4-3cb0c899d72c",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "7c78b225-2ae5-44cc-9d47-a75ba25a53a6",
+        "type": "service",
+        "title": "SpotDraft Contract Management",
+        "description": "Contract lifecycle management platform.",
+        "purpose": "Provides evidence for vendor agreements and contractual obligations.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "spotdraft",
+            "uuid": "9eb13af0-656d-471e-b491-fc61cdd57b22"
+          },
+          {
+            "name": "control-count",
+            "value": "7",
+            "uuid": "59c84182-c4dd-4635-845d-de89f30238a9"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "3f49b744-aaa5-4d96-b5e3-d515951f0169",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for SpotDraft Contract Management",
+            "implemented-requirements": [
+              {
+                "uuid": "502b0ff2-bfcb-433a-9ddd-42723400090e",
+                "control-id": "GV.OC-05",
+                "description": "Evidence from SpotDraft Contract Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "0add0e55-fc88-4b92-87d2-c331a64ac413"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "spotdraft",
+                    "uuid": "b9f69ded-8eb1-4fa4-808e-0610e354c358"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vendor_inventory",
+                    "uuid": "8df8df34-968a-469a-bba5-d57f9ecddaad",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "d025fb0c-f06d-4042-9f0b-3e2d5b201c6e",
+                "control-id": "GV.SC-02",
+                "description": "Evidence from SpotDraft Contract Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "571a2efa-78c8-4509-9b4d-030e7fdfabc7"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "spotdraft",
+                    "uuid": "310d42c7-bdf1-4e54-8b43-53022ee7b855"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vendor_agreements",
+                    "uuid": "4d9957a8-4ae7-458f-ad05-dc1ef428eb97",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "79daab08-33c6-4b15-9868-c41950c1a602",
+                "control-id": "GV.SC-04",
+                "description": "Evidence from SpotDraft Contract Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "d3ba5f36-dc95-463e-be37-a145ff14abfa"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "spotdraft",
+                    "uuid": "e2d34df7-bc1a-4caa-a296-bd557363f964"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vendor_inventory",
+                    "uuid": "881d9278-3050-4f09-a3a6-cc88abb9f1a0",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "e6d95e12-27f0-484f-bf98-369fb2a91f9a",
+                "control-id": "GV.SC-05",
+                "description": "Evidence from SpotDraft Contract Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "e32bd07b-1a34-4599-9ebf-2923e1288987"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "spotdraft",
+                    "uuid": "07d82cd3-3b4a-42bb-978b-c251b2f74b2c"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "contract_templates",
+                    "uuid": "dc630a61-608d-4782-bc8e-11b32d6ce5b9",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "b17f69f1-51ee-4aa7-8b09-30fce76b15c1",
+                "control-id": "GV.SC-06",
+                "description": "Evidence from SpotDraft Contract Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "f9bccdc0-3a12-434c-95ce-ee461ab0f7af"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "spotdraft",
+                    "uuid": "0f7060b4-4a4b-4bf6-a666-26ff8bc7788e"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "due_diligence_reports",
+                    "uuid": "438b8c5e-a595-40f9-b82c-8efade80d25b",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "d6df4a86-f864-43b0-9ade-19b85f568661",
+                "control-id": "ID.AM-04",
+                "description": "Evidence from SpotDraft Contract Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "93085831-27d9-4771-a2df-a2ff82919796"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "spotdraft",
+                    "uuid": "8f52f093-2da3-48d0-ab39-7566959e6c9b"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vendor_inventory",
+                    "uuid": "d20b87ee-d1c7-408f-b947-20f178dcc49a",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "ebce3ff8-b054-4e59-8336-44a0d1d0748d",
+                "control-id": "ID.RA-10",
+                "description": "Evidence from SpotDraft Contract Management.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "b3ffc70e-94bf-4a5d-82b5-1109d98fb7f1"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "spotdraft",
+                    "uuid": "bfc8f7ad-ffc6-4714-9bac-8259becef93f"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "due_diligence_reports",
+                    "uuid": "ee3fab42-9f78-4974-9ab4-e6bc53f85b59",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "60794cf3-4192-49b9-9bc1-9185bf1820e0",
+        "type": "service",
+        "title": "Amazon Web Services",
+        "description": "Cloud infrastructure and services platform.",
+        "purpose": "Provides evidence for cloud infrastructure security, access controls, and configuration.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "aws",
+            "uuid": "adb44b9e-82fe-4101-bde3-771a0b54fba0"
+          },
+          {
+            "name": "control-count",
+            "value": "15",
+            "uuid": "82703522-1b1b-4409-bd13-af25a909aba5"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "ad6e02d2-6530-4bcd-9c15-b0c31672135f",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Amazon Web Services",
+            "implemented-requirements": [
+              {
+                "uuid": "09ba30bd-aa11-4677-a610-3b89498e5760",
+                "control-id": "ID.RA-01",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "a98d51dd-a5f5-4055-a8d9-ad687141a547"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "e3302751-0ff3-4b7c-a34d-b1936b72bc20"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vulnerability_scan",
+                    "uuid": "c6d7b023-77bf-467d-8a79-63b65dc87a13",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_findings",
+                    "uuid": "04c9c150-c508-47fe-ac8c-5816c66dc4f2",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "665cf17b-6d52-4cc1-bb37-5327b638ce44",
+                "control-id": "PR.AA-01",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "b6a8b901-ac76-46c1-b851-0e7b9ad520be"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "a8faa7cb-5a98-4af1-8e19-13a4a6887954"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "user_inventory",
+                    "uuid": "271fe0c8-7ebe-48da-940f-cee9bdec355d",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "5876d3c6-5768-434f-8471-f9940d128b38",
+                "control-id": "PR.AA-03",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "8b321f12-197c-4e6d-a25c-99706c509a51"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "e4b64c8b-8b3a-43be-a93d-9cfdaf75da0d"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "mfa_status",
+                    "uuid": "c89462fe-8cf4-4907-a15a-57c62e2382d8",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "e44488ff-b32a-4ac6-a42f-b67d41cfa086",
+                "control-id": "PR.AA-05",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "9af17d4b-3389-4013-9702-670835053d32"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "52c30aee-1889-4d73-8b69-a71f719d6d58"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "access_policies",
+                    "uuid": "8681cf5b-0976-4618-b55f-e2f521c98b9e",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "rbac_config",
+                    "uuid": "e4421d84-d134-4859-9192-0c811afd12cf",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "0fcbe07f-a3c3-48c9-9ed4-a3b59579bed1",
+                "control-id": "PR.DS-01",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "34647cb1-41df-4bb7-ac29-6d60132dc8e7"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "49f3eca5-48a3-4888-8947-00ce63547ae4"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "encryption_status",
+                    "uuid": "9c5b8546-62cb-4d39-80ed-c7dfd21923c8",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "data_protection_config",
+                    "uuid": "84b9fd9c-e094-4c31-83b9-cdbe89ba3a04",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "bd0da9de-277b-4469-8691-e3b411e9e375",
+                "control-id": "PR.DS-02",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "e3c23b15-dd0f-4b32-926c-c98500ce06cb"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "f4ed8fd9-bd9c-4cc7-bedf-c6b566592d49"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "tls_config",
+                    "uuid": "1fa1da5b-9259-4cb0-9046-1707a6d9861f",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "18916a5f-5b4f-458d-8ee8-7165a4bc4c39",
+                "control-id": "PR.DS-11",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "d903223d-1f95-4128-b566-c15eb5ef1448"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "88caddc8-d726-4acb-9bfa-e2caf4497dd3"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "backup_config",
+                    "uuid": "c39c656a-a7ce-4eed-a29b-863499513cd6",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "986bfe3c-7ae3-44b2-b272-58918ee38dbc",
+                "control-id": "PR.PS-01",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "0ddd4544-81ef-402f-81ff-f7ed78806dfe"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "dbc13426-933d-42db-ae42-afa7f550fe64"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "config_standards",
+                    "uuid": "dc71bc20-4031-4bef-b7c9-e0b31fb9577d",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "baseline_config",
+                    "uuid": "1731c5f1-5615-499e-96e0-2f574b50583c",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "68ddb6fc-1943-4a3d-818a-2d68cff5cab3",
+                "control-id": "PR.PS-02",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "42523726-8069-4863-b66b-0f8c1bcf7839"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "ef87413b-79fd-456b-9ef9-55e9ba4d0342"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "patch_status",
+                    "uuid": "bd2dfe16-de16-4a65-af22-cde6c092d536",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "6168d819-70d8-40f9-b875-02ffe06b3325",
+                "control-id": "PR.PS-04",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "f50ff679-a9ce-44bf-9fa3-70828fd70446"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "d28dac0a-b160-409d-b8e2-1afd8c3aebbe"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "logging_config",
+                    "uuid": "4dd96c60-40bc-4ae5-a6a6-bb2acb673433",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "audit_logs",
+                    "uuid": "d4e05b9f-4d96-4bd6-a812-7e52216c9b5e",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "2f9272b8-2ae1-4b9d-85c7-5ce5b8fbccf0",
+                "control-id": "PR.IR-01",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "1f616244-7f21-4d4d-a3c4-e03fa8df9c84"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "a32fa924-5e22-4a08-841c-9ff80c5eb4a0"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "firewall_config",
+                    "uuid": "93175a6b-fc17-4960-b147-ed4feb80f5b7",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "network_segmentation",
+                    "uuid": "0d7ea571-8c89-43d5-a22c-eff6e021262e",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "daac3e69-2baf-49d4-b1f7-bda634f24dad",
+                "control-id": "PR.IR-03",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "60e8eb47-eae9-44c7-99a6-5908dde77919"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "8ccba5c0-37b8-4ad0-91af-7f6755583941"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "ha_config",
+                    "uuid": "961c54a4-156b-4b86-85bc-bd3ff05498c8",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "4be24849-0ce6-418c-afe2-616d030fd19b",
+                "control-id": "PR.IR-04",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "a3b9cf72-42c7-40aa-8a92-0e0366630f8a"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "8d8761f7-fdd4-4811-b210-a6bc568a4704"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "capacity_monitoring",
+                    "uuid": "7926d8ae-0103-40d4-b570-43d0877402c1",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "913df9ba-6edb-4d09-825c-35c1552ce551",
+                "control-id": "DE.CM-01",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "d88f99e2-8e39-472a-a3ad-5e34a2ba9e36"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "5942de35-3313-4464-90fb-3ee593a2c321"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "network_monitoring",
+                    "uuid": "e5fa1e9c-193c-4477-afbf-3702a29b314d",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "f53dd92e-d935-4807-999a-e6061e2d1cd0",
+                "control-id": "DE.AE-02",
+                "description": "Evidence from Amazon Web Services.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "38507d5e-4593-45dc-91d7-9d88b45bf202"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "aws",
+                    "uuid": "ee37e585-990e-486d-94a8-808498104c3d"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_findings",
+                    "uuid": "a3ab4641-8d4b-4753-ac08-eb32c47168eb",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "4da87d45-29cc-4d6d-b2c1-d4bbfe9bd7a1",
+        "type": "service",
+        "title": "Microsoft Azure",
+        "description": "Cloud computing platform and services.",
+        "purpose": "Provides evidence for cloud infrastructure security, identity, and compliance.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "azure",
+            "uuid": "09778c55-9115-446e-86b3-07602b78f243"
+          },
+          {
+            "name": "control-count",
+            "value": "16",
+            "uuid": "cd06bd96-5061-4fe8-9a99-f97ffa23778d"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "c40053c0-7f4a-4df9-ad57-507e5a4b36b5",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Microsoft Azure",
+            "implemented-requirements": [
+              {
+                "uuid": "8efacd04-72f6-41cb-a02a-63e7ae4648fc",
+                "control-id": "ID.RA-01",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "3e7a05a5-1bfe-46bf-a9b1-982d71dba56b"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "3057e929-b894-424b-ad9b-3a70ec117e24"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "vulnerability_scan",
+                    "uuid": "3bf7ae5f-969b-4984-8541-5874e0180b03",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_findings",
+                    "uuid": "4e5c8b30-2889-4655-b68b-dfbd413bf540",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "d90828da-5417-432f-a623-2ceee977e8b5",
+                "control-id": "PR.AA-01",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "b24d1ed6-0b5c-4807-912b-6c16630e7149"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "72c8a48c-6919-42f6-bbd8-9db7412b19ea"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "user_inventory",
+                    "uuid": "f8011d97-3a46-4577-9d21-7939c617aff3",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "identity_provider_config",
+                    "uuid": "6d3ba360-1d59-4bcb-882a-656f7a88eb10",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "70d7e717-9620-402c-89c2-d4e74a285300",
+                "control-id": "PR.AA-03",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "b5caf669-7c61-486e-a259-c7e32c7c1ab4"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "c35f057f-e08e-4e2e-8a2e-45821d66101c"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "mfa_status",
+                    "uuid": "65d7605f-2ac7-4283-803d-977cf4d471b7",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "sso_config",
+                    "uuid": "98fdb246-ecec-4c6e-9766-cd8689eede59",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "2cc16809-48c2-4514-86f8-ca3dc0182a89",
+                "control-id": "PR.AA-04",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "6f666dd0-620d-4f7d-a7a7-e08207f94be9"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "d7dda72e-55a4-41ed-8436-e52b0a1acd31"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "sso_config",
+                    "uuid": "9477a237-dbce-49a9-a201-896bc84413f7",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "5bcf8226-3f11-4cbb-822a-7c79091cce19",
+                "control-id": "PR.AA-05",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "5cc5140f-1023-4b77-9700-74460fd3c1f2"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "454ac7eb-20f2-44db-8fc8-fc5d312a862b"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "access_policies",
+                    "uuid": "2da623d2-ec3f-4b7d-a09a-d94140d252ba",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "rbac_config",
+                    "uuid": "bec6f9d6-b21c-43ab-af89-317b0305e1b3",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "8bfbff35-a9b9-4387-bfca-e76860d745ad",
+                "control-id": "PR.DS-01",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "02c8f171-89fa-4626-be58-cb0272e7fe30"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "988151ac-5cb7-468f-8685-218d1a788bbc"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "encryption_status",
+                    "uuid": "48390715-100a-4fed-ba0f-78ada3100338",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "data_protection_config",
+                    "uuid": "1b2ba966-c210-4bd7-aceb-ab79549e22ba",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "fa4833b4-847d-4284-b84f-1b5e672b43a2",
+                "control-id": "PR.DS-02",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "aad80318-1d46-41b1-9b07-30fb279893b1"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "30cd379b-e802-4c77-a2db-4a8a5acccaa4"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "tls_config",
+                    "uuid": "f241e4ff-233f-4338-974d-5e6f91fe6a89",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "07eb985e-53eb-48df-b2a4-aec4af555edc",
+                "control-id": "PR.DS-11",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "9aa2300c-197a-4f31-a383-9ea374b7ce01"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "39e054a0-a87b-4996-8627-94787540c44a"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "backup_config",
+                    "uuid": "c51acb2d-c972-4b85-a8a6-82f3bdac11c3",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "8165e4b7-a234-48b4-b80a-43cb21033fd0",
+                "control-id": "PR.PS-01",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "9c5d59fa-c358-42f2-864f-887147bee432"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "5b56691f-23af-4cfe-ad91-b51fecb8fa90"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "config_standards",
+                    "uuid": "09efd95b-3b50-4fc0-b2d8-81a65dc7512d",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "baseline_config",
+                    "uuid": "85d1e005-d6f6-456a-ad72-1bda08725ab9",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "b3645895-55b9-49e2-8ecc-1180c2ff03ac",
+                "control-id": "PR.PS-02",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "7f467ba7-db86-40c3-a59a-8f221b8a0a55"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "4253807d-38f7-4692-a82c-b0efef043869"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "patch_status",
+                    "uuid": "5c356802-3eb6-45eb-a469-17d5f77e35c7",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "725403dc-7196-49fb-8890-d030c3cd850c",
+                "control-id": "PR.PS-04",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "56094d0e-8bd6-4f0b-a71a-b1cf91e1ea0c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "50edc988-185f-4fa2-be0d-42b35267d527"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "logging_config",
+                    "uuid": "508b3dd6-7382-4d35-b3f0-9d6eade40c92",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "audit_logs",
+                    "uuid": "d7974c7a-c01e-4ac4-9d6f-2a4cef591341",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "2698a5a4-cbb5-41de-8256-00cacbd4789c",
+                "control-id": "PR.IR-01",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "1fbd5225-c72e-4080-9770-56f24e475da7"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "f3c89717-7f7e-4056-9f75-88051a11da6f"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "firewall_config",
+                    "uuid": "c529b2e3-0b31-4e30-b018-d9a01c7d3574",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "network_segmentation",
+                    "uuid": "71f4bd83-e62f-4530-937b-eaf55b681db0",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "8140148a-24c2-4c7c-ba4a-554a3f8c1364",
+                "control-id": "PR.IR-03",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "e4ad318d-e6d9-43f1-865c-6749b45901b5"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "14e58c8d-6dd3-4d68-8e21-1ef4f73aeda8"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "ha_config",
+                    "uuid": "99d0a326-1656-4ce7-96c7-0428d4c21071",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "e9b06f7c-3dd0-470c-9e81-cd1a6df6afe5",
+                "control-id": "PR.IR-04",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "4786bd3e-784e-42c9-b5d4-39b1242ac05b"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "bdc0a17a-6ebf-4730-b19e-01d08ce3fa85"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "capacity_monitoring",
+                    "uuid": "0c68bc36-159f-44b2-8014-0a89573b7ffa",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "6b8adea3-81d5-41fe-8a7a-43d9f7ab1277",
+                "control-id": "DE.CM-01",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "903a4629-1bb5-4db4-a79b-e06416f36f21"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "3fab7da8-d194-4054-8198-67394ceba126"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "network_monitoring",
+                    "uuid": "ae651914-24f0-4e53-ab90-d7da4534ef5f",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "922bca57-b2a5-4414-af80-f958e836bce4",
+                "control-id": "DE.AE-02",
+                "description": "Evidence from Microsoft Azure.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "6bbb9f7d-da20-4367-a868-a4b54cf83dab"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "azure",
+                    "uuid": "f7333079-96b7-46a1-9d2b-9d515d087f3b"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "security_findings",
+                    "uuid": "4231cea1-f925-41ef-9b4b-96398d0e0231",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uuid": "fe1adb38-9b68-481c-b179-73dba78c728a",
+        "type": "service",
+        "title": "Google Cloud Platform",
+        "description": "Cloud computing platform and services.",
+        "purpose": "Provides evidence for cloud infrastructure security and data protection.",
+        "props": [
+          {
+            "name": "platform-id",
+            "value": "gcp",
+            "uuid": "24aabf0b-e2f1-4ea0-9ef3-1a9594d4518b"
+          },
+          {
+            "name": "control-count",
+            "value": "10",
+            "uuid": "36765d23-8ef8-44dc-9daf-cef3843cac45"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "b069ba0e-e619-4d38-b270-709ec9cfc1d0",
+            "source": "./nist-csf-2.0.json",
+            "description": "NIST CSF 2.0 controls for Google Cloud Platform",
+            "implemented-requirements": [
+              {
+                "uuid": "302a948d-6d79-4abf-8b75-d1072af5bf69",
+                "control-id": "PR.AA-01",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "7b947811-7703-4f6d-8c45-c9c8c2c19e2f"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "9c4e4ad1-a710-4646-b4ec-8b2d256b4a30"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "user_inventory",
+                    "uuid": "e12c3239-547b-476e-86e9-32546cf3df81",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "a2975f30-4ca2-49b3-a83f-285aa2a523c5",
+                "control-id": "PR.AA-05",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "5d52ad35-ea0c-4c7e-bedd-3e1d8fd41a2f"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "52aa88d5-c91c-4b9a-aca3-9df6eca73758"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "access_policies",
+                    "uuid": "689d7a6c-cab4-4f6d-8d8c-2454e20a1f9f",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "rbac_config",
+                    "uuid": "225e0208-fcca-4e7b-b1d9-4403fc670a7c",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "9083367b-88d6-4281-9489-4bb0bcce77e0",
+                "control-id": "PR.DS-01",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "f5bac95c-b864-4d41-aa98-f7b1f12298e1"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "29197873-8e8d-4191-90f7-ab76de428ae8"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "encryption_status",
+                    "uuid": "d3758f3a-963f-475c-bdf4-83073a11ce09",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "data_protection_config",
+                    "uuid": "96e79ef1-b5e5-4bba-811d-c71a5764ba69",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "dfc9acf8-3035-4c2d-8baa-b046cbc2fd82",
+                "control-id": "PR.DS-02",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "c274b0b4-705d-4430-a48d-d198fa3cc6d9"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "bf247bc1-5f23-4740-9d49-39d1faa3ce95"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "tls_config",
+                    "uuid": "2ddb1ac9-f6a3-4d78-aa9f-f462460fd300",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "028fcb59-5d37-42ca-a830-c6f0f5386ed2",
+                "control-id": "PR.DS-11",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "808b0985-45f0-4684-a1f1-46d8b6adfcc0"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "45995f0b-2b23-475d-ada5-d5f214e3169a"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "backup_config",
+                    "uuid": "0b55d0a8-b354-41e7-abd9-a1ff798bdf78",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "97e221a0-848a-44b0-9920-db7926d36bf8",
+                "control-id": "PR.PS-01",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "c2334400-1781-4f71-be9b-aac992f4aa8c"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "f99e31ff-358b-4e69-8196-29ff267d4592"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "config_standards",
+                    "uuid": "03cd4d25-7f9e-45ce-a702-0f47011dd887",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "baseline_config",
+                    "uuid": "8ca5a2a2-71c1-4858-a556-49f1c3f3b9e5",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "cd47d895-4bc3-40f1-80b5-4e9f115f0560",
+                "control-id": "PR.PS-04",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "beb73232-17ab-4a2d-ae5f-472370ed6d8b"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "b0070514-15d1-4ee5-b19d-08d67fcc51f1"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "logging_config",
+                    "uuid": "3039371b-8bb2-4b48-8149-c75d6bd9326c",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "audit_logs",
+                    "uuid": "76b03921-e74a-42ae-872f-0b60eda48b48",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "54f0c690-cfc2-4e38-8d1e-4c830809fbb4",
+                "control-id": "PR.IR-01",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "60516e4a-53a1-4dbc-82d0-dfd8edf83eff"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "52714dd6-0945-4ab5-a05e-1055f242dc91"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "firewall_config",
+                    "uuid": "c9c6b055-6aa9-42f4-bc22-31fc3bcbe573",
+                    "class": "attestful"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "network_segmentation",
+                    "uuid": "03646fad-5906-4c06-9b64-2653e1eb682c",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "08e19b81-9fd2-4cfe-b27b-8332aeca4b1e",
+                "control-id": "PR.IR-03",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "ee7b7ac1-7124-49b5-bd9d-cd6cba91fe95"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "35cedea4-b28d-4167-8306-42cc186abc00"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "ha_config",
+                    "uuid": "959a5104-12e0-46a7-861b-0381956adc4f",
+                    "class": "attestful"
+                  }
+                ]
+              },
+              {
+                "uuid": "b8558924-e352-4379-8590-2a8ddd49c888",
+                "control-id": "PR.IR-04",
+                "description": "Evidence from Google Cloud Platform.",
+                "props": [
+                  {
+                    "name": "implementation-status",
+                    "value": "implemented",
+                    "uuid": "45101c28-ff37-4142-95b2-68738eddc056"
+                  },
+                  {
+                    "name": "platform",
+                    "value": "gcp",
+                    "uuid": "a217b6c7-ef99-4c26-b1c2-f552b2523899"
+                  },
+                  {
+                    "name": "evidence-type",
+                    "value": "capacity_monitoring",
+                    "uuid": "e7eb8190-2293-49f0-a6f1-629230c54729",
+                    "class": "attestful"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

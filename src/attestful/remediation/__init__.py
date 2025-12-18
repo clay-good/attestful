@@ -24,6 +24,18 @@ from attestful.remediation.aws import (
     UpdateIAMPasswordPolicyAction,
     get_remediation_action,
 )
+from attestful.remediation.azure import (
+    AZURE_REMEDIATION_REGISTRY,
+    BlockStoragePublicAccessAction,
+    EnableKeyVaultPurgeProtectionAction,
+    EnableKeyVaultSoftDeleteAction,
+    EnableSQLAuditingAction,
+    EnableSQLThreatDetectionAction,
+    EnableStorageSoftDeleteAction,
+    RemoveNSGOpenRDPAction,
+    RemoveNSGOpenSSHAction,
+    get_azure_remediation_action,
+)
 
 __all__ = [
     # Base classes
@@ -41,7 +53,19 @@ __all__ = [
     "EnableS3BucketVersioningAction",
     "RemoveOpenSSHAccessAction",
     "UpdateIAMPasswordPolicyAction",
-    # Registry
+    # AWS Registry
     "REMEDIATION_REGISTRY",
     "get_remediation_action",
+    # Azure actions
+    "BlockStoragePublicAccessAction",
+    "EnableKeyVaultPurgeProtectionAction",
+    "EnableKeyVaultSoftDeleteAction",
+    "EnableSQLAuditingAction",
+    "EnableSQLThreatDetectionAction",
+    "EnableStorageSoftDeleteAction",
+    "RemoveNSGOpenRDPAction",
+    "RemoveNSGOpenSSHAction",
+    # Azure Registry
+    "AZURE_REMEDIATION_REGISTRY",
+    "get_azure_remediation_action",
 ]

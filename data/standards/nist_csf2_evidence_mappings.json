@@ -1,0 +1,963 @@
+{
+  "version": "2.0.0",
+  "description": "Complete evidence-to-control mappings for all 106 NIST CSF 2.0 subcategories. Defines which evidence types satisfy which controls.",
+  "mappings": [
+    {
+      "control_id": "GV.OC-01",
+      "required_evidence_types": ["security_policies"],
+      "optional_evidence_types": ["audit_logs"],
+      "platforms": ["okta", "zendesk", "zoom"],
+      "logic": "all_required",
+      "freshness_days": 90,
+      "description": "Organizational context requires documented security policies"
+    },
+    {
+      "control_id": "GV.OC-02",
+      "required_evidence_types": ["user_inventory", "access_control"],
+      "optional_evidence_types": ["audit_logs"],
+      "platforms": ["okta", "jira", "gitlab", "notion", "slab"],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Internal and external stakeholders are understood"
+    },
+    {
+      "control_id": "GV.RM-01",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["detection_rules"],
+      "platforms": ["aws", "datadog"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Risk management requires visibility into security findings"
+    },
+    {
+      "control_id": "GV.RM-02",
+      "required_evidence_types": ["security_config", "security_policies"],
+      "optional_evidence_types": ["audit_logs"],
+      "platforms": ["okta", "zoom", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Risk appetite is determined and expressed"
+    },
+    {
+      "control_id": "GV.SC-01",
+      "required_evidence_types": ["access_policies", "user_inventory"],
+      "optional_evidence_types": [],
+      "platforms": ["okta", "snowflake", "aws"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Supply chain risk management requires access control policies"
+    },
+    {
+      "control_id": "GV.SC-03",
+      "required_evidence_types": ["contract_inventory"],
+      "optional_evidence_types": ["template_inventory"],
+      "platforms": ["spotdraft"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Supply chain contracts include cybersecurity requirements"
+    },
+    {
+      "control_id": "GV.SC-05",
+      "required_evidence_types": ["contract_inventory", "audit_logs"],
+      "optional_evidence_types": [],
+      "platforms": ["spotdraft"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Suppliers are assessed post-contract"
+    },
+    {
+      "control_id": "ID.AM-01",
+      "required_evidence_types": ["device_inventory"],
+      "optional_evidence_types": ["software_inventory"],
+      "platforms": ["jamf", "google"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Asset inventory of physical devices managed by the organization"
+    },
+    {
+      "control_id": "ID.AM-02",
+      "required_evidence_types": ["software_inventory"],
+      "optional_evidence_types": ["device_inventory"],
+      "platforms": ["jamf"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Inventory of software platforms and applications"
+    },
+    {
+      "control_id": "ID.AM-03",
+      "required_evidence_types": ["user_inventory", "access_assignments"],
+      "optional_evidence_types": [],
+      "platforms": ["okta", "google", "snowflake", "gitlab", "jira", "zendesk", "zoom", "notion", "slab"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Organization communication and data flows are mapped"
+    },
+    {
+      "control_id": "ID.AM-05",
+      "required_evidence_types": ["device_inventory", "user_inventory"],
+      "optional_evidence_types": ["access_assignments"],
+      "platforms": ["jamf", "okta", "google"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Resources are prioritized based on criticality"
+    },
+    {
+      "control_id": "ID.AM-07",
+      "required_evidence_types": ["data_access_logs"],
+      "optional_evidence_types": ["access_logs"],
+      "platforms": ["snowflake"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Data asset inventories for data-at-rest and data-in-transit"
+    },
+    {
+      "control_id": "ID.AM-08",
+      "required_evidence_types": ["user_inventory", "access_policies"],
+      "optional_evidence_types": [],
+      "platforms": ["okta", "snowflake", "aws", "gitlab", "jira"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Systems and assets managed in repositories"
+    },
+    {
+      "control_id": "ID.RA-01",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["config_compliance"],
+      "platforms": ["aws", "datadog"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Vulnerabilities are identified and documented"
+    },
+    {
+      "control_id": "ID.RA-02",
+      "required_evidence_types": ["security_findings", "detection_rules"],
+      "optional_evidence_types": [],
+      "platforms": ["aws", "datadog"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Threat intelligence is received from information sharing forums"
+    },
+    {
+      "control_id": "ID.RA-05",
+      "required_evidence_types": ["incident_tracking"],
+      "optional_evidence_types": ["security_findings"],
+      "platforms": ["jira", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Threats, vulnerabilities, likelihood, and impact are used to understand risk"
+    },
+    {
+      "control_id": "ID.IM-01",
+      "required_evidence_types": ["incident_tracking", "audit_logs"],
+      "optional_evidence_types": [],
+      "platforms": ["jira", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Improvements are identified from security events"
+    },
+    {
+      "control_id": "PR.AA-01",
+      "required_evidence_types": ["user_inventory"],
+      "optional_evidence_types": ["access_assignments"],
+      "platforms": ["okta", "google", "aws", "snowflake", "gitlab", "jira", "zendesk", "zoom", "notion", "slab", "spotdraft"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Identities and credentials are managed for authorized users"
+    },
+    {
+      "control_id": "PR.AA-02",
+      "required_evidence_types": ["user_inventory", "access_policies"],
+      "optional_evidence_types": ["access_assignments"],
+      "platforms": ["okta", "google", "aws", "snowflake", "gitlab"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Identities are proofed and bound to credentials"
+    },
+    {
+      "control_id": "PR.AA-03",
+      "required_evidence_types": ["mfa_status", "authentication_logs"],
+      "optional_evidence_types": ["security_config"],
+      "platforms": ["okta", "google", "aws", "gitlab", "zoom", "zendesk"],
+      "logic": "weighted",
+      "freshness_days": 7,
+      "weights": {"mfa_status": 0.7, "authentication_logs": 0.3},
+      "description": "Users and devices are authenticated (MFA 70%, logs 30%)"
+    },
+    {
+      "control_id": "PR.AA-04",
+      "required_evidence_types": ["identity_federation"],
+      "optional_evidence_types": ["security_policies", "mfa_status", "access_control"],
+      "platforms": ["okta", "snowflake", "slab"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Identity assertions are protected and verified"
+    },
+    {
+      "control_id": "PR.AA-05",
+      "required_evidence_types": ["access_policies", "access_assignments"],
+      "optional_evidence_types": ["access_logs", "access_control"],
+      "platforms": ["okta", "aws", "snowflake", "gitlab", "jira", "zendesk", "notion", "slab"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Access permissions are managed using least privilege"
+    },
+    {
+      "control_id": "PR.AA-06",
+      "required_evidence_types": ["device_inventory"],
+      "optional_evidence_types": ["endpoint_compliance"],
+      "platforms": ["jamf", "google"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Physical access to assets is managed and protected"
+    },
+    {
+      "control_id": "PR.AT-01",
+      "required_evidence_types": ["user_inventory"],
+      "optional_evidence_types": ["data_inventory", "topic_structure"],
+      "platforms": ["okta", "google", "notion", "slab"],
+      "logic": "all_required",
+      "freshness_days": 90,
+      "description": "Personnel are provided with awareness and training"
+    },
+    {
+      "control_id": "PR.AT-02",
+      "required_evidence_types": ["user_inventory", "access_control"],
+      "optional_evidence_types": [],
+      "platforms": ["okta", "gitlab", "jira"],
+      "logic": "all_required",
+      "freshness_days": 90,
+      "description": "Privileged users understand responsibilities"
+    },
+    {
+      "control_id": "PR.DS-01",
+      "required_evidence_types": ["encryption_status", "data_protection"],
+      "optional_evidence_types": [],
+      "platforms": ["jamf", "aws", "zoom"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Data-at-rest is protected"
+    },
+    {
+      "control_id": "PR.DS-02",
+      "required_evidence_types": ["data_protection"],
+      "optional_evidence_types": ["encryption_status", "meeting_security"],
+      "platforms": ["aws", "zoom"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Data-in-transit is protected"
+    },
+    {
+      "control_id": "PR.DS-10",
+      "required_evidence_types": ["data_protection", "config_compliance"],
+      "optional_evidence_types": [],
+      "platforms": ["aws"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Data integrity is verified"
+    },
+    {
+      "control_id": "PR.DS-11",
+      "required_evidence_types": ["data_protection"],
+      "optional_evidence_types": ["log_retention"],
+      "platforms": ["aws", "datadog"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Backups of data are created and maintained"
+    },
+    {
+      "control_id": "PR.IR-01",
+      "required_evidence_types": ["security_findings", "detection_rules", "monitoring_coverage"],
+      "optional_evidence_types": [],
+      "platforms": ["aws", "datadog"],
+      "logic": "weighted",
+      "freshness_days": 7,
+      "weights": {"security_findings": 0.4, "detection_rules": 0.35, "monitoring_coverage": 0.25},
+      "description": "Security events monitored (findings 40%, rules 35%, coverage 25%)"
+    },
+    {
+      "control_id": "PR.IR-02",
+      "required_evidence_types": ["security_policies", "mfa_status"],
+      "optional_evidence_types": ["security_config"],
+      "platforms": ["okta", "zoom"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Security practices are monitored"
+    },
+    {
+      "control_id": "PR.PS-01",
+      "required_evidence_types": ["security_configurations", "config_compliance"],
+      "optional_evidence_types": ["branch_protection"],
+      "platforms": ["jamf", "aws", "gitlab"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Configuration baselines are developed and maintained"
+    },
+    {
+      "control_id": "PR.PS-02",
+      "required_evidence_types": ["software_inventory"],
+      "optional_evidence_types": ["endpoint_compliance"],
+      "platforms": ["jamf"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Software is maintained and updated"
+    },
+    {
+      "control_id": "PR.PS-04",
+      "required_evidence_types": ["audit_logging"],
+      "optional_evidence_types": ["access_logs", "audit_logs"],
+      "platforms": ["aws", "gitlab", "jira", "zendesk", "zoom", "notion", "slab", "spotdraft"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Log records are generated and made available"
+    },
+    {
+      "control_id": "PR.PS-05",
+      "required_evidence_types": ["software_inventory", "config_compliance"],
+      "optional_evidence_types": [],
+      "platforms": ["jamf", "aws"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Unauthorized software installation is prevented"
+    },
+    {
+      "control_id": "PR.PS-06",
+      "required_evidence_types": ["security_configurations", "change_management"],
+      "optional_evidence_types": ["endpoint_compliance", "branch_protection"],
+      "platforms": ["jamf", "gitlab"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Secure software development practices are integrated"
+    },
+    {
+      "control_id": "DE.AE-02",
+      "required_evidence_types": ["security_findings", "access_logs"],
+      "optional_evidence_types": ["audit_logs"],
+      "platforms": ["aws", "datadog", "okta", "gitlab", "zoom"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Potentially adverse events are analyzed"
+    },
+    {
+      "control_id": "DE.AE-03",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["detection_rules"],
+      "platforms": ["aws", "datadog"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Event data are aggregated and correlated"
+    },
+    {
+      "control_id": "DE.AE-04",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": [],
+      "platforms": ["aws", "datadog"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Estimated impact of events is understood"
+    },
+    {
+      "control_id": "DE.AE-06",
+      "required_evidence_types": ["security_findings", "detection_rules"],
+      "optional_evidence_types": [],
+      "platforms": ["aws", "datadog"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Information on adverse events is provided"
+    },
+    {
+      "control_id": "DE.AE-07",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["access_logs", "audit_logs"],
+      "platforms": ["aws", "datadog"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Cyber threat intelligence is integrated"
+    },
+    {
+      "control_id": "DE.AE-08",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["incident_tracking"],
+      "platforms": ["aws", "datadog", "jira", "zendesk"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Incidents are declared based on criteria"
+    },
+    {
+      "control_id": "DE.CM-01",
+      "required_evidence_types": ["monitoring_coverage", "detection_rules", "security_findings"],
+      "optional_evidence_types": [],
+      "platforms": ["datadog"],
+      "logic": "weighted",
+      "freshness_days": 7,
+      "weights": {"monitoring_coverage": 0.5, "detection_rules": 0.3, "security_findings": 0.2},
+      "description": "Network monitoring (coverage 50%, rules 30%, findings 20%)"
+    },
+    {
+      "control_id": "DE.CM-02",
+      "required_evidence_types": ["device_inventory", "endpoint_compliance"],
+      "optional_evidence_types": [],
+      "platforms": ["jamf"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Physical environment is monitored"
+    },
+    {
+      "control_id": "DE.CM-03",
+      "required_evidence_types": ["access_logs", "authentication_logs"],
+      "optional_evidence_types": ["audit_logs"],
+      "platforms": ["okta", "snowflake", "aws", "gitlab", "jira", "zendesk", "zoom"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Personnel activity is monitored"
+    },
+    {
+      "control_id": "DE.CM-06",
+      "required_evidence_types": ["audit_logging", "audit_logs"],
+      "optional_evidence_types": ["access_logs"],
+      "platforms": ["aws", "datadog", "gitlab", "jira"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Computing hardware and software are monitored"
+    },
+    {
+      "control_id": "DE.CM-09",
+      "required_evidence_types": ["endpoint_compliance", "security_configurations"],
+      "optional_evidence_types": ["device_inventory"],
+      "platforms": ["jamf"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Computing hardware and software are monitored"
+    },
+    {
+      "control_id": "RS.AN-03",
+      "required_evidence_types": ["security_findings", "access_logs"],
+      "optional_evidence_types": ["audit_logs", "incident_tracking"],
+      "platforms": ["aws", "datadog", "okta", "jira", "zendesk"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Analysis is performed to establish root cause"
+    },
+    {
+      "control_id": "RS.AN-06",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["detection_rules", "incident_tracking"],
+      "platforms": ["aws", "datadog", "jira"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Actions performed during investigation are recorded"
+    },
+    {
+      "control_id": "RS.AN-07",
+      "required_evidence_types": ["security_findings", "audit_logs"],
+      "optional_evidence_types": ["incident_tracking"],
+      "platforms": ["aws", "datadog", "jira", "zendesk"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Incident data is collected and organized"
+    },
+    {
+      "control_id": "RS.AN-08",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["incident_tracking"],
+      "platforms": ["aws", "datadog", "jira"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Estimation of incident magnitude is performed"
+    },
+    {
+      "control_id": "RS.CO-02",
+      "required_evidence_types": ["security_findings", "audit_logs"],
+      "optional_evidence_types": ["incident_tracking"],
+      "platforms": ["aws", "datadog", "jira", "zendesk"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Incident information is reported"
+    },
+    {
+      "control_id": "RS.CO-03",
+      "required_evidence_types": ["incident_tracking"],
+      "optional_evidence_types": ["audit_logs"],
+      "platforms": ["jira", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Information is shared with designated stakeholders"
+    },
+    {
+      "control_id": "RS.MI-01",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["detection_rules", "incident_tracking"],
+      "platforms": ["aws", "datadog", "jira"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Incidents are contained"
+    },
+    {
+      "control_id": "RS.MI-02",
+      "required_evidence_types": ["security_findings"],
+      "optional_evidence_types": ["incident_tracking"],
+      "platforms": ["aws", "datadog", "jira"],
+      "logic": "all_required",
+      "freshness_days": 7,
+      "description": "Incidents are eradicated"
+    },
+    {
+      "control_id": "RC.RP-01",
+      "required_evidence_types": ["data_protection"],
+      "optional_evidence_types": ["log_retention"],
+      "platforms": ["aws"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Recovery plan is executed during or after event"
+    },
+    {
+      "control_id": "RC.RP-02",
+      "required_evidence_types": ["data_protection"],
+      "optional_evidence_types": [],
+      "platforms": ["aws"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Recovery actions are selected and performed"
+    },
+    {
+      "control_id": "RC.RP-03",
+      "required_evidence_types": ["data_protection", "audit_logging"],
+      "optional_evidence_types": [],
+      "platforms": ["aws"],
+      "logic": "all_required",
+      "freshness_days": 30,
+      "description": "Integrity of backups and restored assets is verified"
+    },
+    {
+      "control_id": "RC.RP-05",
+      "required_evidence_types": ["config_compliance", "security_configurations"],
+      "optional_evidence_types": [],
+      "platforms": ["aws", "jamf"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Integrity of restored assets is verified"
+    },
+    {
+      "control_id": "RC.CO-03",
+      "required_evidence_types": ["incident_tracking"],
+      "optional_evidence_types": ["audit_logs"],
+      "platforms": ["jira", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Recovery activities and progress are communicated"
+    },
+    {
+      "control_id": "GV.OC-03",
+      "required_evidence_types": ["compliance_register", "policy_document"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Legal, regulatory, and contractual requirements are understood and managed"
+    },
+    {
+      "control_id": "GV.OC-04",
+      "required_evidence_types": ["business_impact_analysis", "service_catalog"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Critical objectives and services stakeholders depend on are understood"
+    },
+    {
+      "control_id": "GV.OC-05",
+      "required_evidence_types": ["dependency_mapping", "vendor_inventory"],
+      "optional_evidence_types": [],
+      "platforms": ["spotdraft"],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Outcomes and services the organization depends on are understood"
+    },
+    {
+      "control_id": "GV.OV-01",
+      "required_evidence_types": ["risk_review_minutes", "kri_dashboard"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Risk management strategy outcomes are reviewed to adjust strategy"
+    },
+    {
+      "control_id": "GV.OV-02",
+      "required_evidence_types": ["strategy_document", "review_minutes"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Risk management strategy is reviewed and adjusted for coverage"
+    },
+    {
+      "control_id": "GV.OV-03",
+      "required_evidence_types": ["kpi_report", "performance_metrics"],
+      "optional_evidence_types": [],
+      "platforms": ["datadog"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Organizational cybersecurity risk management performance is evaluated"
+    },
+    {
+      "control_id": "GV.PO-01",
+      "required_evidence_types": ["security_policy", "policy_document"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Policy for managing cybersecurity risks is established and communicated"
+    },
+    {
+      "control_id": "GV.PO-02",
+      "required_evidence_types": ["policy_review_log", "policy_document"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "all_required",
+      "freshness_days": 90,
+      "description": "Cybersecurity policy is reviewed, updated, and enforced"
+    },
+    {
+      "control_id": "GV.RM-03",
+      "required_evidence_types": ["risk_register", "erm_integration"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Cybersecurity risk activities included in enterprise risk management"
+    },
+    {
+      "control_id": "GV.RM-04",
+      "required_evidence_types": ["risk_response_strategy", "policy_document"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Strategic direction for risk response options is established"
+    },
+    {
+      "control_id": "GV.RM-05",
+      "required_evidence_types": ["communication_plan", "org_chart"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Communication lines for cybersecurity risks are established"
+    },
+    {
+      "control_id": "GV.RM-06",
+      "required_evidence_types": ["risk_methodology", "risk_register"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Standardized method for calculating and prioritizing risks is established"
+    },
+    {
+      "control_id": "GV.RM-07",
+      "required_evidence_types": ["opportunity_register", "strategic_plan"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Strategic opportunities are included in risk discussions"
+    },
+    {
+      "control_id": "GV.RR-01",
+      "required_evidence_types": ["governance_charter", "board_minutes"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Leadership is accountable for cybersecurity risk"
+    },
+    {
+      "control_id": "GV.RR-02",
+      "required_evidence_types": ["raci_matrix", "job_descriptions"],
+      "optional_evidence_types": ["org_chart"],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Cybersecurity roles and responsibilities are established"
+    },
+    {
+      "control_id": "GV.RR-03",
+      "required_evidence_types": ["budget_allocation", "resource_plan"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Adequate resources allocated for cybersecurity"
+    },
+    {
+      "control_id": "GV.RR-04",
+      "required_evidence_types": ["hr_policy", "performance_criteria"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Cybersecurity is included in human resources practices"
+    },
+    {
+      "control_id": "GV.SC-02",
+      "required_evidence_types": ["vendor_agreements", "raci_matrix"],
+      "optional_evidence_types": [],
+      "platforms": ["spotdraft"],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Supplier cybersecurity roles and responsibilities are established"
+    },
+    {
+      "control_id": "GV.SC-04",
+      "required_evidence_types": ["vendor_inventory", "criticality_assessment"],
+      "optional_evidence_types": [],
+      "platforms": ["spotdraft"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Suppliers are known and prioritized by criticality"
+    },
+    {
+      "control_id": "GV.SC-06",
+      "required_evidence_types": ["due_diligence_reports", "vendor_assessments"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Due diligence performed before supplier relationships"
+    },
+    {
+      "control_id": "GV.SC-07",
+      "required_evidence_types": ["vendor_risk_assessments", "risk_register"],
+      "optional_evidence_types": [],
+      "platforms": ["spotdraft"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Supplier risks are understood and monitored"
+    },
+    {
+      "control_id": "GV.SC-08",
+      "required_evidence_types": ["incident_plan", "vendor_contacts"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Suppliers included in incident planning and response"
+    },
+    {
+      "control_id": "GV.SC-09",
+      "required_evidence_types": ["scrm_metrics", "lifecycle_management"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Supply chain security integrated into risk management"
+    },
+    {
+      "control_id": "GV.SC-10",
+      "required_evidence_types": ["offboarding_procedures", "data_return_policy"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Supply chain plans include post-agreement provisions"
+    },
+    {
+      "control_id": "ID.AM-04",
+      "required_evidence_types": ["vendor_inventory", "service_catalog"],
+      "optional_evidence_types": [],
+      "platforms": ["spotdraft"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Inventories of services provided by suppliers are maintained"
+    },
+    {
+      "control_id": "ID.IM-02",
+      "required_evidence_types": ["improvement_plan", "remediation_tracking"],
+      "optional_evidence_types": [],
+      "platforms": ["jira"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Improvements are prioritized and implemented"
+    },
+    {
+      "control_id": "ID.IM-03",
+      "required_evidence_types": ["exercise_results", "lessons_learned"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Improvements are evaluated through exercises"
+    },
+    {
+      "control_id": "ID.IM-04",
+      "required_evidence_types": ["incident_response_plan", "plan_review_log"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Incident response plans are established and improved"
+    },
+    {
+      "control_id": "ID.RA-03",
+      "required_evidence_types": ["threat_register", "threat_assessment"],
+      "optional_evidence_types": [],
+      "platforms": ["datadog", "aws"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Internal and external threats are identified and recorded"
+    },
+    {
+      "control_id": "ID.RA-04",
+      "required_evidence_types": ["risk_assessment", "impact_analysis"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Potential impacts and likelihoods of threats are identified"
+    },
+    {
+      "control_id": "ID.RA-06",
+      "required_evidence_types": ["risk_treatment_plan", "risk_register"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Risk responses are chosen, prioritized, and tracked"
+    },
+    {
+      "control_id": "ID.RA-07",
+      "required_evidence_types": ["change_management", "exception_log"],
+      "optional_evidence_types": [],
+      "platforms": ["gitlab", "jira"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Changes and exceptions are managed and tracked"
+    },
+    {
+      "control_id": "ID.RA-08",
+      "required_evidence_types": ["vulnerability_disclosure_policy"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "all_required",
+      "freshness_days": 90,
+      "description": "Vulnerability disclosure processes are established"
+    },
+    {
+      "control_id": "ID.RA-09",
+      "required_evidence_types": ["procurement_policy", "integrity_verification"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Hardware and software authenticity assessed before use"
+    },
+    {
+      "control_id": "ID.RA-10",
+      "required_evidence_types": ["vendor_assessment", "due_diligence_reports"],
+      "optional_evidence_types": [],
+      "platforms": ["spotdraft"],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Critical suppliers assessed prior to acquisition"
+    },
+    {
+      "control_id": "PR.IR-03",
+      "required_evidence_types": ["ha_config", "dr_plan"],
+      "optional_evidence_types": [],
+      "platforms": ["aws"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Resilience mechanisms implemented for availability"
+    },
+    {
+      "control_id": "PR.IR-04",
+      "required_evidence_types": ["capacity_monitoring", "resource_planning"],
+      "optional_evidence_types": [],
+      "platforms": ["datadog", "aws"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Adequate resource capacity maintained for availability"
+    },
+    {
+      "control_id": "PR.PS-03",
+      "required_evidence_types": ["hardware_lifecycle", "maintenance_records"],
+      "optional_evidence_types": [],
+      "platforms": ["jamf"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Hardware maintained, replaced, and removed per risk"
+    },
+    {
+      "control_id": "RC.CO-04",
+      "required_evidence_types": ["public_communication_plan", "press_releases"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Public updates on incident recovery are shared"
+    },
+    {
+      "control_id": "RC.RP-04",
+      "required_evidence_types": ["business_continuity_plan", "operational_norms"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Critical functions considered for post-incident operations"
+    },
+    {
+      "control_id": "RC.RP-06",
+      "required_evidence_types": ["recovery_completion", "incident_closure"],
+      "optional_evidence_types": [],
+      "platforms": ["jira", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "End of incident recovery declared and documented"
+    },
+    {
+      "control_id": "RS.MA-01",
+      "required_evidence_types": ["incident_response_plan", "ir_execution_logs"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 30,
+      "description": "Incident response plan executed with third parties"
+    },
+    {
+      "control_id": "RS.MA-02",
+      "required_evidence_types": ["incident_triage_process", "incident_log"],
+      "optional_evidence_types": [],
+      "platforms": ["jira", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Incident reports are triaged and validated"
+    },
+    {
+      "control_id": "RS.MA-03",
+      "required_evidence_types": ["incident_classification", "priority_matrix"],
+      "optional_evidence_types": [],
+      "platforms": ["jira", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Incidents are categorized and prioritized"
+    },
+    {
+      "control_id": "RS.MA-04",
+      "required_evidence_types": ["escalation_procedures", "escalation_logs"],
+      "optional_evidence_types": [],
+      "platforms": ["jira", "zendesk"],
+      "logic": "any_required",
+      "freshness_days": 7,
+      "description": "Incidents are escalated or elevated as needed"
+    },
+    {
+      "control_id": "RS.MA-05",
+      "required_evidence_types": ["forensics_capability", "evidence_collection"],
+      "optional_evidence_types": [],
+      "platforms": [],
+      "logic": "any_required",
+      "freshness_days": 90,
+      "description": "Criteria for initiating incident recovery are applied"
+    }
+  ]
+}

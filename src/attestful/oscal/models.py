@@ -67,6 +67,141 @@ class OSCALBaseModel(BaseModel):
         data = yaml.safe_load(yaml_str)
         return cls.model_validate(data)
 
+    def to_xml(self, root_element: str | None = None, indent: bool = True) -> str:
+        """
+        Serialize to XML string for FedRAMP compatibility.
+
+        Follows the OSCAL XML schema conventions:
+        - Uses kebab-case for element names
+        - Wraps root in appropriate OSCAL element
+        - Handles nested objects and lists properly
+
+        Args:
+            root_element: Name of the root XML element. If None, uses class name.
+            indent: Whether to indent the output for readability.
+
+        Returns:
+            XML string representation of the model.
+        """
+        from xml.dom.minidom import parseString
+        from xml.etree.ElementTree import Element, SubElement, tostring
+
+        def to_kebab_case(name: str) -> str:
+            """Convert snake_case or camelCase to kebab-case."""
+            import re
+            # Handle snake_case
+            name = name.replace("_", "-")
+            # Handle camelCase
+            name = re.sub(r"([a-z])([A-Z])", r"\1-\2", name).lower()
+            return name
+
+        def dict_to_xml(parent: Element, data: dict[str, Any]) -> None:
+            """Recursively convert dictionary to XML elements."""
+            for key, value in data.items():
+                element_name = to_kebab_case(key)
+
+                if value is None:
+                    continue
+                elif isinstance(value, list):
+                    for item in value:
+                        child = SubElement(parent, element_name)
+                        if isinstance(item, dict):
+                            dict_to_xml(child, item)
+                        else:
+                            child.text = str(item)
+                elif isinstance(value, dict):
+                    child = SubElement(parent, element_name)
+                    dict_to_xml(child, value)
+                else:
+                    child = SubElement(parent, element_name)
+                    child.text = str(value)
+
+        # Get model data
+        data = self.model_dump(by_alias=True, exclude_none=True, mode="json")
+
+        # Determine root element name
+        if root_element is None:
+            root_element = to_kebab_case(self.__class__.__name__)
+
+        # Build XML
+        root = Element(root_element)
+        root.set("xmlns", "http://csrc.nist.gov/ns/oscal/1.0")
+        dict_to_xml(root, data)
+
+        # Convert to string
+        xml_bytes = tostring(root, encoding="unicode")
+
+        if indent:
+            # Pretty print
+            dom = parseString(xml_bytes)
+            return dom.toprettyxml(indent="  ")
+        return xml_bytes
+
+    @classmethod
+    def from_xml(cls, xml_str: str) -> OSCALBaseModel:
+        """
+        Parse from XML string.
+
+        Args:
+            xml_str: XML string to parse.
+
+        Returns:
+            Parsed model instance.
+        """
+        from xml.etree.ElementTree import fromstring
+
+        def to_snake_case(name: str) -> str:
+            """Convert kebab-case to snake_case."""
+            return name.replace("-", "_")
+
+        def xml_to_dict(element: Any) -> dict[str, Any] | str | list[Any]:
+            """Recursively convert XML element to dictionary."""
+            result: dict[str, Any] = {}
+
+            # Handle attributes
+            for attr_name, attr_value in element.attrib.items():
+                if not attr_name.startswith("{"):  # Skip namespace attributes
+                    result[to_snake_case(attr_name)] = attr_value
+
+            # Group children by tag name to detect lists
+            children_by_tag: dict[str, list[Any]] = {}
+            for child in element:
+                tag = child.tag.split("}")[-1] if "}" in child.tag else child.tag
+                if tag not in children_by_tag:
+                    children_by_tag[tag] = []
+                children_by_tag[tag].append(child)
+
+            # Process children
+            for tag, children in children_by_tag.items():
+                key = to_snake_case(tag)
+                if len(children) == 1:
+                    child = children[0]
+                    if len(child) == 0 and not child.attrib:
+                        # Leaf element with text
+                        result[key] = child.text or ""
+                    else:
+                        # Complex element
+                        result[key] = xml_to_dict(child)
+                else:
+                    # Multiple children with same tag = list
+                    result[key] = [
+                        xml_to_dict(child) if len(child) > 0 or child.attrib else (child.text or "")
+                        for child in children
+                    ]
+
+            # If no children and no attributes, return text content
+            if not result and element.text:
+                return element.text.strip()
+
+            return result
+
+        root = fromstring(xml_str)
+        data = xml_to_dict(root)
+
+        if isinstance(data, dict):
+            return cls.model_validate(data)
+        raise ValueError("XML root must be a complex element, not text")
+
 
 # =============================================================================
 # Common Types
@@ -937,4 +1072,125 @@ class AssessmentResults(OSCALDocument):
         default=None, alias="local-definitions"
     )
     results: list[Result]
+    back_matter: BackMatter | None = Field(default=None, alias="back-matter")
+
+
+# =============================================================================
+# Plan of Action and Milestones (POA&M) Models
+# =============================================================================
+
+
+class PoamItem(OSCALBaseModel):
+    """An individual POA&M item."""
+
+    uuid: UUID = Field(default_factory=uuid4)
+    title: str
+    description: str
+    props: list[Property] | None = None
+    links: list[Link] | None = None
+    origins: list[Origin] | None = None
+    related_findings: list[dict[str, UUID]] | None = Field(
+        default=None, alias="related-findings"
+    )
+    related_observations: list[dict[str, UUID]] | None = Field(
+        default=None, alias="related-observations"
+    )
+    related_risks: list[AssociatedRisk] | None = Field(
+        default=None, alias="related-risks"
+    )
+    remarks: str | None = None
+
+
+class Milestone(OSCALBaseModel):
+    """A milestone in a remediation timeline."""
+
+    uuid: UUID = Field(default_factory=uuid4)
+    title: str
+    description: str | None = None
+    due_date: datetime = Field(alias="due-date")
+    props: list[Property] | None = None
+    links: list[Link] | None = None
+    remarks: str | None = None
+
+
+class RemediationOrigin(OSCALBaseModel):
+    """Origin information for remediation."""
+
+    actors: list[dict[str, Any]]
+
+
+class Response(OSCALBaseModel):
+    """A response/remediation action in a POA&M."""
+
+    uuid: UUID = Field(default_factory=uuid4)
+    lifecycle: str  # "recommendation", "planned", "completed"
+    title: str
+    description: str
+    props: list[Property] | None = None
+    links: list[Link] | None = None
+    origins: list[RemediationOrigin] | None = None
+    required_assets: list[dict[str, Any]] | None = Field(
+        default=None, alias="required-assets"
+    )
+    tasks: list[dict[str, Any]] | None = None
+    remarks: str | None = None
+
+
+class Risk(OSCALBaseModel):
+    """A risk identified in the POA&M."""
+
+    uuid: UUID = Field(default_factory=uuid4)
+    title: str
+    description: str
+    statement: str | None = None
+    props: list[Property] | None = None
+    links: list[Link] | None = None
+    status: str  # "open", "investigating", "deviated", "risk-accepted", "closed"
+    origins: list[Origin] | None = None
+    threat_ids: list[dict[str, Any]] | None = Field(default=None, alias="threat-ids")
+    characterizations: list[dict[str, Any]] | None = None
+    mitigating_factors: list[dict[str, Any]] | None = Field(
+        default=None, alias="mitigating-factors"
+    )
+    deadline: datetime | None = None
+    remediations: list[Response] | None = None
+    risk_log: list[dict[str, Any]] | None = Field(default=None, alias="risk-log")
+    related_observations: list[dict[str, UUID]] | None = Field(
+        default=None, alias="related-observations"
+    )
+    remarks: str | None = None
+
+
+class ImportSSP(OSCALBaseModel):
+    """Import reference to an SSP."""
+
+    href: str
+    remarks: str | None = None
+
+
+class PoamLocalDefinitions(OSCALBaseModel):
+    """Local definitions within a POA&M."""
+
+    components: list[Component] | None = None
+    inventory_items: list[dict[str, Any]] | None = Field(
+        default=None, alias="inventory-items"
+    )
+    assessment_assets: dict[str, Any] | None = Field(
+        default=None, alias="assessment-assets"
+    )
+    remarks: str | None = None
+
+
+class PlanOfActionAndMilestones(OSCALDocument):
+    """OSCAL Plan of Action and Milestones (POA&M) document."""
+
+    import_ssp: ImportSSP | None = Field(default=None, alias="import-ssp")
+    system_id: SystemId | None = Field(default=None, alias="system-id")
+    local_definitions: PoamLocalDefinitions | None = Field(
+        default=None, alias="local-definitions"
+    )
+    observations: list[Observation] | None = None
+    risks: list[Risk] | None = None
+    findings: list[Finding] | None = None
+    poam_items: list[PoamItem] = Field(alias="poam-items")
     back_matter: BackMatter | None = Field(default=None, alias="back-matter")

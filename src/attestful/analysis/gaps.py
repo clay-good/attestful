@@ -2,6 +2,7 @@
 Gap analysis for compliance frameworks.
 
 Identifies missing controls, evidence gaps, and remediation priorities.
+Supports SOC 2, NIST 800-53, ISO 27001, and HITRUST frameworks.
 """
 
 from __future__ import annotations
@@ -183,6 +184,56 @@ class GapAnalyzer:
         },
     }
 
+    # NIST 800-53 control families
+    NIST_800_53_FAMILIES = {
+        "AC": {"name": "Access Control", "count": 25},
+        "AT": {"name": "Awareness and Training", "count": 6},
+        "AU": {"name": "Audit and Accountability", "count": 16},
+        "CA": {"name": "Assessment, Authorization, Monitoring", "count": 9},
+        "CM": {"name": "Configuration Management", "count": 14},
+        "CP": {"name": "Contingency Planning", "count": 13},
+        "IA": {"name": "Identification and Authentication", "count": 12},
+        "IR": {"name": "Incident Response", "count": 10},
+        "MA": {"name": "Maintenance", "count": 7},
+        "MP": {"name": "Media Protection", "count": 8},
+        "PE": {"name": "Physical and Environmental Protection", "count": 23},
+        "PL": {"name": "Planning", "count": 11},
+        "PM": {"name": "Program Management", "count": 32},
+        "PS": {"name": "Personnel Security", "count": 9},
+        "PT": {"name": "PII Processing and Transparency", "count": 8},
+        "RA": {"name": "Risk Assessment", "count": 10},
+        "SA": {"name": "System and Services Acquisition", "count": 23},
+        "SC": {"name": "System and Communications Protection", "count": 51},
+        "SI": {"name": "System and Information Integrity", "count": 23},
+        "SR": {"name": "Supply Chain Risk Management", "count": 12},
+    }
+
+    # ISO 27001:2022 Annex A domains
+    ISO_27001_DOMAINS = {
+        "A.5": {"name": "Organizational controls", "count": 37},
+        "A.6": {"name": "People controls", "count": 8},
+        "A.7": {"name": "Physical controls", "count": 14},
+        "A.8": {"name": "Technological controls", "count": 34},
+    }
+
+    # HITRUST CSF categories
+    HITRUST_CATEGORIES = {
+        "00": {"name": "Information Security Management Program", "count": 0},
+        "01": {"name": "Access Control", "count": 25},
+        "02": {"name": "Human Resources Security", "count": 0},
+        "03": {"name": "Risk Management", "count": 0},
+        "04": {"name": "Security Policy", "count": 0},
+        "05": {"name": "Organization of Information Security", "count": 0},
+        "06": {"name": "Compliance", "count": 0},
+        "07": {"name": "Asset Management", "count": 0},
+        "08": {"name": "Physical and Environmental Security", "count": 0},
+        "09": {"name": "Communications and Operations Management", "count": 32},
+        "10": {"name": "Information Systems Acquisition, Development, Maintenance", "count": 16},
+        "11": {"name": "Information Security Incident Management", "count": 5},
+        "12": {"name": "Business Continuity Management", "count": 0},
+        "13": {"name": "Privacy Practices", "count": 0},
+    }
+
     def __init__(self, framework: str = "soc2") -> None:
         """
         Initialize the gap analyzer.
@@ -224,6 +275,12 @@ class GapAnalyzer:
 
         if self.framework == "soc2":
             gaps.extend(self._analyze_soc2())
+        elif self.framework == "nist-800-53":
+            gaps.extend(self._analyze_nist_800_53())
+        elif self.framework == "iso-27001":
+            gaps.extend(self._analyze_iso_27001())
+        elif self.framework == "hitrust":
+            gaps.extend(self._analyze_hitrust())
         else:
             gaps.extend(self._analyze_generic())
 
@@ -260,7 +317,40 @@ class GapAnalyzer:
             for category in self.SOC2_CONTROLS.values():
                 controls.update(category["controls"])
             return controls
+        elif self.framework == "nist-800-53":
+            return self._get_nist_800_53_controls()
+        elif self.framework == "iso-27001":
+            return self._get_iso_27001_controls()
+        elif self.framework == "hitrust":
+            return self._get_hitrust_controls()
         return set()
+
+    def _get_nist_800_53_controls(self) -> set[str]:
+        """Get NIST 800-53 control IDs from framework module."""
+        try:
+            from attestful.frameworks.nist_800_53 import NIST_800_53_CONTROLS
+            return set(NIST_800_53_CONTROLS.keys())
+        except ImportError:
+            logger.warning("NIST 800-53 framework not available")
+            return set()
+
+    def _get_iso_27001_controls(self) -> set[str]:
+        """Get ISO 27001 control IDs from framework module."""
+        try:
+            from attestful.frameworks.iso_27001 import ISO_27001_CONTROLS
+            return set(ISO_27001_CONTROLS.keys())
+        except ImportError:
+            logger.warning("ISO 27001 framework not available")
+            return set()
+
+    def _get_hitrust_controls(self) -> set[str]:
+        """Get HITRUST control IDs from framework module."""
+        try:
+            from attestful.frameworks.hitrust import HITRUST_CONTROLS
+            return set(HITRUST_CONTROLS.keys())
+        except ImportError:
+            logger.warning("HITRUST framework not available")
+            return set()
 
     def _analyze_soc2(self) -> list[ComplianceGap]:
         """Analyze SOC 2 gaps."""
@@ -273,6 +363,72 @@ class GapAnalyzer:
                     category_name=category_data["name"],
                 )
                 gaps.extend(control_gaps)
+
+        return gaps
+
+    def _analyze_nist_800_53(self) -> list[ComplianceGap]:
+        """Analyze NIST 800-53 gaps."""
+        gaps: list[ComplianceGap] = []
+
+        try:
+            from attestful.frameworks.nist_800_53 import NIST_800_53_CONTROLS
+
+            for control_id, control in NIST_800_53_CONTROLS.items():
+                family = control_id.split("-")[0]
+                family_name = self.NIST_800_53_FAMILIES.get(
+                    family, {"name": family}
+                )["name"]
+                control_gaps = self._analyze_control(
+                    control_id=control_id,
+                    category_name=family_name,
+                )
+                gaps.extend(control_gaps)
+        except ImportError:
+            logger.warning("NIST 800-53 framework not available for gap analysis")
+
+        return gaps
+
+    def _analyze_iso_27001(self) -> list[ComplianceGap]:
+        """Analyze ISO 27001 gaps."""
+        gaps: list[ComplianceGap] = []
+
+        try:
+            from attestful.frameworks.iso_27001 import ISO_27001_CONTROLS
+
+            for control_id, control in ISO_27001_CONTROLS.items():
+                domain = control.domain
+                domain_name = self.ISO_27001_DOMAINS.get(
+                    domain, {"name": domain}
+                )["name"]
+                control_gaps = self._analyze_control(
+                    control_id=control_id,
+                    category_name=domain_name,
+                )
+                gaps.extend(control_gaps)
+        except ImportError:
+            logger.warning("ISO 27001 framework not available for gap analysis")
+
+        return gaps
+
+    def _analyze_hitrust(self) -> list[ComplianceGap]:
+        """Analyze HITRUST gaps."""
+        gaps: list[ComplianceGap] = []
+
+        try:
+            from attestful.frameworks.hitrust import HITRUST_CONTROLS
+
+            for control_id, control in HITRUST_CONTROLS.items():
+                category = control.category
+                category_name = self.HITRUST_CATEGORIES.get(
+                    category, {"name": f"Category {category}"}
+                )["name"]
+                control_gaps = self._analyze_control(
+                    control_id=control_id,
+                    category_name=category_name,
+                )
+                gaps.extend(control_gaps)
+        except ImportError:
+            logger.warning("HITRUST framework not available for gap analysis")
 
         return gaps
 
