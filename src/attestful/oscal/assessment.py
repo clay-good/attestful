@@ -585,7 +585,7 @@ class ScanResultMappingConfig:
 
 class ScanResultMapper:
     """
-    Map Compliy scan results to OSCAL Assessment Results format.
+    Map scan results to OSCAL Assessment Results format.
 
     Converts compliance check results into OSCAL-compliant observations
     and findings with proper risk level mappings.
@@ -975,7 +975,7 @@ class TrendData:
 
 class MaturityScoreMapper:
     """
-    Map Nisify maturity scores to OSCAL Assessment Results format.
+    Map maturity scores to OSCAL Assessment Results format.
 
     Converts maturity assessment data into OSCAL-compliant observations
     and findings with implementation status mappings.

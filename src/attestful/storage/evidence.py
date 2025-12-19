@@ -509,6 +509,63 @@ class EvidenceStore:
         logger.info(f"Retention policy applied: deleted {len(to_delete)} items")
         return len(to_delete)
 
+    def cleanup(self, retention_days: int) -> int:
+        """
+        Alias for apply_retention for API compatibility.
+
+        Args:
+            retention_days: Number of days to retain evidence.
+
+        Returns:
+            Number of items deleted.
+        """
+        return self.apply_retention(retention_days)
+
+    def get_by_type(
+        self,
+        platform: str,
+        evidence_type: str,
+    ) -> list[StoredEvidence]:
+        """
+        Get all evidence of a specific type from a platform.
+
+        Args:
+            platform: Platform name.
+            evidence_type: Type of evidence.
+
+        Returns:
+            List of matching stored evidence records.
+        """
+        return self.list(platform=platform, evidence_type=evidence_type)
+
+    def get_by_date_range(
+        self,
+        start: datetime,
+        end: datetime,
+        platform: str | None = None,
+    ) -> list[StoredEvidence]:
+        """
+        Get evidence within a date range.
+
+        Args:
+            start: Start of date range (inclusive).
+            end: End of date range (inclusive).
+            platform: Optional platform filter.
+
+        Returns:
+            List of matching stored evidence records.
+        """
+        return self.list(platform=platform, start_date=start, end_date=end)
+
+    def get_all(self) -> list[StoredEvidence]:
+        """
+        Get all stored evidence.
+
+        Returns:
+            List of all stored evidence records.
+        """
+        return self.list()
+
     def export_bundle(
         self,
         output_path: Path,

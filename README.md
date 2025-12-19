@@ -1,32 +1,106 @@
 # Attestful
 
-**OSCAL-first compliance automation platform. Open-source alternative to Vanta.**
-
-[![CI](https://github.com/attestful/attestful/actions/workflows/ci.yml/badge.svg)](https://github.com/attestful/attestful/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-
----
+**Prove your compliance posture with automated evidence and clear visualization.**
 
 ## What is Attestful?
 
-Attestful is a **self-hosted, air-gap capable** compliance automation platform that uses [OSCAL](https://pages.nist.gov/OSCAL/) (Open Security Controls Assessment Language) as its foundation. It combines:
+Attestful is a **focused, open-source tool** that does ONE thing extremely well:
 
-- **Automated compliance checking** with 200+ checks across AWS, Azure, GCP, Kubernetes, and Docker
-- **Evidence collection** from 13+ platforms (Okta, Jamf, Snowflake, Datadog, GitLab, etc.)
-- **Multi-framework support** for NIST CSF 2.0, NIST 800-53/FedRAMP, SOC 2, ISO 27001, and HITRUST
-- **Cross-framework mapping** to reduce duplicate compliance work
+- **Automated evidence collection** from 30+ platforms (cloud, SaaS, infrastructure)
+- **Clear compliance visualization** showing percentage completion per framework
+- **OSCAL-native exports** for interoperability with other compliance tools
+- **Self-hosted/air-gapped deployment** for government and defense organizations
 
-## Why Attestful?
+**Attestful is NOT a full GRC platform.** It does NOT compete with Vanta, Drata, or enterprise GRC suites. Organizations needing full GRC capabilities should pair Attestful with a dedicated GRC platform and use Attestful's OSCAL exports for evidence transfer.
 
-| Feature | Attestful | Vanta | Drata |
-|---------|-----------|-------|-------|
-| Open Source | ✅ | ❌ | ❌ |
-| Self-Hosted | ✅ | ❌ | ❌ |
-| Air-Gap Capable | ✅ | ❌ | ❌ |
-| OSCAL Native | ✅ | ❌ | ❌ |
-| FedRAMP Ready | ✅ | ❌ | ❌ |
-| Automated Remediation | ✅ | ⚠️ | ⚠️ |
+## What Attestful Does NOT Include (Intentionally)
+
+- ❌ Third-Party Risk Management (TPRM) or vendor questionnaires
+- ❌ Trust Center or public compliance page hosting
+- ❌ AI questionnaire automation
+- ❌ Policy management or policy templates
+- ❌ Risk register or risk management workflows
+- ❌ Audit workflow management or auditor portals
+- ❌ Employee compliance tracking or onboarding
+- ❌ Security awareness training
+- ❌ User access reviews or access certification campaigns
+
+These features are intentionally out of scope to keep Attestful simple and focused.
+
+## Core Principles
+
+| Principle | Description |
+|-----------|-------------|
+| **Evidence-First** | Primary function is collecting evidence from as many sources as possible |
+| **Clear Visualization** | Leadership sees "We are 90% SOC 2 compliant" at a glance |
+| **OSCAL-First** | All evidence and assessments use OSCAL format for interoperability |
+| **Self-hosted/Air-gapped** | Works entirely offline - critical for government/defense |
+| **Simple and Focused** | Do evidence collection and visualization extremely well |
+| **Open-source** | Free forever for core functionality |
+
+## Target Users
+
+- **Government/defense contractors** needing self-hosted compliance tools
+- **Startups** wanting simple compliance visibility without SaaS costs
+- **Air-gapped environments** (classified networks, OT/ICS)
+- **Teams with existing GRC platforms** that need better evidence collection
+
+## Supported Frameworks
+
+| Framework | Status | Description |
+|-----------|--------|-------------|
+| **NIST CSF 2.0** | ✅ | 106 subcategories, evidence-based maturity scoring |
+| **NIST 800-53 / FedRAMP** | ✅ | Full Rev 5 catalog, OSCAL-native for FedRAMP authorization |
+| **SOC 2 Type II** | ✅ | All 5 Trust Services Criteria, 90%+ automation |
+| **ISO 27001** | ✅ | ISO 27001:2022 Annex A controls |
+| **HITRUST** | ✅ | HITRUST CSF with 5-level maturity scoring |
+
+## Supported Platforms (30+)
+
+### Cloud Infrastructure
+- **AWS** - EC2, S3, IAM, VPC, CloudTrail, Secrets Manager, and more
+- **Azure** - VMs, Storage, AD, Key Vault, NSGs, and more
+- **GCP** - Compute, Storage, IAM, and more
+- **Kubernetes** - Pods, Services, NetworkPolicies, RBAC
+- **Docker** - Containers, Images, Networks, Swarm
+
+### Identity & Access
+- **Okta** - Users, MFA, policies, audit logs
+- **Google Workspace** - Users, Drive, audit logs
+- **Microsoft 365** - Users, groups, compliance settings
+- **1Password** - Vaults, users, access policies
+
+### Secrets Management
+- **AWS Secrets Manager** - Secrets, rotation, access logs
+- **Azure Key Vault** - Keys, secrets, certificates
+- **HashiCorp Vault** - Secrets engines, policies, audit
+
+### DevOps & Source Control
+- **GitHub** - Repos, workflows, security alerts
+- **GitLab** - Projects, pipelines, security scans
+- **Terraform Cloud** - Workspaces, runs, policy checks
+
+### Collaboration & Productivity
+- **Slack** - Users, channels, apps, DLP settings
+- **Notion** - Pages, permissions
+- **Confluence** - Spaces, pages, permissions
+- **Zoom** - Users, meetings, security settings
+
+### Project Management
+- **Jira** - Issues, workflows, audit logs
+- **Linear** - Issues, teams, integrations
+- **Asana** - Projects, tasks, permissions
+- **Monday** - Boards, users, permissions
+- **Shortcut** - Stories, iterations
+
+### Other Platforms
+- **Jamf** - Devices, MDM, compliance
+- **Datadog** - Monitors, security signals
+- **PagerDuty** - Incidents, services, escalations
+- **Snowflake** - Users, roles, access history
+- **Zendesk** - Tickets, users, security
+- **Slab** - Posts, topics
+- **SpotDraft** - Contracts, approvals
 
 ## Quick Start
 
@@ -43,194 +117,89 @@ poetry add attestful
 pip install attestful[all]
 ```
 
-### First Scan
+### First Evidence Collection
 
 ```bash
 # Initialize Attestful
 attestful configure init
 
-# Configure AWS credentials
+# Configure platform credentials
+attestful configure credentials --platform okta
 attestful configure credentials --platform aws
 
-# Run a compliance scan
-attestful scan aws --framework soc2
+# Collect evidence from all configured platforms
+attestful collect --all
 
-# View results
-attestful report generate --format html --output report.html
+# View compliance dashboard
+attestful dashboard
 ```
 
-### First Evidence Collection
+### View Compliance Status
 
 ```bash
-# Configure Okta credentials
-attestful configure credentials --platform okta
-
-# Collect evidence
-attestful collect okta
-
-# Analyze maturity
+# Analyze compliance by framework
 attestful analyze maturity --framework nist-csf
+attestful analyze maturity --framework soc2
 
-# View gaps
-attestful analyze gaps
+# Generate compliance report
+attestful report generate --format html --output compliance-report.html
+
+# Export to OSCAL
+attestful oscal assessment export --format json
 ```
 
-## Supported Frameworks
+## Dashboard
 
-### NIST CSF 2.0
-- 106 subcategories across 6 functions
-- Evidence-based maturity scoring (0-4)
-- 38 API-collectible evidence types
+Attestful includes a simple, monochrome dashboard designed for clarity:
 
-### NIST 800-53 / FedRAMP
-- Full Rev 5 catalog (1000+ controls)
-- FedRAMP Low, Moderate, and High baselines
-- OSCAL-native for FedRAMP authorization
+- **Large compliance percentage** - See "90% SOC 2" at a glance
+- **Framework selector** - Switch between NIST CSF, SOC 2, ISO 27001, etc.
+- **Category breakdown** - Drill into specific control areas
+- **Evidence status** - See which platforms are connected and collecting
+- **Light/dark mode** - Toggle based on preference
 
-### SOC 2 Type II
-- All 5 Trust Services Criteria
-- 90%+ automation for Common Criteria
-- Audit-ready evidence packages
+The dashboard is designed for leadership who need to understand compliance posture without technical details.
 
-### ISO 27001
-- ISO 27001:2022 Annex A controls
-- Statement of Applicability generator
-- Certification audit support
+## Air-Gap Support
 
-### HITRUST
-- HITRUST CSF controls
-- 5-level maturity scoring
-- MyCSF integration ready
-
-## Supported Platforms
-
-### Cloud Infrastructure
-- **AWS** - EC2, S3, IAM, VPC, CloudTrail, and more
-- **Azure** - VMs, Storage, AD, NSGs, and more
-- **GCP** - Compute, Storage, IAM, and more
-- **Kubernetes** - Pods, Services, NetworkPolicies
-- **Docker** - Containers, Images, Networks
-
-### SaaS Platforms
-- **Okta** - Users, MFA, policies, audit logs
-- **Jamf** - Devices, MDM, compliance
-- **Google Workspace** - Users, Drive, audit logs
-- **Snowflake** - Users, roles, access history
-- **Datadog** - Monitors, security signals
-- **GitLab** - Projects, pipelines, security scans
-- **Jira** - Issues, workflows, audit logs
-- **Zendesk** - Tickets, users, security
-- **Zoom** - Users, meetings, security
-- **Notion** - Pages, permissions
-- **Slab** - Posts, topics
-- **SpotDraft** - Contracts, approvals
-
-## Key Features
-
-### Compliance as Code
-
-All compliance checks are defined in version-controlled YAML:
-
-```yaml
-id: soc2-cc6.1-001
-name: Ensure MFA enabled for all IAM users
-severity: critical
-resource_types: [aws_iam_user]
-condition: |
-  resource.get('raw', {}).get('mfa_enabled') == True
-remediation: |
-  Enable MFA for all IAM users via AWS Console or CLI
-```
-
-### OSCAL Integration
-
-Generate OSCAL documents for FedRAMP and other machine-readable compliance:
+Attestful is designed for disconnected environments:
 
 ```bash
-# Generate System Security Plan
-attestful oscal ssp generate --profile fedramp-moderate
-
-# Export assessment results
-attestful oscal assessment export --scan-id latest
-
-# Generate POA&M
-attestful oscal poam generate
-```
-
-### Automated Remediation
-
-Fix compliance issues automatically with 33+ remediation actions:
-
-```bash
-# Preview remediation plan
-attestful remediate plan --scan-id abc123
-
-# Apply remediations (with dry-run)
-attestful remediate apply --dry-run
-
-# Apply remediations
-attestful remediate apply
-```
-
-### Air-Gap Support
-
-Deploy in disconnected environments:
-
-```bash
-# Export evidence bundle
+# Export evidence bundle for transfer
 attestful collect export --output evidence-bundle.attestful
 
 # Import on air-gapped system
 attestful collect import --input evidence-bundle.attestful
 
+# Generate static HTML dashboard for offline viewing
+attestful dashboard export --output dashboard.html
+
 # Analyze offline
 attestful analyze maturity
 ```
 
-## Architecture
+## OSCAL Integration
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    CLI / API / Dashboard                     │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                       OSCAL Layer                            │
-│   Catalog → Profile → Component → SSP → Assessment          │
-└─────────────────────────────────────────────────────────────┘
-                              │
-         ┌────────────────────┼────────────────────┐
-         │                    │                    │
-         ▼                    ▼                    ▼
-┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│ Resource Checks │  │    Evidence     │  │    Analysis     │
-│   (Compliy)     │  │   (Nisify)      │  │                 │
-└─────────────────┘  └─────────────────┘  └─────────────────┘
-         │                    │                    │
-         └────────────────────┼────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                  Unified Collector Layer                     │
-│        Infrastructure + Platform Collectors                  │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                     Storage Layer                            │
-│           Database + File-based Evidence                     │
-└─────────────────────────────────────────────────────────────┘
+Attestful uses [OSCAL](https://pages.nist.gov/OSCAL/) (Open Security Controls Assessment Language) as its native format:
+
+```bash
+# Export assessment results in OSCAL format
+attestful oscal assessment export --format json
+
+# Generate System Security Plan
+attestful oscal ssp generate --profile fedramp-moderate
+
+# Generate POA&M for failed controls
+attestful oscal poam generate
 ```
 
-## Documentation
-
-- [Architecture](docs/ARCHITECTURE.md) - System design and components
-- [OSCAL Guide](docs/OSCAL.md) - Working with OSCAL documents
-- [Instructions](instructions.txt) - Complete implementation guide
+OSCAL exports work with any OSCAL-compatible tool, including FedRAMP authorization systems.
 
 ## Development
 
 ```bash
 # Clone the repository
-git clone https://github.com/attestful/attestful.git
+git clone https://github.com/clay-good/attestful.git
 cd attestful
 
 # Install dependencies
@@ -246,20 +215,16 @@ make lint
 make format
 ```
 
-## Contributing
+## Documentation
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+For detailed documentation, see the [docs/](docs/) directory:
 
-## License
-
-Attestful is licensed under the [Apache License 2.0](LICENSE).
-
-## Acknowledgments
-
-Attestful was created by merging two projects:
-- **Compliy** - Multi-cloud compliance checker
-- **Nisify** - NIST CSF 2.0 evidence aggregator
-
-Special thanks to:
-- [NIST OSCAL Team](https://pages.nist.gov/OSCAL/) for the OSCAL standard
-- [FedRAMP Automation Team](https://github.com/GSA/fedramp-automation) for OSCAL content
+- [Getting Started](docs/GETTING_STARTED.md) - Installation and first steps
+- [CLI Reference](docs/CLI.md) - Command-line interface
+- [Collectors](docs/COLLECTORS.md) - Platform integrations
+- [Frameworks](docs/FRAMEWORKS.md) - Supported compliance frameworks
+- [OSCAL Guide](docs/OSCAL.md) - Working with OSCAL documents
+- [Architecture](docs/ARCHITECTURE.md) - System design and components
+- [Configuration](docs/CONFIGURATION.md) - Configuration options
+- [Deployment](docs/DEPLOYMENT.md) - Docker and Kubernetes deployment
+- [Air-Gap Deployment](docs/AIR_GAP.md) - Offline deployment guide

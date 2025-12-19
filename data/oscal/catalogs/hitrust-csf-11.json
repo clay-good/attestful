@@ -1,0 +1,2004 @@
+{
+  "catalog": {
+    "uuid": "f3b9c8a2-7e4d-4f6a-b5c8-9d0e1f2a3b4c",
+    "metadata": {
+      "title": "HITRUST CSF Version 11.0 Control Catalog",
+      "published": "2024-01-15T00:00:00.000Z",
+      "last-modified": "2024-12-15T00:00:00.000Z",
+      "version": "11.0",
+      "oscal-version": "1.1.2",
+      "props": [
+        {
+          "name": "framework",
+          "value": "HITRUST CSF"
+        },
+        {
+          "name": "source",
+          "value": "HITRUST Alliance"
+        },
+        {
+          "name": "assessment-type",
+          "value": "Certification"
+        }
+      ],
+      "links": [
+        {
+          "href": "https://hitrustalliance.net/csf/",
+          "rel": "reference"
+        }
+      ],
+      "remarks": "HITRUST CSF (Common Security Framework) catalog containing control requirements organized by 14 control categories. This catalog supports HITRUST CSF assessments including r2, e1, and i1 assessment types."
+    },
+    "groups": [
+      {
+        "id": "category-00",
+        "title": "Information Security Management Program",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "00"
+          }
+        ],
+        "controls": [
+          {
+            "id": "00.a",
+            "class": "HITRUST-CSF",
+            "title": "Information Security Management Program",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "00.a-statement",
+                "name": "statement",
+                "prose": "The organization shall establish and maintain an information security management program (ISMP) that includes the development and maintenance of security policies, assignment of responsibilities, and ongoing monitoring and improvement."
+              },
+              {
+                "id": "00.a-guidance",
+                "name": "guidance",
+                "prose": "The ISMP should be comprehensive and address all aspects of information security relevant to the organization's operations, risk profile, and regulatory requirements."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-01",
+        "title": "Access Control",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "01"
+          }
+        ],
+        "controls": [
+          {
+            "id": "01.a",
+            "class": "HITRUST-CSF",
+            "title": "Access Control Policy",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.a-statement",
+                "name": "statement",
+                "prose": "Access control policies shall be established, documented, and reviewed based on business and information security requirements."
+              }
+            ]
+          },
+          {
+            "id": "01.b",
+            "class": "HITRUST-CSF",
+            "title": "User Registration and De-registration",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.b-statement",
+                "name": "statement",
+                "prose": "A formal user registration and de-registration procedure shall be implemented to enable assignment and revocation of access rights."
+              }
+            ]
+          },
+          {
+            "id": "01.c",
+            "class": "HITRUST-CSF",
+            "title": "Privilege Management",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.c-statement",
+                "name": "statement",
+                "prose": "The allocation and use of privileged access rights shall be restricted and controlled."
+              }
+            ]
+          },
+          {
+            "id": "01.d",
+            "class": "HITRUST-CSF",
+            "title": "User Password Management",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.d-statement",
+                "name": "statement",
+                "prose": "The allocation of secret authentication information shall be controlled through a formal management process."
+              }
+            ]
+          },
+          {
+            "id": "01.e",
+            "class": "HITRUST-CSF",
+            "title": "Review of User Access Rights",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.e-statement",
+                "name": "statement",
+                "prose": "Asset owners shall review users access rights at regular intervals."
+              }
+            ]
+          },
+          {
+            "id": "01.f",
+            "class": "HITRUST-CSF",
+            "title": "Password Use",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.f-statement",
+                "name": "statement",
+                "prose": "Users shall be required to follow good security practices in the selection and use of passwords."
+              }
+            ]
+          },
+          {
+            "id": "01.g",
+            "class": "HITRUST-CSF",
+            "title": "Unattended User Equipment",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.g-statement",
+                "name": "statement",
+                "prose": "Users shall ensure that unattended equipment has appropriate protection."
+              }
+            ]
+          },
+          {
+            "id": "01.h",
+            "class": "HITRUST-CSF",
+            "title": "Network Access Control",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.h-statement",
+                "name": "statement",
+                "prose": "Users shall only be provided access to internal and external network services for which they have been specifically authorized."
+              }
+            ]
+          },
+          {
+            "id": "01.i",
+            "class": "HITRUST-CSF",
+            "title": "User Authentication for External Connections",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.i-statement",
+                "name": "statement",
+                "prose": "Appropriate authentication methods shall be used to control access by remote users."
+              }
+            ]
+          },
+          {
+            "id": "01.j",
+            "class": "HITRUST-CSF",
+            "title": "Equipment Identification in Networks",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "01.j-statement",
+                "name": "statement",
+                "prose": "Automatic equipment identification shall be considered as a means to authenticate connections from specific locations and equipment."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-02",
+        "title": "Human Resources Security",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "02"
+          }
+        ],
+        "controls": [
+          {
+            "id": "02.a",
+            "class": "HITRUST-CSF",
+            "title": "Roles and Responsibilities",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "02.a-statement",
+                "name": "statement",
+                "prose": "Security roles and responsibilities of employees, contractors, and third-party users shall be defined and documented."
+              }
+            ]
+          },
+          {
+            "id": "02.b",
+            "class": "HITRUST-CSF",
+            "title": "Screening",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "02.b-statement",
+                "name": "statement",
+                "prose": "Background verification checks on all candidates for employment, contractors, and third-party users shall be carried out."
+              }
+            ]
+          },
+          {
+            "id": "02.c",
+            "class": "HITRUST-CSF",
+            "title": "Terms and Conditions of Employment",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "02.c-statement",
+                "name": "statement",
+                "prose": "Employees, contractors, and third-party users shall agree and sign the terms and conditions of their employment contract."
+              }
+            ]
+          },
+          {
+            "id": "02.d",
+            "class": "HITRUST-CSF",
+            "title": "Information Security Awareness, Education, and Training",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "02.d-statement",
+                "name": "statement",
+                "prose": "All employees and relevant third parties shall receive appropriate awareness training and regular updates."
+              }
+            ]
+          },
+          {
+            "id": "02.e",
+            "class": "HITRUST-CSF",
+            "title": "Disciplinary Process",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "02.e-statement",
+                "name": "statement",
+                "prose": "There shall be a formal disciplinary process for employees who have committed a security breach."
+              }
+            ]
+          },
+          {
+            "id": "02.f",
+            "class": "HITRUST-CSF",
+            "title": "Termination or Change Responsibilities",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "02.f-statement",
+                "name": "statement",
+                "prose": "Responsibilities for performing employment termination or change of employment shall be clearly defined and assigned."
+              }
+            ]
+          },
+          {
+            "id": "02.g",
+            "class": "HITRUST-CSF",
+            "title": "Return of Assets",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "02.g-statement",
+                "name": "statement",
+                "prose": "All employees, contractors, and third-party users shall return all organizational assets upon termination."
+              }
+            ]
+          },
+          {
+            "id": "02.h",
+            "class": "HITRUST-CSF",
+            "title": "Removal of Access Rights",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "02.h-statement",
+                "name": "statement",
+                "prose": "The access rights of all employees, contractors, and third-party users shall be removed upon termination."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-03",
+        "title": "Risk Management",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "03"
+          }
+        ],
+        "controls": [
+          {
+            "id": "03.a",
+            "class": "HITRUST-CSF",
+            "title": "Risk Management Program",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "03.a-statement",
+                "name": "statement",
+                "prose": "A comprehensive risk management program shall be developed and maintained."
+              }
+            ]
+          },
+          {
+            "id": "03.b",
+            "class": "HITRUST-CSF",
+            "title": "Risk Assessment",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "03.b-statement",
+                "name": "statement",
+                "prose": "Risk assessments shall identify, quantify, and prioritize risks against criteria for risk acceptance."
+              }
+            ]
+          },
+          {
+            "id": "03.c",
+            "class": "HITRUST-CSF",
+            "title": "Risk Treatment",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "03.c-statement",
+                "name": "statement",
+                "prose": "Appropriate controls shall be selected and implemented to mitigate identified risks."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-04",
+        "title": "Security Policy",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "04"
+          }
+        ],
+        "controls": [
+          {
+            "id": "04.a",
+            "class": "HITRUST-CSF",
+            "title": "Information Security Policy Document",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "04.a-statement",
+                "name": "statement",
+                "prose": "An information security policy shall be approved by management, published, and communicated to all employees."
+              }
+            ]
+          },
+          {
+            "id": "04.b",
+            "class": "HITRUST-CSF",
+            "title": "Review of the Information Security Policy",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "04.b-statement",
+                "name": "statement",
+                "prose": "The information security policy shall be reviewed at planned intervals to ensure its continuing suitability."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-05",
+        "title": "Organization of Information Security",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "05"
+          }
+        ],
+        "controls": [
+          {
+            "id": "05.a",
+            "class": "HITRUST-CSF",
+            "title": "Management Commitment to Information Security",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.a-statement",
+                "name": "statement",
+                "prose": "Management shall actively support security within the organization through clear direction and demonstrated commitment."
+              }
+            ]
+          },
+          {
+            "id": "05.b",
+            "class": "HITRUST-CSF",
+            "title": "Information Security Coordination",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.b-statement",
+                "name": "statement",
+                "prose": "Information security activities shall be coordinated by representatives from different parts of the organization."
+              }
+            ]
+          },
+          {
+            "id": "05.c",
+            "class": "HITRUST-CSF",
+            "title": "Authorization Process for Information Processing Facilities",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.c-statement",
+                "name": "statement",
+                "prose": "A management authorization process for new information processing facilities shall be defined and implemented."
+              }
+            ]
+          },
+          {
+            "id": "05.d",
+            "class": "HITRUST-CSF",
+            "title": "Confidentiality Agreements",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.d-statement",
+                "name": "statement",
+                "prose": "Requirements for confidentiality or non-disclosure agreements shall be identified and regularly reviewed."
+              }
+            ]
+          },
+          {
+            "id": "05.e",
+            "class": "HITRUST-CSF",
+            "title": "Contact with Authorities",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.e-statement",
+                "name": "statement",
+                "prose": "Appropriate contacts with relevant authorities shall be maintained."
+              }
+            ]
+          },
+          {
+            "id": "05.f",
+            "class": "HITRUST-CSF",
+            "title": "Contact with Special Interest Groups",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.f-statement",
+                "name": "statement",
+                "prose": "Appropriate contacts with special interest groups and professional associations shall be maintained."
+              }
+            ]
+          },
+          {
+            "id": "05.g",
+            "class": "HITRUST-CSF",
+            "title": "Independent Review of Information Security",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.g-statement",
+                "name": "statement",
+                "prose": "The organization's approach to managing information security shall be reviewed independently at planned intervals."
+              }
+            ]
+          },
+          {
+            "id": "05.h",
+            "class": "HITRUST-CSF",
+            "title": "Identification of Risks Related to External Parties",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.h-statement",
+                "name": "statement",
+                "prose": "Risks to the organization's information from business processes involving external parties shall be identified."
+              }
+            ]
+          },
+          {
+            "id": "05.i",
+            "class": "HITRUST-CSF",
+            "title": "Addressing Security When Dealing with Customers",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.i-statement",
+                "name": "statement",
+                "prose": "All identified security requirements shall be addressed before giving customers access to information or assets."
+              }
+            ]
+          },
+          {
+            "id": "05.j",
+            "class": "HITRUST-CSF",
+            "title": "Addressing Security in Third-Party Agreements",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "05.j-statement",
+                "name": "statement",
+                "prose": "Agreements with third parties shall cover all relevant security requirements."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-06",
+        "title": "Compliance",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "06"
+          }
+        ],
+        "controls": [
+          {
+            "id": "06.a",
+            "class": "HITRUST-CSF",
+            "title": "Identification of Applicable Legislation",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.a-statement",
+                "name": "statement",
+                "prose": "All relevant legislative, regulatory, and contractual requirements shall be explicitly defined and documented."
+              }
+            ]
+          },
+          {
+            "id": "06.b",
+            "class": "HITRUST-CSF",
+            "title": "Intellectual Property Rights",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.b-statement",
+                "name": "statement",
+                "prose": "Appropriate procedures shall be implemented to ensure compliance with intellectual property rights requirements."
+              }
+            ]
+          },
+          {
+            "id": "06.c",
+            "class": "HITRUST-CSF",
+            "title": "Protection of Organizational Records",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.c-statement",
+                "name": "statement",
+                "prose": "Records shall be protected from loss, destruction, falsification, and unauthorized access or release."
+              }
+            ]
+          },
+          {
+            "id": "06.d",
+            "class": "HITRUST-CSF",
+            "title": "Data Protection and Privacy of Personal Information",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.d-statement",
+                "name": "statement",
+                "prose": "Data protection and privacy shall be ensured as required by relevant legislation and regulations."
+              }
+            ]
+          },
+          {
+            "id": "06.e",
+            "class": "HITRUST-CSF",
+            "title": "Prevention of Misuse of Information Processing Facilities",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.e-statement",
+                "name": "statement",
+                "prose": "Users shall be deterred from using information processing facilities for unauthorized purposes."
+              }
+            ]
+          },
+          {
+            "id": "06.f",
+            "class": "HITRUST-CSF",
+            "title": "Regulation of Cryptographic Controls",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.f-statement",
+                "name": "statement",
+                "prose": "Cryptographic controls shall be used in compliance with all relevant agreements, laws, and regulations."
+              }
+            ]
+          },
+          {
+            "id": "06.g",
+            "class": "HITRUST-CSF",
+            "title": "Compliance with Security Policies and Standards",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.g-statement",
+                "name": "statement",
+                "prose": "Managers shall ensure that all security procedures within their area of responsibility are carried out correctly."
+              }
+            ]
+          },
+          {
+            "id": "06.h",
+            "class": "HITRUST-CSF",
+            "title": "Technical Compliance Checking",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.h-statement",
+                "name": "statement",
+                "prose": "Information systems shall be regularly checked for compliance with security implementation standards."
+              }
+            ]
+          },
+          {
+            "id": "06.i",
+            "class": "HITRUST-CSF",
+            "title": "Information Systems Audit Controls",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "06.i-statement",
+                "name": "statement",
+                "prose": "Audit requirements involving checks on operational systems shall be planned to minimize disruptions."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-09",
+        "title": "Communications and Operations Management",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "09"
+          }
+        ],
+        "controls": [
+          {
+            "id": "09.a",
+            "class": "HITRUST-CSF",
+            "title": "Documented Operating Procedures",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "09.a-statement",
+                "name": "statement",
+                "prose": "Operating procedures shall be documented, maintained, and made available to all users who need them."
+              }
+            ]
+          },
+          {
+            "id": "09.b",
+            "class": "HITRUST-CSF",
+            "title": "Change Management",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "09.b-statement",
+                "name": "statement",
+                "prose": "Changes to information processing facilities and systems shall be controlled."
+              }
+            ]
+          },
+          {
+            "id": "09.h",
+            "class": "HITRUST-CSF",
+            "title": "Controls Against Malicious Code",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "09.h-statement",
+                "name": "statement",
+                "prose": "Detection, prevention, and recovery controls to protect against malicious code shall be implemented."
+              }
+            ]
+          },
+          {
+            "id": "09.j",
+            "class": "HITRUST-CSF",
+            "title": "Information Backup",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "09.j-statement",
+                "name": "statement",
+                "prose": "Backup copies of information and software shall be taken and tested regularly."
+              }
+            ]
+          },
+          {
+            "id": "09.k",
+            "class": "HITRUST-CSF",
+            "title": "Network Controls",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "09.k-statement",
+                "name": "statement",
+                "prose": "Networks shall be adequately managed and controlled to protect information in systems and applications."
+              }
+            ]
+          },
+          {
+            "id": "09.t",
+            "class": "HITRUST-CSF",
+            "title": "Audit Logging",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "09.t-statement",
+                "name": "statement",
+                "prose": "Audit logs recording user activities, exceptions, and security events shall be produced and kept."
+              }
+            ]
+          },
+          {
+            "id": "09.u",
+            "class": "HITRUST-CSF",
+            "title": "Monitoring System Use",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "09.u-statement",
+                "name": "statement",
+                "prose": "Procedures for monitoring use of information processing facilities shall be established."
+              }
+            ]
+          },
+          {
+            "id": "09.v",
+            "class": "HITRUST-CSF",
+            "title": "Protection of Log Information",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "09.v-statement",
+                "name": "statement",
+                "prose": "Logging facilities and log information shall be protected against tampering and unauthorized access."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-10",
+        "title": "Information Systems Acquisition, Development, and Maintenance",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "10"
+          }
+        ],
+        "controls": [
+          {
+            "id": "10.a",
+            "class": "HITRUST-CSF",
+            "title": "Security Requirements Analysis and Specification",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "10.a-statement",
+                "name": "statement",
+                "prose": "Statements of business requirements for new information systems shall specify requirements for security controls."
+              }
+            ]
+          },
+          {
+            "id": "10.b",
+            "class": "HITRUST-CSF",
+            "title": "Input Data Validation",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "10.b-statement",
+                "name": "statement",
+                "prose": "Data input to applications shall be validated to ensure it is correct and appropriate."
+              }
+            ]
+          },
+          {
+            "id": "10.f",
+            "class": "HITRUST-CSF",
+            "title": "Policy on the Use of Cryptographic Controls",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "10.f-statement",
+                "name": "statement",
+                "prose": "A policy on the use of cryptographic controls for protection of information shall be developed and implemented."
+              }
+            ]
+          },
+          {
+            "id": "10.g",
+            "class": "HITRUST-CSF",
+            "title": "Key Management",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "10.g-statement",
+                "name": "statement",
+                "prose": "Key management shall be in place to support the organization's use of cryptographic techniques."
+              }
+            ]
+          },
+          {
+            "id": "10.k",
+            "class": "HITRUST-CSF",
+            "title": "Change Control Procedures",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "10.k-statement",
+                "name": "statement",
+                "prose": "The implementation of changes shall be controlled by the use of formal change control procedures."
+              }
+            ]
+          },
+          {
+            "id": "10.p",
+            "class": "HITRUST-CSF",
+            "title": "Control of Technical Vulnerabilities",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "10.p-statement",
+                "name": "statement",
+                "prose": "Timely information about technical vulnerabilities shall be obtained, evaluated, and appropriate measures taken."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-11",
+        "title": "Information Security Incident Management",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "11"
+          }
+        ],
+        "controls": [
+          {
+            "id": "11.a",
+            "class": "HITRUST-CSF",
+            "title": "Reporting Information Security Events",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "11.a-statement",
+                "name": "statement",
+                "prose": "Information security events shall be reported through appropriate management channels as quickly as possible."
+              }
+            ]
+          },
+          {
+            "id": "11.b",
+            "class": "HITRUST-CSF",
+            "title": "Reporting Security Weaknesses",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "11.b-statement",
+                "name": "statement",
+                "prose": "All employees and third-party users shall report any observed or suspected security weaknesses."
+              }
+            ]
+          },
+          {
+            "id": "11.c",
+            "class": "HITRUST-CSF",
+            "title": "Responsibilities and Procedures",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "11.c-statement",
+                "name": "statement",
+                "prose": "Management responsibilities and procedures shall be established for effective incident response."
+              }
+            ]
+          },
+          {
+            "id": "11.d",
+            "class": "HITRUST-CSF",
+            "title": "Learning from Information Security Incidents",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "11.d-statement",
+                "name": "statement",
+                "prose": "Mechanisms shall enable the types, volumes, and costs of information security incidents to be quantified and monitored."
+              }
+            ]
+          },
+          {
+            "id": "11.e",
+            "class": "HITRUST-CSF",
+            "title": "Collection of Evidence",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "11.e-statement",
+                "name": "statement",
+                "prose": "Evidence shall be collected, retained, and presented to conform to rules for evidence in legal proceedings."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-12",
+        "title": "Business Continuity Management",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "12"
+          }
+        ],
+        "controls": [
+          {
+            "id": "12.a",
+            "class": "HITRUST-CSF",
+            "title": "Including Information Security in Business Continuity",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "12.a-statement",
+                "name": "statement",
+                "prose": "A managed process shall be developed for business continuity that addresses information security requirements."
+              }
+            ]
+          },
+          {
+            "id": "12.b",
+            "class": "HITRUST-CSF",
+            "title": "Business Continuity and Risk Assessment",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "12.b-statement",
+                "name": "statement",
+                "prose": "Events that can cause interruptions shall be identified along with their probability and impact."
+              }
+            ]
+          },
+          {
+            "id": "12.c",
+            "class": "HITRUST-CSF",
+            "title": "Developing and Implementing Continuity Plans",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "12.c-statement",
+                "name": "statement",
+                "prose": "Plans shall be developed and implemented to maintain or restore operations following interruption."
+              }
+            ]
+          },
+          {
+            "id": "12.e",
+            "class": "HITRUST-CSF",
+            "title": "Testing and Maintaining Business Continuity Plans",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "12.e-statement",
+                "name": "statement",
+                "prose": "Business continuity plans shall be tested and updated regularly to ensure they are up to date and effective."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "category-13",
+        "title": "Privacy Practices",
+        "props": [
+          {
+            "name": "category-code",
+            "value": "13"
+          }
+        ],
+        "controls": [
+          {
+            "id": "13.a",
+            "class": "HITRUST-CSF",
+            "title": "Privacy Governance",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "13.a-statement",
+                "name": "statement",
+                "prose": "The organization shall establish a privacy governance structure with defined roles and responsibilities."
+              }
+            ]
+          },
+          {
+            "id": "13.b",
+            "class": "HITRUST-CSF",
+            "title": "Notice and Choice",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "administrative"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual"
+              }
+            ],
+            "parts": [
+              {
+                "id": "13.b-statement",
+                "name": "statement",
+                "prose": "Individuals shall be provided notice about privacy practices and choices about how their information is used."
+              }
+            ]
+          },
+          {
+            "id": "13.d",
+            "class": "HITRUST-CSF",
+            "title": "Use, Retention, and Disposal",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial"
+              }
+            ],
+            "parts": [
+              {
+                "id": "13.d-statement",
+                "name": "statement",
+                "prose": "Personal information shall only be used for identified purposes, retained as long as necessary, and disposed of securely."
+              }
+            ]
+          },
+          {
+            "id": "13.g",
+            "class": "HITRUST-CSF",
+            "title": "Security for Privacy",
+            "props": [
+              {
+                "name": "maturity-level",
+                "value": "3"
+              },
+              {
+                "name": "control-type",
+                "value": "technical"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated"
+              }
+            ],
+            "parts": [
+              {
+                "id": "13.g-statement",
+                "name": "statement",
+                "prose": "Personal information shall be protected by appropriate security safeguards against unauthorized access."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

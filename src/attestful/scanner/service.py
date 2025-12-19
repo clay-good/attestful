@@ -1,7 +1,5 @@
 """
 Compliance scanner service that orchestrates asset collection and compliance checking.
-
-Migrated from Compliy (Step 4.2.1 of instructions.txt).
 """
 
 import asyncio

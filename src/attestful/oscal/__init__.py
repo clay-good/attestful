@@ -118,6 +118,17 @@ from attestful.oscal.component import (
     get_component_definition_summary,
     merge_component_definitions,
 )
+from attestful.oscal.cache import (
+    OSCALCache,
+    CacheEntry,
+    OFFICIAL_CATALOGS,
+    OFFICIAL_PROFILES,
+    get_oscal_cache,
+    download_all_official_catalogs,
+    download_all_official_profiles,
+    export_cache_for_offline,
+    import_cache_from_offline,
+)
 
 __all__ = [
     # Common
@@ -226,4 +237,14 @@ __all__ = [
     "create_component_from_check_results",
     "get_component_definition_summary",
     "merge_component_definitions",
+    # Cache
+    "OSCALCache",
+    "CacheEntry",
+    "OFFICIAL_CATALOGS",
+    "OFFICIAL_PROFILES",
+    "get_oscal_cache",
+    "download_all_official_catalogs",
+    "download_all_official_profiles",
+    "export_cache_for_offline",
+    "import_cache_from_offline",
 ]

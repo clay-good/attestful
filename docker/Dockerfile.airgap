@@ -1,0 +1,116 @@
+# Attestful Air-Gapped Docker Image
+#
+# Fully self-contained image for air-gapped deployments.
+# Includes all wheels, OSCAL data, and documentation.
+# No network access required after image is loaded.
+#
+# Build from tarball export:
+#   docker load < attestful-airgap.tar.gz
+#
+# Run:
+#   docker run -it --rm --network none attestful:airgap scan aws
+
+# =============================================================================
+# Stage 1: Wheel Builder
+# =============================================================================
+FROM python:3.11-slim-bookworm AS wheel-builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libffi-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /wheels
+
+# Copy requirements
+COPY pyproject.toml poetry.lock* ./
+COPY src/ ./src/
+COPY README.md ./
+
+# Install pip tools
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel poetry
+
+# Export requirements and download wheels
+RUN poetry export -f requirements.txt --without-hashes -o requirements.txt 2>/dev/null || true
+
+# Download/build all wheels
+RUN pip wheel --wheel-dir=/wheels/dist -r requirements.txt 2>/dev/null || \
+    pip wheel --wheel-dir=/wheels/dist .
+
+# Build attestful wheel
+RUN pip wheel --wheel-dir=/wheels/dist --no-deps .
+
+# =============================================================================
+# Stage 2: Runtime
+# =============================================================================
+FROM python:3.11-slim-bookworm
+
+# Labels
+LABEL org.opencontainers.image.title="Attestful (Air-Gapped)"
+LABEL org.opencontainers.image.description="Fully offline OSCAL-first compliance platform"
+LABEL org.opencontainers.image.source="https://github.com/clay-good/attestful"
+
+# Runtime dependencies only
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create directory structure
+WORKDIR /app
+RUN mkdir -p \
+    /app/wheels \
+    /app/data/oscal/catalogs \
+    /app/data/oscal/profiles \
+    /app/data/standards \
+    /app/data/evidence \
+    /app/data/reports \
+    /app/config \
+    /app/docs
+
+# Copy wheels from builder
+COPY --from=wheel-builder /wheels/dist /app/wheels/
+
+# Copy data files
+COPY data/oscal/ /app/data/oscal/
+COPY data/standards/ /app/data/standards/
+
+# Copy documentation
+COPY docs/ /app/docs/
+COPY README.md /app/
+
+# Install from local wheels (no network)
+RUN pip install --no-cache-dir --no-index --find-links=/app/wheels/ \
+    /app/wheels/attestful*.whl \
+    && rm -rf /root/.cache
+
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash attestful && \
+    chown -R attestful:attestful /app
+
+# Environment for offline operation
+ENV ATTESTFUL_DATA_DIR=/app/data
+ENV ATTESTFUL_CONFIG_DIR=/app/config
+ENV ATTESTFUL_OFFLINE_MODE=true
+ENV ATTESTFUL_OSCAL_CACHE_DIR=/app/data/oscal
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Include offline manifest
+RUN echo '{"version": "1.0.0", "mode": "airgap", "network_required": false}' > /app/manifest.json
+
+# Switch to non-root user
+USER attestful
+
+# Verify installation
+RUN attestful --version
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD attestful --version || exit 1
+
+# Entrypoint
+ENTRYPOINT ["attestful"]
+CMD ["--help"]

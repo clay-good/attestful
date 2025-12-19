@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "attestful.configMapName" . }}
+  labels:
+    {{- include "attestful.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    general:
+      data_dir: /var/attestful
+      log_level: {{ .Values.config.logLevel }}
+      timezone: {{ .Values.config.timezone }}
+      parallel_workers: {{ .Values.config.parallelWorkers }}
+
+    database:
+      type: postgresql
+      # URL set via environment variable
+
+    storage:
+      evidence_dir: /var/attestful/evidence
+      retention_days: {{ .Values.config.storage.retentionDays }}
+      compression: {{ .Values.config.storage.compression }}
+
+    security:
+      credential_encryption: {{ .Values.config.security.credentialEncryption }}
+      audit_logging: {{ .Values.config.security.auditLogging }}
+
+    {{- if .Values.api.enabled }}
+    api:
+      enabled: true
+      host: 0.0.0.0
+      port: {{ .Values.api.port }}
+      workers: {{ .Values.api.workers }}
+      auth_enabled: {{ .Values.config.api.authEnabled }}
+      jwt_expiry_hours: {{ .Values.config.api.jwtExpiryHours }}
+      rate_limit: {{ .Values.config.api.rateLimit }}
+      {{- if .Values.config.api.corsOrigins }}
+      cors_origins:
+        {{- range (split "," .Values.config.api.corsOrigins) }}
+        - {{ . | trim }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+
+    {{- if .Values.dashboard.enabled }}
+    dashboard:
+      enabled: true
+      host: 0.0.0.0
+      port: {{ .Values.dashboard.port }}
+    {{- end }}
+
+    {{- if .Values.redis.enabled }}
+    celery:
+      enabled: true
+      # broker URL set via environment variable
+    {{- end }}
+
+    {{- if .Values.metrics.enabled }}
+    metrics:
+      enabled: true
+      port: {{ .Values.metrics.port }}
+    {{- end }}

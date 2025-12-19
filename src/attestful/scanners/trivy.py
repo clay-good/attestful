@@ -1,7 +1,5 @@
 """
 Trivy scanner wrapper for container and IaC vulnerability scanning.
-
-Migrated from Compliy (Step 4.2.10 of instructions.txt).
 """
 
 import json

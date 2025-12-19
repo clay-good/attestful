@@ -1,7 +1,5 @@
 """
 Main dashboard application using Dash/Plotly.
-
-Migrated from Compliy (Step 4.2.12 of instructions.txt).
 """
 
 from typing import Any

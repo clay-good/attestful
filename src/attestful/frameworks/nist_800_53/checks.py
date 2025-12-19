@@ -4,7 +4,7 @@ Automated compliance checks for NIST 800-53 controls.
 Provides check definitions for AWS, Azure, and GCP cloud resources
 mapped to NIST 800-53 controls.
 
-These checks use the Compliy evaluator engine to assess cloud resources
+These checks use the Attestful evaluator engine to assess cloud resources
 against NIST 800-53 requirements.
 """
 

@@ -5,9 +5,8 @@ description = "OSCAL-first compliance automation platform. Open-source Vanta alt
 authors = ["Attestful Contributors"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/attestful/attestful"
-repository = "https://github.com/attestful/attestful"
-documentation = "https://attestful.dev/docs"
+homepage = "https://github.com/clay-good/attestful"
+repository = "https://github.com/clay-good/attestful"
 keywords = ["compliance", "oscal", "security", "nist", "soc2", "fedramp", "iso27001"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -129,26 +128,67 @@ python_functions = ["test_*"]
 addopts = [
     "--strict-markers",
     "-ra",
+    "--cov=src/attestful",
+    "--cov-report=term-missing",
+    "--cov-report=html:coverage_html",
+    "--cov-report=xml:coverage.xml",
+    "--cov-fail-under=80",
 ]
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",
     "slow: Slow tests",
+    "security: Security tests",
+    "oscal: OSCAL-related tests",
+    "collector: Collector tests",
+    "offline: Offline/air-gap tests",
 ]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+asyncio_mode = "auto"
 
 [tool.coverage.run]
 source = ["src/attestful"]
 branch = true
-omit = ["*/tests/*", "*/__pycache__/*"]
+parallel = true
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+    "*/_version.py",
+]
+data_file = ".coverage"
 
 [tool.coverage.report]
+fail_under = 80
+precision = 2
+show_missing = true
+skip_covered = false
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
     "raise NotImplementedError",
+    "raise AssertionError",
     "if TYPE_CHECKING:",
     "if __name__ == .__main__.:",
+    "@abstractmethod",
+    "@abc.abstractmethod",
+    "pass",
+    "\\.\\.\\.",
 ]
+exclude_also = [
+    "if self.debug:",
+    "if settings.DEBUG",
+]
+
+[tool.coverage.html]
+directory = "coverage_html"
+title = "Attestful Coverage Report"
+
+[tool.coverage.xml]
+output = "coverage.xml"
 
 [tool.mypy]
 python_version = "3.11"

@@ -3,7 +3,10 @@
 
 .PHONY: help install install-dev install-all test test-unit test-integration \
         lint format type-check security-check check all clean build docs \
-        docker-build docker-run db-init db-migrate db-upgrade db-downgrade
+        docker-build docker-run db-init db-migrate db-upgrade db-downgrade \
+        release release-prepare release-tag version version-patch version-minor version-major \
+        helm-lint helm-template helm-package helm-install-local helm-uninstall-local \
+        airgap-bundle airgap-docker
 
 # Default target
 .DEFAULT_GOAL := help
@@ -238,3 +241,55 @@ version-major: ## Bump major version
 
 changelog: ## Generate changelog (requires git-cliff or similar)
 	@echo "$(YELLOW)Changelog generation not yet configured$(NC)"
+
+release-prepare: ## Prepare release (bump version, update changelog)
+	@read -p "Release type (patch/minor/major): " type; \
+	$(POETRY) version $$type; \
+	NEW_VERSION=$$($(POETRY) version -s); \
+	echo "$(GREEN)Version bumped to $$NEW_VERSION$(NC)"; \
+	echo "$(YELLOW)Please update CHANGELOG.md with release notes$(NC)"
+
+release-tag: ## Create and push release tag
+	@VERSION=$$($(POETRY) version -s); \
+	git add pyproject.toml CHANGELOG.md; \
+	git commit -m "chore: release v$$VERSION"; \
+	git tag -a "v$$VERSION" -m "Release v$$VERSION"; \
+	echo "$(GREEN)Created tag v$$VERSION$(NC)"; \
+	echo "$(YELLOW)Run 'git push && git push --tags' to trigger release workflow$(NC)"
+
+release: release-prepare release-tag ## Full release (prepare + tag)
+
+# ============================================================================
+# Helm
+# ============================================================================
+
+helm-lint: ## Lint Helm chart
+	helm lint helm/attestful
+
+helm-template: ## Render Helm templates
+	helm template attestful helm/attestful
+
+helm-package: ## Package Helm chart
+	helm package helm/attestful -d dist/
+
+helm-install-local: ## Install Helm chart locally (for testing)
+	helm install attestful-dev helm/attestful --namespace attestful-dev --create-namespace
+
+helm-uninstall-local: ## Uninstall local Helm chart
+	helm uninstall attestful-dev --namespace attestful-dev
+
+# ============================================================================
+# Air-Gap
+# ============================================================================
+
+airgap-bundle: ## Create air-gap deployment bundle
+	@echo "$(BLUE)Creating air-gap bundle...$(NC)"
+	@mkdir -p dist/airgap
+	$(POETRY) export -f requirements.txt --output dist/airgap/requirements.txt
+	pip download -r dist/airgap/requirements.txt -d dist/airgap/packages
+	cp -r data/oscal dist/airgap/
+	tar -czvf dist/attestful-airgap-$$($(POETRY) version -s).tar.gz -C dist/airgap .
+	@echo "$(GREEN)Created dist/attestful-airgap-$$($(POETRY) version -s).tar.gz$(NC)"
+
+airgap-docker: ## Build air-gap Docker image
+	docker build -t attestful:airgap -f docker/Dockerfile.airgap .

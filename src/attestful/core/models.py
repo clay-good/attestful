@@ -58,7 +58,7 @@ class Resource:
     """
     A cloud or infrastructure resource to be checked for compliance.
 
-    This is the Compliy-style model for resource-based compliance checking.
+    This model supports resource-based compliance checking.
     """
 
     id: str
@@ -102,7 +102,7 @@ class Evidence:
     """
     An evidence artifact collected from a platform.
 
-    This is the Nisify-style model for evidence-based compliance verification.
+    This model supports evidence-based compliance verification.
     """
 
     id: str = field(default_factory=lambda: str(uuid4()))

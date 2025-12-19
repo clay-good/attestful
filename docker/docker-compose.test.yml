@@ -1,0 +1,113 @@
+# Attestful Integration Test Environment
+#
+# Docker Compose configuration for running integration tests.
+# Includes mock API servers and test database.
+#
+# Usage:
+#   docker compose -f docker/docker-compose.test.yml up -d
+#   poetry run pytest tests/integration -v
+#   docker compose -f docker/docker-compose.test.yml down
+
+version: '3.8'
+
+services:
+  # Test database
+  test-db:
+    image: postgres:15-alpine
+    container_name: attestful-test-db
+    environment:
+      POSTGRES_USER: attestful_test
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: attestful_test
+    ports:
+      - "5433:5432"
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U attestful_test"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    tmpfs:
+      - /var/lib/postgresql/data
+
+  # Redis for task queue testing
+  test-redis:
+    image: redis:7-alpine
+    container_name: attestful-test-redis
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Mock AWS LocalStack
+  localstack:
+    image: localstack/localstack:latest
+    container_name: attestful-test-localstack
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      - SERVICES=s3,iam,ec2,rds,lambda,cloudtrail,kms
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - localstack-data:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # Mock API server for platform integrations
+  mock-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.mockapi
+    container_name: attestful-test-mockapi
+    ports:
+      - "8080:8080"
+    environment:
+      - MOCK_DELAY_MS=0
+      - MOCK_FAIL_RATE=0
+    volumes:
+      - ../tests/recorded_responses:/app/responses:ro
+
+  # Test runner service (optional, for CI)
+  test-runner:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: development
+    container_name: attestful-test-runner
+    depends_on:
+      test-db:
+        condition: service_healthy
+      test-redis:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+    environment:
+      - ATTESTFUL_DATABASE_URL=postgresql://attestful_test:test_password@test-db:5432/attestful_test
+      - ATTESTFUL_REDIS_URL=redis://test-redis:6379/0
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+      - ATTESTFUL_TEST_MODE=true
+    volumes:
+      - ../src:/app/src:ro
+      - ../tests:/app/tests:ro
+      - test-results:/app/test-results
+    command: ["pytest", "tests/", "-v", "--cov=src/attestful", "--cov-report=xml:/app/test-results/coverage.xml"]
+    profiles:
+      - ci
+
+volumes:
+  test-db-data:
+  localstack-data:
+  test-results:
+
+networks:
+  default:
+    name: attestful-test-network

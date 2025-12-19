@@ -355,3 +355,50 @@ class KeyError(SecurityError):
     """Error with cryptographic keys."""
 
     pass
+
+
+# =============================================================================
+# Export/Import Errors (Air-Gap Support)
+# =============================================================================
+
+
+class ExportError(AttestfulError):
+    """Error during evidence or data export."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        export_path: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        self.export_path = export_path
+
+
+class ImportError(AttestfulError):
+    """Error during evidence or data import."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        import_path: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        self.import_path = import_path
+
+
+class SignatureError(SecurityError):
+    """Error with digital signatures (verification failed)."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        file_path: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(message, **kwargs)
+        self.file_path = file_path

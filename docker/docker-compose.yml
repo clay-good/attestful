@@ -1,0 +1,152 @@
+# Attestful Docker Compose Configuration
+#
+# Provides development and production deployment options.
+#
+# Usage:
+#   Development: docker compose up -d
+#   Production:  docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   Air-gapped:  docker compose -f docker-compose.yml -f docker-compose.airgap.yml up -d
+
+version: '3.8'
+
+services:
+  # Main Attestful service
+  attestful:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: attestful:latest
+    container_name: attestful
+    volumes:
+      # Persist data directory
+      - attestful-data:/app/data
+      # Mount config directory
+      - attestful-config:/app/config
+      # Optional: mount local evidence directory
+      - ./evidence:/app/data/evidence:rw
+    environment:
+      - ATTESTFUL_DATA_DIR=/app/data
+      - ATTESTFUL_CONFIG_DIR=/app/config
+      - ATTESTFUL_LOG_LEVEL=INFO
+    # Run as daemon with command passthrough
+    entrypoint: ["attestful"]
+    command: ["--help"]
+    restart: unless-stopped
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Database service (optional, for enterprise deployments)
+  db:
+    image: postgres:15-alpine
+    container_name: attestful-db
+    profiles:
+      - enterprise
+    volumes:
+      - attestful-db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=attestful
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+      - POSTGRES_DB=attestful
+    secrets:
+      - db_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U attestful"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis service (optional, for task queue)
+  redis:
+    image: redis:7-alpine
+    container_name: attestful-redis
+    profiles:
+      - enterprise
+    volumes:
+      - attestful-redis:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # API service (optional)
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: attestful:latest
+    container_name: attestful-api
+    profiles:
+      - enterprise
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - attestful-data:/app/data
+      - attestful-config:/app/config
+    environment:
+      - ATTESTFUL_DATA_DIR=/app/data
+      - ATTESTFUL_CONFIG_DIR=/app/config
+      - ATTESTFUL_DATABASE_URL=postgresql://attestful@db:5432/attestful
+      - ATTESTFUL_REDIS_URL=redis://redis:6379/0
+      - ATTESTFUL_API_HOST=0.0.0.0
+      - ATTESTFUL_API_PORT=8000
+    entrypoint: ["python", "-m", "attestful.api"]
+    restart: unless-stopped
+
+  # Worker service (optional, for background tasks)
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: attestful:latest
+    container_name: attestful-worker
+    profiles:
+      - enterprise
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - attestful-data:/app/data
+      - attestful-config:/app/config
+    environment:
+      - ATTESTFUL_DATA_DIR=/app/data
+      - ATTESTFUL_CONFIG_DIR=/app/config
+      - ATTESTFUL_DATABASE_URL=postgresql://attestful@db:5432/attestful
+      - ATTESTFUL_REDIS_URL=redis://redis:6379/0
+    entrypoint: ["celery", "-A", "attestful.tasks", "worker", "--loglevel=info"]
+    restart: unless-stopped
+
+volumes:
+  attestful-data:
+    driver: local
+  attestful-config:
+    driver: local
+  attestful-db:
+    driver: local
+  attestful-redis:
+    driver: local
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+
+networks:
+  default:
+    name: attestful-network

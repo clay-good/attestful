@@ -1,0 +1,2162 @@
+{
+  "catalog": {
+    "uuid": "f7e3d2a1-b8c4-5d6e-9f0a-1b2c3d4e5f6a",
+    "metadata": {
+      "title": "SOC 2 Trust Services Criteria",
+      "last-modified": "2024-12-01T00:00:00Z",
+      "version": "2017",
+      "oscal-version": "1.1.2",
+      "published": "2017-04-01T00:00:00Z",
+      "props": [
+        {
+          "name": "source",
+          "value": "AICPA",
+          "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        },
+        {
+          "name": "framework",
+          "value": "SOC2",
+          "uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901"
+        },
+        {
+          "name": "framework-version",
+          "value": "2017",
+          "uuid": "c3d4e5f6-a7b8-9012-cdef-123456789012"
+        }
+      ],
+      "links": [
+        {
+          "href": "https://www.aicpa.org/resources/landing/soc-2-trust-services-criteria",
+          "rel": "reference"
+        }
+      ],
+      "remarks": "AICPA Trust Services Criteria for Security, Availability, Processing Integrity, Confidentiality, and Privacy (2017). The Security category (Common Criteria) is mandatory for all SOC 2 engagements."
+    },
+    "groups": [
+      {
+        "id": "CC",
+        "class": "category",
+        "title": "Security (Common Criteria)",
+        "props": [
+          {
+            "name": "category-id",
+            "value": "CC",
+            "uuid": "d4e5f6a7-b8c9-0123-def0-234567890123"
+          },
+          {
+            "name": "mandatory",
+            "value": "true",
+            "uuid": "e5f6a7b8-c9d0-1234-ef01-345678901234"
+          }
+        ],
+        "parts": [
+          {
+            "name": "overview",
+            "prose": "The Common Criteria (Security) category addresses the entity's controls over the security of its system. Security controls protect against unauthorized access, both physical and logical."
+          }
+        ],
+        "groups": [
+          {
+            "id": "CC1",
+            "class": "criteria-group",
+            "title": "Control Environment",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity demonstrates a commitment to integrity and ethical values."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC1.1",
+                "class": "criterion",
+                "title": "Commitment to Integrity and Ethical Values",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC1.1",
+                    "uuid": "cc11-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc11-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC1.1_stmt",
+                    "name": "statement",
+                    "prose": "The entity demonstrates a commitment to integrity and ethical values."
+                  },
+                  {
+                    "id": "CC1.1_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Sets the Tone at the Top - The board of directors and management, at all levels, demonstrate through their directives, actions, and behavior the importance of integrity and ethical values to support the functioning of the system of internal control."
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Establishes Standards of Conduct - The expectations of the board of directors and senior management concerning integrity and ethical values are defined in the entity's standards of conduct and understood at all levels of the entity and by outsourced service providers and business partners."
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Evaluates Adherence to Standards of Conduct - Processes are in place to evaluate the performance of individuals and teams against the entity's expected standards of conduct."
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Addresses Deviations in a Timely Manner - Deviations from the entity's expected standards of conduct are identified and remedied in a timely and consistent manner."
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC1.2",
+                "class": "criterion",
+                "title": "Board Independence and Oversight",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC1.2",
+                    "uuid": "cc12-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc12-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC1.2_stmt",
+                    "name": "statement",
+                    "prose": "The board of directors demonstrates independence from management and exercises oversight of the development and performance of internal control."
+                  }
+                ]
+              },
+              {
+                "id": "CC1.3",
+                "class": "criterion",
+                "title": "Organizational Structure and Reporting Lines",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC1.3",
+                    "uuid": "cc13-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc13-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC1.3_stmt",
+                    "name": "statement",
+                    "prose": "Management establishes, with board oversight, structures, reporting lines, and appropriate authorities and responsibilities in the pursuit of objectives."
+                  }
+                ]
+              },
+              {
+                "id": "CC1.4",
+                "class": "criterion",
+                "title": "Competence and Accountability",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC1.4",
+                    "uuid": "cc14-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc14-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC1.4_stmt",
+                    "name": "statement",
+                    "prose": "The entity demonstrates a commitment to attract, develop, and retain competent individuals in alignment with objectives."
+                  }
+                ]
+              },
+              {
+                "id": "CC1.5",
+                "class": "criterion",
+                "title": "Accountability for Internal Control",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC1.5",
+                    "uuid": "cc15-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc15-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC1.5_stmt",
+                    "name": "statement",
+                    "prose": "The entity holds individuals accountable for their internal control responsibilities in the pursuit of objectives."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "CC2",
+            "class": "criteria-group",
+            "title": "Communication and Information",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity obtains or generates and uses relevant, quality information to support the functioning of internal control."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC2.1",
+                "class": "criterion",
+                "title": "Quality Information",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC2.1",
+                    "uuid": "cc21-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc21-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC2.1_stmt",
+                    "name": "statement",
+                    "prose": "The entity obtains or generates and uses relevant, quality information to support the functioning of internal control."
+                  }
+                ]
+              },
+              {
+                "id": "CC2.2",
+                "class": "criterion",
+                "title": "Internal Communication",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC2.2",
+                    "uuid": "cc22-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc22-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC2.2_stmt",
+                    "name": "statement",
+                    "prose": "The entity internally communicates information, including objectives and responsibilities for internal control, necessary to support the functioning of internal control."
+                  }
+                ]
+              },
+              {
+                "id": "CC2.3",
+                "class": "criterion",
+                "title": "External Communication",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC2.3",
+                    "uuid": "cc23-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc23-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC2.3_stmt",
+                    "name": "statement",
+                    "prose": "The entity communicates with external parties regarding matters affecting the functioning of internal control."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "CC3",
+            "class": "criteria-group",
+            "title": "Risk Assessment",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity specifies objectives with sufficient clarity to enable the identification and assessment of risks relating to objectives."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC3.1",
+                "class": "criterion",
+                "title": "Objective Specification",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC3.1",
+                    "uuid": "cc31-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc31-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC3.1_stmt",
+                    "name": "statement",
+                    "prose": "The entity specifies objectives with sufficient clarity to enable the identification and assessment of risks relating to objectives."
+                  }
+                ]
+              },
+              {
+                "id": "CC3.2",
+                "class": "criterion",
+                "title": "Risk Identification and Analysis",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC3.2",
+                    "uuid": "cc32-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc32-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC3.2_stmt",
+                    "name": "statement",
+                    "prose": "The entity identifies risks to the achievement of its objectives across the entity and analyzes risks as a basis for determining how the risks should be managed."
+                  }
+                ]
+              },
+              {
+                "id": "CC3.3",
+                "class": "criterion",
+                "title": "Fraud Risk",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC3.3",
+                    "uuid": "cc33-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc33-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC3.3_stmt",
+                    "name": "statement",
+                    "prose": "The entity considers the potential for fraud in assessing risks to the achievement of objectives."
+                  }
+                ]
+              },
+              {
+                "id": "CC3.4",
+                "class": "criterion",
+                "title": "Change Management Risk",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC3.4",
+                    "uuid": "cc34-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc34-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC3.4_stmt",
+                    "name": "statement",
+                    "prose": "The entity identifies and assesses changes that could significantly impact the system of internal control."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "CC4",
+            "class": "criteria-group",
+            "title": "Monitoring Activities",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity selects, develops, and performs ongoing and/or separate evaluations to ascertain whether the components of internal control are present and functioning."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC4.1",
+                "class": "criterion",
+                "title": "Ongoing and Separate Evaluations",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC4.1",
+                    "uuid": "cc41-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "partial",
+                    "uuid": "cc41-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC4.1_stmt",
+                    "name": "statement",
+                    "prose": "The entity selects, develops, and performs ongoing and/or separate evaluations to ascertain whether the components of internal control are present and functioning."
+                  }
+                ]
+              },
+              {
+                "id": "CC4.2",
+                "class": "criterion",
+                "title": "Deficiency Communication",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC4.2",
+                    "uuid": "cc42-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc42-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC4.2_stmt",
+                    "name": "statement",
+                    "prose": "The entity evaluates and communicates internal control deficiencies in a timely manner to those parties responsible for taking corrective action, including senior management and the board of directors, as appropriate."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "CC5",
+            "class": "criteria-group",
+            "title": "Control Activities",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity selects and develops control activities that contribute to the mitigation of risks to the achievement of objectives to acceptable levels."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC5.1",
+                "class": "criterion",
+                "title": "Control Activity Selection",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC5.1",
+                    "uuid": "cc51-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc51-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC5.1_stmt",
+                    "name": "statement",
+                    "prose": "The entity selects and develops control activities that contribute to the mitigation of risks to the achievement of objectives to acceptable levels."
+                  }
+                ]
+              },
+              {
+                "id": "CC5.2",
+                "class": "criterion",
+                "title": "Technology General Controls",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC5.2",
+                    "uuid": "cc52-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc52-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC5.2_stmt",
+                    "name": "statement",
+                    "prose": "The entity also selects and develops general control activities over technology to support the achievement of objectives."
+                  }
+                ]
+              },
+              {
+                "id": "CC5.3",
+                "class": "criterion",
+                "title": "Policy Deployment",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC5.3",
+                    "uuid": "cc53-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc53-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC5.3_stmt",
+                    "name": "statement",
+                    "prose": "The entity deploys control activities through policies that establish what is expected and procedures that put policies into action."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "CC6",
+            "class": "criteria-group",
+            "title": "Logical and Physical Access Controls",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC6.1",
+                "class": "criterion",
+                "title": "Logical Access Security",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC6.1",
+                    "uuid": "cc61-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc61-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC6.1_stmt",
+                    "name": "statement",
+                    "prose": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives."
+                  },
+                  {
+                    "id": "CC6.1_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Identifies and Manages the Inventory of Information Assets"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Restricts Logical Access"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Identifies and Authenticates Users"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Considers Network Segmentation"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Manages Points of Access"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Restricts Access to Information Assets"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Manages Identification and Authentication"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Manages Credentials for Infrastructure and Software"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Uses Encryption to Protect Data"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Protects Encryption Keys"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC6.2",
+                "class": "criterion",
+                "title": "User Registration and Authorization",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC6.2",
+                    "uuid": "cc62-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc62-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC6.2_stmt",
+                    "name": "statement",
+                    "prose": "Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users whose access is administered by the entity."
+                  },
+                  {
+                    "id": "CC6.2_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Controls Access Credentials to Protected Assets"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Removes Access to Protected Assets When Appropriate"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Reviews Appropriateness of Access Credentials"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC6.3",
+                "class": "criterion",
+                "title": "Access Modification and Removal",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC6.3",
+                    "uuid": "cc63-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc63-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC6.3_stmt",
+                    "name": "statement",
+                    "prose": "The entity authorizes, modifies, or removes access to data, software, functions, and other protected information assets based on roles, responsibilities, or the system design and changes, giving consideration to the concepts of least privilege and segregation of duties."
+                  },
+                  {
+                    "id": "CC6.3_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Creates or Modifies Access to Protected Information Assets"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Removes Access to Protected Information Assets"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Uses Role-Based Access Controls"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Reviews Access Roles and Rules"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC6.4",
+                "class": "criterion",
+                "title": "Physical Access Restrictions",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC6.4",
+                    "uuid": "cc64-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc64-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC6.4_stmt",
+                    "name": "statement",
+                    "prose": "The entity restricts physical access to facilities and protected information assets (for example, data center facilities, backup media storage, and other sensitive locations) to authorized personnel to meet the entity's objectives."
+                  }
+                ]
+              },
+              {
+                "id": "CC6.5",
+                "class": "criterion",
+                "title": "Disposal of Protected Assets",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC6.5",
+                    "uuid": "cc65-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc65-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC6.5_stmt",
+                    "name": "statement",
+                    "prose": "The entity discontinues logical and physical protections over physical assets only after the ability to read or recover data and software from those assets has been diminished and is no longer required to meet the entity's objectives."
+                  }
+                ]
+              },
+              {
+                "id": "CC6.6",
+                "class": "criterion",
+                "title": "External Access Protection",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC6.6",
+                    "uuid": "cc66-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc66-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC6.6_stmt",
+                    "name": "statement",
+                    "prose": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries."
+                  },
+                  {
+                    "id": "CC6.6_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Restricts Access"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Protects Identification and Authentication Credentials"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Requires Additional Authentication or Credentials"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Implements Boundary Protection Systems"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC6.7",
+                "class": "criterion",
+                "title": "Data Transmission Restriction",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC6.7",
+                    "uuid": "cc67-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc67-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC6.7_stmt",
+                    "name": "statement",
+                    "prose": "The entity restricts the transmission, movement, and removal of information to authorized internal and external users and processes, and protects it during transmission, movement, or removal to meet the entity's objectives."
+                  },
+                  {
+                    "id": "CC6.7_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Restricts the Ability to Perform Transmission"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Uses Encryption Technologies or Secure Communication Channels"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Protects Removal Media"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Protects Mobile Devices"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC6.8",
+                "class": "criterion",
+                "title": "Malicious Software Prevention",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC6.8",
+                    "uuid": "cc68-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc68-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC6.8_stmt",
+                    "name": "statement",
+                    "prose": "The entity implements controls to prevent or detect and act upon the introduction of unauthorized or malicious software to meet the entity's objectives."
+                  },
+                  {
+                    "id": "CC6.8_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Restricts Application and Software Installation"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Detects Unauthorized Changes to Software and Configuration Parameters"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Uses a Defined Change Control Process"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Uses Antivirus and Anti-Malware Software"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Scans Information Assets from Outside the Entity for Malware and Other Unauthorized Software"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "CC7",
+            "class": "criteria-group",
+            "title": "System Operations",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity uses detection and monitoring procedures to identify changes to configurations that result in the introduction of new vulnerabilities, and susceptibilities to newly discovered vulnerabilities."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC7.1",
+                "class": "criterion",
+                "title": "Vulnerability Detection and Monitoring",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC7.1",
+                    "uuid": "cc71-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc71-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC7.1_stmt",
+                    "name": "statement",
+                    "prose": "To meet its objectives, the entity uses detection and monitoring procedures to identify (1) changes to configurations that result in the introduction of new vulnerabilities, and (2) susceptibilities to newly discovered vulnerabilities."
+                  },
+                  {
+                    "id": "CC7.1_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Uses Defined Configuration Standards"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Monitors Infrastructure and Software"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Implements Change-Detection Mechanisms"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Detects Unknown or Unauthorized Components"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Conducts Vulnerability Scans"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC7.2",
+                "class": "criterion",
+                "title": "System Monitoring",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC7.2",
+                    "uuid": "cc72-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc72-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC7.2_stmt",
+                    "name": "statement",
+                    "prose": "The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events."
+                  },
+                  {
+                    "id": "CC7.2_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Implements Detection Policies, Procedures, and Tools"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Designs Detection Measures"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Implements Filters to Analyze Anomalies"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Monitors Detection Tools for Effective Operation"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC7.3",
+                "class": "criterion",
+                "title": "Security Event Evaluation",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC7.3",
+                    "uuid": "cc73-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc73-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC7.3_stmt",
+                    "name": "statement",
+                    "prose": "The entity evaluates security events to determine whether they could or have resulted in a failure of the entity to meet its objectives (security incidents) and, if so, takes actions to prevent or address such failures."
+                  },
+                  {
+                    "id": "CC7.3_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Responds to Security Incidents"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Communicates and Reviews Detected Security Events"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Develops and Implements Procedures to Analyze Security Incidents"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Assesses the Impact of Security Incidents"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC7.4",
+                "class": "criterion",
+                "title": "Incident Response",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC7.4",
+                    "uuid": "cc74-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "partial",
+                    "uuid": "cc74-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC7.4_stmt",
+                    "name": "statement",
+                    "prose": "The entity responds to identified security incidents by executing a defined incident response program to understand, contain, remediate, and communicate security incidents, as appropriate."
+                  },
+                  {
+                    "id": "CC7.4_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Assigns Roles and Responsibilities"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Contains Security Incidents"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Mitigates Ongoing Security Incidents"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Ends Threats Posed by Security Incidents"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Restores Operations"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Develops and Implements Communication Protocols"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Obtains Understanding of Nature of Incident and Determines Containment Strategy"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Remediates Identified Vulnerabilities"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Communicates Remediation Activities"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Evaluates the Effectiveness of Incident Response"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC7.5",
+                "class": "criterion",
+                "title": "Incident Recovery",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC7.5",
+                    "uuid": "cc75-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "partial",
+                    "uuid": "cc75-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC7.5_stmt",
+                    "name": "statement",
+                    "prose": "The entity identifies, develops, and implements activities to recover from identified security incidents."
+                  },
+                  {
+                    "id": "CC7.5_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Restores the Affected Environment"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Communicates Information About the Event"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Determines Root Cause of the Event"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Implements Changes to Prevent and Detect Recurrences"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "CC8",
+            "class": "criteria-group",
+            "title": "Change Management",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity authorizes, designs, develops or acquires, configures, documents, tests, approves, and implements changes to infrastructure and software."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC8.1",
+                "class": "criterion",
+                "title": "Change Authorization and Management",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC8.1",
+                    "uuid": "cc81-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "automated",
+                    "uuid": "cc81-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC8.1_stmt",
+                    "name": "statement",
+                    "prose": "The entity authorizes, designs, develops or acquires, configures, documents, tests, approves, and implements changes to infrastructure and software."
+                  },
+                  {
+                    "id": "CC8.1_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Manages Changes Throughout the System Life Cycle"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Authorizes Changes"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Designs and Develops Changes"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Documents Changes"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Tracks System Changes"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Configures Software"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Tests System Changes"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Approves System Changes"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Deploys System Changes"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Identifies and Evaluates System Changes"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Identifies Changes in Infrastructure, Data, Software, and Procedures Required to Remediate Incidents"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "CC9",
+            "class": "criteria-group",
+            "title": "Risk Mitigation",
+            "parts": [
+              {
+                "name": "overview",
+                "prose": "The entity identifies, selects, and develops risk mitigation activities for risks arising from potential business disruptions."
+              }
+            ],
+            "controls": [
+              {
+                "id": "CC9.1",
+                "class": "criterion",
+                "title": "Business Disruption Risk Mitigation",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC9.1",
+                    "uuid": "cc91-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "manual",
+                    "uuid": "cc91-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC9.1_stmt",
+                    "name": "statement",
+                    "prose": "The entity identifies, selects, and develops risk mitigation activities for risks arising from potential business disruptions."
+                  },
+                  {
+                    "id": "CC9.1_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Considers Mitigation of Risks of Business Disruption"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Considers the Use of Insurance to Mitigate Financial Impact Risks"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "CC9.2",
+                "class": "criterion",
+                "title": "Vendor and Business Partner Risk",
+                "props": [
+                  {
+                    "name": "criterion-id",
+                    "value": "CC9.2",
+                    "uuid": "cc92-0001-0001-0001-000000000001"
+                  },
+                  {
+                    "name": "automation-status",
+                    "value": "partial",
+                    "uuid": "cc92-0001-0001-0001-000000000002"
+                  }
+                ],
+                "parts": [
+                  {
+                    "id": "CC9.2_stmt",
+                    "name": "statement",
+                    "prose": "The entity assesses and manages risks associated with vendors and business partners."
+                  },
+                  {
+                    "id": "CC9.2_pof",
+                    "name": "points-of-focus",
+                    "parts": [
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Establishes Requirements for Vendor and Business Partner Engagements"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Assesses Vendor and Business Partner Risks"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Assigns Responsibility and Accountability for Managing Vendors"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Establishes Communication Protocols for Vendors and Business Partners"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Establishes Exception Handling Procedures from Vendors and Business Partners"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Assesses Vendor and Business Partner Performance"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Implements Procedures for Addressing Issues Identified During Vendor and Business Partner Assessments"
+                      },
+                      {
+                        "name": "point-of-focus",
+                        "prose": "Implements Procedures for Terminating Vendor and Business Partner Relationships"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "A",
+        "class": "category",
+        "title": "Availability",
+        "props": [
+          {
+            "name": "category-id",
+            "value": "A",
+            "uuid": "a000-0001-0001-0001-000000000001"
+          },
+          {
+            "name": "mandatory",
+            "value": "false",
+            "uuid": "a000-0001-0001-0001-000000000002"
+          }
+        ],
+        "parts": [
+          {
+            "name": "overview",
+            "prose": "The Availability category addresses controls over the availability of the system for operation and use as committed or agreed."
+          }
+        ],
+        "controls": [
+          {
+            "id": "A1.1",
+            "class": "criterion",
+            "title": "Capacity Planning",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "A1.1",
+                "uuid": "a11-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated",
+                "uuid": "a11-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "A1.1_stmt",
+                "name": "statement",
+                "prose": "The entity maintains, monitors, and evaluates current processing capacity and use of system components (infrastructure, data, and software) to manage capacity demand and to enable the implementation of additional capacity to help meet its objectives."
+              }
+            ]
+          },
+          {
+            "id": "A1.2",
+            "class": "criterion",
+            "title": "Environmental Protections and Recovery",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "A1.2",
+                "uuid": "a12-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "automated",
+                "uuid": "a12-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "A1.2_stmt",
+                "name": "statement",
+                "prose": "The entity authorizes, designs, develops or acquires, implements, operates, approves, maintains, and monitors environmental protections, software, data backup processes, and recovery infrastructure to meet its objectives."
+              }
+            ]
+          },
+          {
+            "id": "A1.3",
+            "class": "criterion",
+            "title": "Recovery Testing",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "A1.3",
+                "uuid": "a13-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "a13-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "A1.3_stmt",
+                "name": "statement",
+                "prose": "The entity tests recovery plan procedures supporting system recovery to meet its objectives."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "PI",
+        "class": "category",
+        "title": "Processing Integrity",
+        "props": [
+          {
+            "name": "category-id",
+            "value": "PI",
+            "uuid": "pi00-0001-0001-0001-000000000001"
+          },
+          {
+            "name": "mandatory",
+            "value": "false",
+            "uuid": "pi00-0001-0001-0001-000000000002"
+          }
+        ],
+        "parts": [
+          {
+            "name": "overview",
+            "prose": "The Processing Integrity category addresses controls over the completeness, validity, accuracy, timeliness, and authorization of system processing."
+          }
+        ],
+        "controls": [
+          {
+            "id": "PI1.1",
+            "class": "criterion",
+            "title": "Processing Completeness and Accuracy",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "PI1.1",
+                "uuid": "pi11-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "pi11-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "PI1.1_stmt",
+                "name": "statement",
+                "prose": "The entity obtains or generates, uses, and communicates relevant, quality information regarding the objectives related to processing, including definitions of data processed and product and service specifications, to support the use of products and services."
+              }
+            ]
+          },
+          {
+            "id": "PI1.2",
+            "class": "criterion",
+            "title": "Processing Policies",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "PI1.2",
+                "uuid": "pi12-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "pi12-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "PI1.2_stmt",
+                "name": "statement",
+                "prose": "The entity implements policies and procedures over system inputs, including controls over completeness and accuracy, to result in products, services, and reporting to meet the entity's objectives."
+              }
+            ]
+          },
+          {
+            "id": "PI1.3",
+            "class": "criterion",
+            "title": "Processing Defined",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "PI1.3",
+                "uuid": "pi13-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "pi13-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "PI1.3_stmt",
+                "name": "statement",
+                "prose": "The entity implements policies and procedures over system processing to result in products, services, and reporting to meet the entity's objectives."
+              }
+            ]
+          },
+          {
+            "id": "PI1.4",
+            "class": "criterion",
+            "title": "Output Completeness",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "PI1.4",
+                "uuid": "pi14-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "pi14-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "PI1.4_stmt",
+                "name": "statement",
+                "prose": "The entity implements policies and procedures to make available or deliver output completely, accurately, and timely in accordance with specifications to meet the entity's objectives."
+              }
+            ]
+          },
+          {
+            "id": "PI1.5",
+            "class": "criterion",
+            "title": "Processing Storage and Retention",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "PI1.5",
+                "uuid": "pi15-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "pi15-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "PI1.5_stmt",
+                "name": "statement",
+                "prose": "The entity implements policies and procedures to store inputs, items in processing, and outputs completely, accurately, and timely in accordance with system specifications to meet the entity's objectives."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "C",
+        "class": "category",
+        "title": "Confidentiality",
+        "props": [
+          {
+            "name": "category-id",
+            "value": "C",
+            "uuid": "c000-0001-0001-0001-000000000001"
+          },
+          {
+            "name": "mandatory",
+            "value": "false",
+            "uuid": "c000-0001-0001-0001-000000000002"
+          }
+        ],
+        "parts": [
+          {
+            "name": "overview",
+            "prose": "The Confidentiality category addresses controls over the protection of confidential information as committed or agreed."
+          }
+        ],
+        "controls": [
+          {
+            "id": "C1.1",
+            "class": "criterion",
+            "title": "Confidential Information Identification",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "C1.1",
+                "uuid": "c11-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "c11-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "C1.1_stmt",
+                "name": "statement",
+                "prose": "The entity identifies and maintains confidential information to meet the entity's objectives related to confidentiality."
+              }
+            ]
+          },
+          {
+            "id": "C1.2",
+            "class": "criterion",
+            "title": "Confidential Information Disposal",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "C1.2",
+                "uuid": "c12-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "c12-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "C1.2_stmt",
+                "name": "statement",
+                "prose": "The entity disposes of confidential information to meet the entity's objectives related to confidentiality."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "P",
+        "class": "category",
+        "title": "Privacy",
+        "props": [
+          {
+            "name": "category-id",
+            "value": "P",
+            "uuid": "p000-0001-0001-0001-000000000001"
+          },
+          {
+            "name": "mandatory",
+            "value": "false",
+            "uuid": "p000-0001-0001-0001-000000000002"
+          }
+        ],
+        "parts": [
+          {
+            "name": "overview",
+            "prose": "The Privacy category addresses the entity's personal information collection, use, retention, disclosure, and disposal practices. These criteria address proper notice, choice, and consent regarding collection, as well as the entity's compliance with privacy commitments and applicable laws and regulations."
+          }
+        ],
+        "controls": [
+          {
+            "id": "P1.1",
+            "class": "criterion",
+            "title": "Privacy Notice",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P1.1",
+                "uuid": "p11-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p11-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P1.1_stmt",
+                "name": "statement",
+                "prose": "The entity provides notice to data subjects about its privacy practices to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P2.1",
+            "class": "criterion",
+            "title": "Choice and Consent",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P2.1",
+                "uuid": "p21-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p21-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P2.1_stmt",
+                "name": "statement",
+                "prose": "The entity communicates choices available regarding the collection, use, retention, disclosure, and disposal of personal information to data subjects."
+              }
+            ]
+          },
+          {
+            "id": "P3.1",
+            "class": "criterion",
+            "title": "Personal Information Collection",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P3.1",
+                "uuid": "p31-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "p31-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P3.1_stmt",
+                "name": "statement",
+                "prose": "Personal information is collected consistent with the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P3.2",
+            "class": "criterion",
+            "title": "Explicit Consent",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P3.2",
+                "uuid": "p32-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p32-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P3.2_stmt",
+                "name": "statement",
+                "prose": "For information requiring explicit consent, the entity communicates the need for such consent, as well as the consequences of a failure to provide consent for the request for personal information, and obtains the consent prior to the collection of the information to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P4.1",
+            "class": "criterion",
+            "title": "Personal Information Use",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P4.1",
+                "uuid": "p41-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p41-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P4.1_stmt",
+                "name": "statement",
+                "prose": "The entity limits the use of personal information to the purposes identified in the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P4.2",
+            "class": "criterion",
+            "title": "Personal Information Retention",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P4.2",
+                "uuid": "p42-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "p42-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P4.2_stmt",
+                "name": "statement",
+                "prose": "The entity retains personal information consistent with the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P4.3",
+            "class": "criterion",
+            "title": "Personal Information Disposal",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P4.3",
+                "uuid": "p43-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "p43-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P4.3_stmt",
+                "name": "statement",
+                "prose": "The entity securely disposes of personal information to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P5.1",
+            "class": "criterion",
+            "title": "Access to Personal Information",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P5.1",
+                "uuid": "p51-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "p51-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P5.1_stmt",
+                "name": "statement",
+                "prose": "The entity grants identified and authenticated data subjects the ability to access their stored personal information for review and, upon request, provides physical or electronic copies of that information to data subjects to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P5.2",
+            "class": "criterion",
+            "title": "Personal Information Correction",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P5.2",
+                "uuid": "p52-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "p52-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P5.2_stmt",
+                "name": "statement",
+                "prose": "The entity corrects, amends, or appends personal information based on information provided by data subjects and communicates such information to third parties, as committed or required, to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P6.1",
+            "class": "criterion",
+            "title": "Third-Party Disclosure",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P6.1",
+                "uuid": "p61-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p61-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P6.1_stmt",
+                "name": "statement",
+                "prose": "The entity discloses personal information to third parties with the explicit consent of data subjects, and such disclosure is consistent with the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P6.2",
+            "class": "criterion",
+            "title": "Authorized Disclosure",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P6.2",
+                "uuid": "p62-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p62-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P6.2_stmt",
+                "name": "statement",
+                "prose": "The entity creates and retains a complete, accurate, and timely record of authorized disclosures of personal information to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P6.3",
+            "class": "criterion",
+            "title": "Unauthorized Disclosure Notification",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P6.3",
+                "uuid": "p63-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "p63-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P6.3_stmt",
+                "name": "statement",
+                "prose": "The entity creates and retains a complete, accurate, and timely record of detected or reported unauthorized disclosures of personal information to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P6.4",
+            "class": "criterion",
+            "title": "Third-Party Privacy Requirements",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P6.4",
+                "uuid": "p64-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p64-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P6.4_stmt",
+                "name": "statement",
+                "prose": "The entity obtains privacy commitments from vendors and other third parties who have access to personal information to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P6.5",
+            "class": "criterion",
+            "title": "Third-Party Compliance",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P6.5",
+                "uuid": "p65-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p65-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P6.5_stmt",
+                "name": "statement",
+                "prose": "The entity obtains assurances that the privacy commitments of vendors and other third parties who have access to personal information are being met to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P6.6",
+            "class": "criterion",
+            "title": "Privacy Breach Notification",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P6.6",
+                "uuid": "p66-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "p66-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P6.6_stmt",
+                "name": "statement",
+                "prose": "The entity provides notification of breaches and incidents to affected data subjects, regulators, and others to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P6.7",
+            "class": "criterion",
+            "title": "Privacy Commitments Accounting",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P6.7",
+                "uuid": "p67-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p67-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P6.7_stmt",
+                "name": "statement",
+                "prose": "The entity provides data subjects with an accounting of the personal information held and disclosure of the data subjects' personal information, upon the data subjects' request, to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P7.1",
+            "class": "criterion",
+            "title": "Data Quality",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P7.1",
+                "uuid": "p71-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "partial",
+                "uuid": "p71-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P7.1_stmt",
+                "name": "statement",
+                "prose": "The entity collects and maintains accurate, up-to-date, complete, and relevant personal information to meet the entity's objectives related to privacy."
+              }
+            ]
+          },
+          {
+            "id": "P8.1",
+            "class": "criterion",
+            "title": "Privacy Compliance",
+            "props": [
+              {
+                "name": "criterion-id",
+                "value": "P8.1",
+                "uuid": "p81-0001-0001-0001-000000000001"
+              },
+              {
+                "name": "automation-status",
+                "value": "manual",
+                "uuid": "p81-0001-0001-0001-000000000002"
+              }
+            ],
+            "parts": [
+              {
+                "id": "P8.1_stmt",
+                "name": "statement",
+                "prose": "The entity complies with its privacy commitments, laws, and regulations to meet the entity's privacy objectives."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

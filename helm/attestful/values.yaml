@@ -1,0 +1,326 @@
+# Default values for attestful
+# This is a YAML-formatted file.
+
+# -- Number of replicas
+replicaCount: 1
+
+image:
+  # -- Image repository
+  repository: attestful/attestful
+  # -- Image pull policy
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag (default is the chart appVersion)
+  tag: ""
+
+# -- Image pull secrets
+imagePullSecrets: []
+
+# -- Override chart name
+nameOverride: ""
+
+# -- Override full name
+fullnameOverride: ""
+
+serviceAccount:
+  # -- Create service account
+  create: true
+  # -- Annotations for service account
+  annotations: {}
+  # -- Service account name
+  name: ""
+
+# -- Pod annotations
+podAnnotations: {}
+
+# -- Pod security context
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+# -- Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# API service configuration
+api:
+  # -- Enable API server
+  enabled: true
+  # -- API port
+  port: 8000
+  # -- Number of API workers
+  workers: 4
+
+# Dashboard configuration
+dashboard:
+  # -- Enable dashboard
+  enabled: true
+  # -- Dashboard port
+  port: 8050
+
+service:
+  # -- Service type
+  type: ClusterIP
+  # -- API service port
+  apiPort: 8000
+  # -- Dashboard service port
+  dashboardPort: 8050
+
+ingress:
+  # -- Enable ingress
+  enabled: false
+  # -- Ingress class name
+  className: ""
+  # -- Ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: attestful.local
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: api
+        - path: /
+          pathType: Prefix
+          service: dashboard
+  # -- TLS configuration
+  tls: []
+  #  - secretName: attestful-tls
+  #    hosts:
+  #      - attestful.local
+
+resources:
+  # -- Resource limits
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  # -- Resource requests
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+autoscaling:
+  # -- Enable autoscaling
+  enabled: false
+  # -- Minimum replicas
+  minReplicas: 1
+  # -- Maximum replicas
+  maxReplicas: 10
+  # -- Target CPU utilization
+  targetCPUUtilizationPercentage: 80
+  # -- Target memory utilization
+  targetMemoryUtilizationPercentage: 80
+
+# -- Node selector
+nodeSelector: {}
+
+# -- Tolerations
+tolerations: []
+
+# -- Affinity
+affinity: {}
+
+# Persistence configuration
+persistence:
+  # -- Enable persistence
+  enabled: true
+  # -- Storage class
+  storageClass: ""
+  # -- Access modes
+  accessModes:
+    - ReadWriteOnce
+  # -- Volume size
+  size: 50Gi
+  # -- Annotations for PVC
+  annotations: {}
+
+# PostgreSQL configuration (Bitnami subchart)
+postgresql:
+  # -- Enable PostgreSQL
+  enabled: true
+  auth:
+    # -- PostgreSQL username
+    username: attestful
+    # -- PostgreSQL password (generate if empty)
+    password: ""
+    # -- PostgreSQL database
+    database: attestful
+    # -- Use existing secret
+    existingSecret: ""
+  primary:
+    persistence:
+      # -- Enable persistence
+      enabled: true
+      # -- Volume size
+      size: 20Gi
+
+# Redis configuration (Bitnami subchart)
+redis:
+  # -- Enable Redis (for task queue)
+  enabled: false
+  auth:
+    # -- Enable Redis authentication
+    enabled: true
+    # -- Redis password
+    password: ""
+  master:
+    persistence:
+      # -- Enable persistence
+      enabled: true
+      # -- Volume size
+      size: 8Gi
+
+# Attestful configuration
+config:
+  # -- Log level
+  logLevel: INFO
+  # -- Timezone
+  timezone: UTC
+  # -- Number of parallel workers
+  parallelWorkers: 4
+
+  security:
+    # -- Enable credential encryption
+    credentialEncryption: true
+    # -- Enable audit logging
+    auditLogging: true
+
+  api:
+    # -- Enable API authentication
+    authEnabled: true
+    # -- JWT expiry in hours
+    jwtExpiryHours: 24
+    # -- Rate limit (requests per minute)
+    rateLimit: 100
+    # -- CORS origins (comma-separated)
+    corsOrigins: ""
+
+  storage:
+    # -- Evidence retention in days
+    retentionDays: 365
+    # -- Enable compression
+    compression: true
+
+# Secrets configuration
+secrets:
+  # -- Create secrets
+  create: true
+  # -- JWT secret (generated if empty)
+  jwtSecret: ""
+  # -- Use existing secret for JWT
+  existingJwtSecret: ""
+  # -- Key in existing secret
+  jwtSecretKey: "jwt-secret"
+
+  # Platform credentials (use existing secrets in production)
+  platforms:
+    aws:
+      # -- Use existing AWS secret
+      existingSecret: ""
+      # -- AWS access key ID key in secret
+      accessKeyIdKey: "aws-access-key-id"
+      # -- AWS secret access key key in secret
+      secretAccessKeyKey: "aws-secret-access-key"
+    okta:
+      # -- Use existing Okta secret
+      existingSecret: ""
+      # -- Okta domain key in secret
+      domainKey: "okta-domain"
+      # -- Okta API token key in secret
+      apiTokenKey: "okta-api-token"
+    github:
+      # -- Use existing GitHub secret
+      existingSecret: ""
+      # -- GitHub token key in secret
+      tokenKey: "github-token"
+
+# Extra environment variables
+extraEnv: []
+#  - name: ATTESTFUL_CUSTOM_SETTING
+#    value: "value"
+
+# Extra environment variables from secrets/configmaps
+extraEnvFrom: []
+#  - secretRef:
+#      name: my-secret
+#  - configMapRef:
+#      name: my-configmap
+
+# -- Extra volumes
+extraVolumes: []
+
+# -- Extra volume mounts
+extraVolumeMounts: []
+
+# -- Init containers
+initContainers: []
+
+# -- Sidecar containers
+sidecars: []
+
+# Network policies
+networkPolicy:
+  # -- Enable network policies
+  enabled: false
+  # -- Ingress rules
+  ingress: []
+  # -- Egress rules
+  egress: []
+
+# Pod disruption budget
+podDisruptionBudget:
+  # -- Enable PDB
+  enabled: false
+  # -- Minimum available pods
+  minAvailable: 1
+  # -- Maximum unavailable pods
+  maxUnavailable: ""
+
+# Metrics and monitoring
+metrics:
+  # -- Enable Prometheus metrics
+  enabled: false
+  # -- Metrics port
+  port: 9090
+  serviceMonitor:
+    # -- Enable ServiceMonitor
+    enabled: false
+    # -- ServiceMonitor interval
+    interval: 30s
+    # -- ServiceMonitor labels
+    labels: {}
+
+# Health probes
+livenessProbe:
+  httpGet:
+    path: /api/v1/health/live
+    port: api
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /api/v1/health/ready
+    port: api
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+startupProbe:
+  httpGet:
+    path: /api/v1/health
+    port: api
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 30

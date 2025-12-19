@@ -28,6 +28,18 @@ from attestful.collectors.platforms.linear import LinearCollector, LinearCollect
 from attestful.collectors.platforms.shortcut import ShortcutCollector, ShortcutCollectorConfig
 from attestful.collectors.platforms.asana import AsanaCollector, AsanaCollectorConfig
 from attestful.collectors.platforms.monday import MondayCollector, MondayCollectorConfig
+from attestful.collectors.platforms.aws_secrets_manager import (
+    AWSSecretsManagerCollector,
+    SecretsManagerConfig,
+)
+from attestful.collectors.platforms.azure_key_vault import (
+    AzureKeyVaultCollector,
+    AzureKeyVaultConfig,
+)
+from attestful.collectors.platforms.hashicorp_vault import (
+    HashiCorpVaultCollector,
+    HashiCorpVaultConfig,
+)
 
 __all__ = [
     "OktaCollector",
@@ -76,4 +88,10 @@ __all__ = [
     "AsanaCollectorConfig",
     "MondayCollector",
     "MondayCollectorConfig",
+    "AWSSecretsManagerCollector",
+    "SecretsManagerConfig",
+    "AzureKeyVaultCollector",
+    "AzureKeyVaultConfig",
+    "HashiCorpVaultCollector",
+    "HashiCorpVaultConfig",
 ]

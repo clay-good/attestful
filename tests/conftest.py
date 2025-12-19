@@ -414,3 +414,383 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "integration: marks tests as integration tests"
     )
+    config.addinivalue_line(
+        "markers", "security: marks security-related tests"
+    )
+    config.addinivalue_line(
+        "markers", "oscal: marks OSCAL-related tests"
+    )
+    config.addinivalue_line(
+        "markers", "collector: marks collector tests"
+    )
+    config.addinivalue_line(
+        "markers", "offline: marks offline/air-gap tests"
+    )
+
+
+# =============================================================================
+# Database Fixtures
+# =============================================================================
+
+
+@pytest.fixture
+def temp_db_path(temp_dir):
+    """Create a temporary database file path."""
+    return temp_dir / "test_attestful.db"
+
+
+@pytest.fixture
+def test_db_engine(temp_db_path):
+    """Create a test database engine."""
+    from sqlalchemy import create_engine
+    from attestful.storage.models import Base
+
+    engine = create_engine(f"sqlite:///{temp_db_path}", echo=False)
+    Base.metadata.create_all(engine)
+    yield engine
+    engine.dispose()
+
+
+@pytest.fixture
+def test_db_session(test_db_engine):
+    """Create a test database session."""
+    from sqlalchemy.orm import sessionmaker
+
+    Session = sessionmaker(bind=test_db_engine)
+    session = Session()
+    yield session
+    session.close()
+
+
+@pytest.fixture
+def sample_organization(test_db_session):
+    """Create a sample organization in the database."""
+    from attestful.storage.models import Organization
+
+    org = Organization(
+        id="org-test-001",
+        name="Test Organization",
+        display_name="Test Org",
+        settings={"timezone": "UTC"},
+    )
+    test_db_session.add(org)
+    test_db_session.commit()
+    return org
+
+
+@pytest.fixture
+def sample_user(test_db_session, sample_organization):
+    """Create a sample user in the database."""
+    from attestful.storage.models import User
+
+    user = User(
+        id="user-test-001",
+        organization_id=sample_organization.id,
+        email="test@example.com",
+        name="Test User",
+        role="admin",
+    )
+    test_db_session.add(user)
+    test_db_session.commit()
+    return user
+
+
+# =============================================================================
+# OSCAL Document Fixtures
+# =============================================================================
+
+
+@pytest.fixture
+def sample_oscal_catalog():
+    """Create a sample OSCAL catalog."""
+    from attestful.oscal.models import (
+        Catalog,
+        Metadata,
+        Group,
+        Control,
+        Part,
+    )
+
+    return Catalog(
+        uuid="catalog-test-001",
+        metadata=Metadata(
+            title="Test Catalog",
+            version="1.0.0",
+            oscal_version="1.1.0",
+        ),
+        groups=[
+            Group(
+                id="group-ac",
+                title="Access Control",
+                controls=[
+                    Control(
+                        id="ac-1",
+                        title="Access Control Policy and Procedures",
+                        parts=[
+                            Part(
+                                id="ac-1_smt",
+                                name="statement",
+                                prose="The organization develops, documents, and disseminates access control policy.",
+                            ),
+                        ],
+                    ),
+                    Control(
+                        id="ac-2",
+                        title="Account Management",
+                        parts=[
+                            Part(
+                                id="ac-2_smt",
+                                name="statement",
+                                prose="The organization manages information system accounts.",
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+        ],
+    )
+
+
+@pytest.fixture
+def sample_oscal_profile():
+    """Create a sample OSCAL profile."""
+    from attestful.oscal.models import (
+        Profile,
+        Metadata,
+        Import,
+    )
+
+    return Profile(
+        uuid="profile-test-001",
+        metadata=Metadata(
+            title="Test Profile",
+            version="1.0.0",
+            oscal_version="1.1.0",
+        ),
+        imports=[
+            Import(
+                href="catalog-test-001",
+                include_controls=[
+                    {"with_ids": ["ac-1", "ac-2"]},
+                ],
+            ),
+        ],
+    )
+
+
+@pytest.fixture
+def sample_oscal_ssp():
+    """Create a sample OSCAL SSP."""
+    from attestful.oscal.models import (
+        SystemSecurityPlan,
+        Metadata,
+        SystemCharacteristics,
+        SystemId,
+        SystemStatus,
+        ImportProfile,
+    )
+
+    return SystemSecurityPlan(
+        uuid="ssp-test-001",
+        metadata=Metadata(
+            title="Test System Security Plan",
+            version="1.0.0",
+            oscal_version="1.1.0",
+        ),
+        import_profile=ImportProfile(href="profile-test-001"),
+        system_characteristics=SystemCharacteristics(
+            system_name="Test System",
+            description="A test system for unit testing",
+            system_ids=[
+                SystemId(
+                    identifier_type="https://attestful.dev",
+                    id="test-system-001",
+                ),
+            ],
+            status=SystemStatus(state="operational"),
+        ),
+    )
+
+
+# =============================================================================
+# Credential Fixtures
+# =============================================================================
+
+
+@pytest.fixture
+def temp_credential_store(temp_dir):
+    """Create a temporary credential store."""
+    from attestful.config.credentials import CredentialStore
+
+    store = CredentialStore(
+        data_dir=temp_dir / "credentials",
+        key_file=temp_dir / "credentials" / ".key",
+        credentials_file=temp_dir / "credentials" / "credentials.enc",
+    )
+    return store
+
+
+@pytest.fixture
+def sample_aws_credentials():
+    """Sample AWS credentials for testing."""
+    return {
+        "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+        "secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        "region": "us-east-1",
+    }
+
+
+@pytest.fixture
+def sample_okta_credentials():
+    """Sample Okta credentials for testing."""
+    return {
+        "domain": "example.okta.com",
+        "api_token": "00abc123DEF456ghi789JKL",
+    }
+
+
+# =============================================================================
+# Mock Response Fixtures
+# =============================================================================
+
+
+@pytest.fixture
+def mock_aws_s3_response():
+    """Mock AWS S3 ListBuckets response."""
+    return {
+        "Buckets": [
+            {
+                "Name": "test-bucket-1",
+                "CreationDate": "2024-01-01T00:00:00Z",
+            },
+            {
+                "Name": "test-bucket-2",
+                "CreationDate": "2024-02-01T00:00:00Z",
+            },
+        ],
+        "Owner": {
+            "DisplayName": "test-account",
+            "ID": "abc123",
+        },
+    }
+
+
+@pytest.fixture
+def mock_okta_users_response():
+    """Mock Okta Users API response."""
+    return [
+        {
+            "id": "00u1234567890",
+            "status": "ACTIVE",
+            "created": "2024-01-01T00:00:00.000Z",
+            "profile": {
+                "firstName": "Test",
+                "lastName": "User",
+                "email": "test@example.com",
+                "login": "test@example.com",
+            },
+        },
+        {
+            "id": "00u0987654321",
+            "status": "ACTIVE",
+            "created": "2024-02-01T00:00:00.000Z",
+            "profile": {
+                "firstName": "Another",
+                "lastName": "User",
+                "email": "another@example.com",
+                "login": "another@example.com",
+            },
+        },
+    ]
+
+
+# =============================================================================
+# Framework Fixtures
+# =============================================================================
+
+
+@pytest.fixture
+def sample_soc2_controls():
+    """Sample SOC 2 Trust Services Criteria."""
+    return [
+        {
+            "id": "CC1.1",
+            "title": "Control Environment",
+            "description": "The entity demonstrates a commitment to integrity and ethical values.",
+            "category": "CC1",
+        },
+        {
+            "id": "CC6.1",
+            "title": "Logical and Physical Access Controls",
+            "description": "The entity implements logical access security software.",
+            "category": "CC6",
+        },
+    ]
+
+
+@pytest.fixture
+def sample_nist_csf_controls():
+    """Sample NIST CSF 2.0 controls."""
+    return [
+        {
+            "id": "ID.AM-1",
+            "title": "Asset Management",
+            "description": "Physical devices and systems are inventoried.",
+            "function": "IDENTIFY",
+            "category": "Asset Management",
+        },
+        {
+            "id": "PR.AC-1",
+            "title": "Access Control",
+            "description": "Identities and credentials are issued and managed.",
+            "function": "PROTECT",
+            "category": "Identity Management",
+        },
+    ]
+
+
+# =============================================================================
+# Scan Result Fixtures
+# =============================================================================
+
+
+@pytest.fixture
+def sample_scan_results():
+    """Sample scan results for testing."""
+    return {
+        "scan_id": "scan-test-001",
+        "provider": "aws",
+        "started_at": "2024-06-15T10:00:00Z",
+        "completed_at": "2024-06-15T10:05:00Z",
+        "status": "completed",
+        "resources_scanned": 100,
+        "findings": {
+            "critical": 2,
+            "high": 5,
+            "medium": 10,
+            "low": 20,
+            "passed": 63,
+        },
+    }
+
+
+@pytest.fixture
+def sample_maturity_scores():
+    """Sample maturity scores for testing."""
+    return {
+        "framework": "nist_csf_2",
+        "overall_score": 3.5,
+        "function_scores": {
+            "IDENTIFY": 3.8,
+            "PROTECT": 3.6,
+            "DETECT": 3.2,
+            "RESPOND": 3.4,
+            "RECOVER": 3.5,
+        },
+        "category_scores": {
+            "ID.AM": 4.0,
+            "ID.BE": 3.5,
+            "PR.AC": 3.8,
+            "PR.DS": 3.4,
+        },
+    }

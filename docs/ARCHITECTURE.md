@@ -6,8 +6,8 @@ This document describes the architecture of Attestful, an OSCAL-first compliance
 
 Attestful combines two distinct compliance approaches into a unified platform:
 
-1. **Resource-based compliance checking** (from Compliy): Evaluates cloud infrastructure resources against defined checks
-2. **Evidence-based compliance verification** (from Nisify): Collects evidence artifacts from platforms to prove control implementation
+1. **Resource-based compliance checking**: Evaluates cloud infrastructure resources against defined checks
+2. **Evidence-based compliance verification**: Collects evidence artifacts from platforms to prove control implementation
 
 Both approaches feed into the OSCAL layer, which provides a standardized format for all compliance data.
 
@@ -30,7 +30,7 @@ Both approaches feed into the OSCAL layer, which provides a standardized format 
         ▼                               ▼                               ▼
 ┌───────────────────┐    ┌─────────────────────────┐    ┌───────────────────┐
 │ Resource Checking │    │   Evidence Collection   │    │     Analysis      │
-│    (Compliy)      │    │       (Nisify)          │    │                   │
+│                   │    │                         │    │                   │
 ├───────────────────┤    ├─────────────────────────┤    ├───────────────────┤
 │ - Scanner         │    │ - Platform Collectors   │    │ - Maturity Calc   │
 │ - Evaluator       │    │ - Evidence Storage      │    │ - Gap Analysis    │

@@ -3,8 +3,6 @@ NIST CSF 2.0 framework implementation.
 
 Provides control definitions, evidence mapping, and maturity calculation
 for the NIST Cybersecurity Framework 2.0.
-
-Migrated from Nisify (Step 4.3 of instructions.txt).
 """
 
 from attestful.frameworks.nist.csf2_controls import (

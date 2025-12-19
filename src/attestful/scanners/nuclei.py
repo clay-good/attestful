@@ -1,7 +1,5 @@
 """
 Nuclei scanner wrapper for web application vulnerability scanning.
-
-Migrated from Compliy (Step 4.2.10 of instructions.txt).
 """
 
 import json

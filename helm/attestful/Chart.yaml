@@ -1,0 +1,38 @@
+apiVersion: v2
+name: attestful
+description: OSCAL-first compliance automation platform - Open source Vanta alternative
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+home: https://github.com/clay-good/attestful
+sources:
+  - https://github.com/clay-good/attestful
+
+maintainers:
+  - name: Attestful Contributors
+    url: https://github.com/clay-good/attestful
+
+keywords:
+  - compliance
+  - oscal
+  - security
+  - nist
+  - soc2
+  - fedramp
+  - iso27001
+  - hitrust
+
+annotations:
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/category: security
+
+dependencies:
+  - name: postgresql
+    version: "13.2.24"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: "18.6.1"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

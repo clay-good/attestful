@@ -3,8 +3,6 @@ YAML parser for compliance standards.
 
 This module parses YAML-formatted compliance standard definitions
 and converts them into executable compliance checks.
-
-Migrated from Compliy (Step 4.2.9 of instructions.txt).
 """
 
 from pathlib import Path

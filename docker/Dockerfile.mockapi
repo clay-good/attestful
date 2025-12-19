@@ -1,0 +1,27 @@
+# Mock API Server for Integration Testing
+#
+# Provides mock endpoints for platform integrations during testing.
+# Serves recorded responses or generates dynamic mock data.
+
+FROM python:3.11-slim-bookworm
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir \
+    flask==3.0.0 \
+    gunicorn==21.2.0
+
+# Create mock API server
+COPY docker/mock_api_server.py /app/
+
+# Create responses directory
+RUN mkdir -p /app/responses
+
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=10s --timeout=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "-w", "2", "mock_api_server:app"]

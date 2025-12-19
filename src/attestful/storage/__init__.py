@@ -1,16 +1,43 @@
 """
 Storage layer for database and file-based evidence storage.
+
+Provides:
+- SQLAlchemy models for all Attestful data
+- File-based evidence storage with integrity verification
+- Database utilities
+- OSCAL document storage
+- Remediation tracking
 """
 
 from attestful.storage.models import (
+    # Base
     Base,
+    # Organization & Users
     Organization,
     User,
+    Team,
+    TeamMember,
+    # Compliance Scanning
     Scan,
     ScanResult,
+    Resource,
+    # Evidence Collection
     CollectionRun,
     EvidenceItem,
+    # OSCAL Documents
+    OSCALCatalog,
+    OSCALProfile,
+    OSCALSSP,
+    OSCALAssessment,
+    # Frameworks
+    Framework,
+    FrameworkMapping,
+    # Maturity
     MaturitySnapshot,
+    # Remediation
+    RemediationAction,
+    RemediationHistory,
+    # Audit
     AuditLog,
 )
 from attestful.storage.database import (
@@ -22,25 +49,36 @@ from attestful.storage.evidence import (
     EvidenceStore,
     StoredEvidence,
 )
-from attestful.storage.migrations import (
-    NisifyMigration,
-    NisifySchemaMapper,
-    NisifyEvidenceConverter,
-    NisifyMaturityPreserver,
-    NisifyTrendMigrator,
-    migrate_nisify_database,
-)
 
 __all__ = [
-    # Models
+    # Base
     "Base",
+    # Organization & Users
     "Organization",
     "User",
+    "Team",
+    "TeamMember",
+    # Compliance Scanning
     "Scan",
     "ScanResult",
+    "Resource",
+    # Evidence Collection
     "CollectionRun",
     "EvidenceItem",
+    # OSCAL Documents
+    "OSCALCatalog",
+    "OSCALProfile",
+    "OSCALSSP",
+    "OSCALAssessment",
+    # Frameworks
+    "Framework",
+    "FrameworkMapping",
+    # Maturity
     "MaturitySnapshot",
+    # Remediation
+    "RemediationAction",
+    "RemediationHistory",
+    # Audit
     "AuditLog",
     # Database
     "get_engine",
@@ -49,11 +87,4 @@ __all__ = [
     # Evidence Store
     "EvidenceStore",
     "StoredEvidence",
-    # Migrations
-    "NisifyMigration",
-    "NisifySchemaMapper",
-    "NisifyEvidenceConverter",
-    "NisifyMaturityPreserver",
-    "NisifyTrendMigrator",
-    "migrate_nisify_database",
 ]

@@ -1,0 +1,47 @@
+# Attestful Air-Gapped Docker Compose Override
+#
+# Use with docker-compose.yml for air-gapped deployments.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.airgap.yml up -d
+#
+# This override:
+# - Disables network access
+# - Uses local SQLite database
+# - Enables offline mode
+
+version: '3.8'
+
+services:
+  attestful:
+    # Use air-gap specific image
+    image: attestful:airgap
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.airgap
+
+    # Disable external network access
+    networks:
+      - airgap-internal
+
+    # Environment for offline mode
+    environment:
+      - ATTESTFUL_OFFLINE_MODE=true
+      - ATTESTFUL_NETWORK_ENABLED=false
+      - ATTESTFUL_DATABASE_URL=sqlite:///app/data/attestful.db
+
+    # No external dependencies
+    depends_on: []
+
+    # Additional volumes for offline data
+    volumes:
+      - attestful-data:/app/data
+      - attestful-config:/app/config
+      # Mount offline evidence bundles
+      - ./import:/app/import:ro
+      - ./export:/app/export:rw
+
+networks:
+  airgap-internal:
+    driver: bridge
+    internal: true  # No external connectivity

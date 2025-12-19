@@ -1,7 +1,5 @@
 """
 Main FastAPI application for Attestful REST API.
-
-Migrated from Compliy (Step 4.2.11 of instructions.txt).
 """
 
 from contextlib import asynccontextmanager

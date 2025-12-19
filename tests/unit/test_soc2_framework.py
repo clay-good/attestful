@@ -16,6 +16,9 @@ from attestful.frameworks.soc2 import (
     SOC2Control,
     SOC2Framework,
     TSC_AVAILABILITY,
+    TSC_CONFIDENTIALITY,
+    TSC_PRIVACY,
+    TSC_PROCESSING_INTEGRITY,
     TSC_SECURITY,
     create_soc2_evaluator,
     get_soc2_aws_checks,
@@ -56,11 +59,18 @@ class TestSOC2Controls:
 
     def test_control_has_required_fields(self):
         """Each control should have required fields."""
+        valid_categories = [
+            TSC_SECURITY,
+            TSC_AVAILABILITY,
+            TSC_PROCESSING_INTEGRITY,
+            TSC_CONFIDENTIALITY,
+            TSC_PRIVACY,
+        ]
         for control_id, control in SOC2_CONTROLS.items():
             assert control.id == control_id
             assert control.title
             assert control.description
-            assert control.category in [TSC_SECURITY, TSC_AVAILABILITY]
+            assert control.category in valid_categories
 
     def test_cc6_1_control_details(self):
         """CC6.1 control should have correct details."""

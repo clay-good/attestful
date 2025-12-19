@@ -3,8 +3,6 @@ Certificate management for mTLS authentication.
 
 Handles generation, storage, and validation of certificates for
 Docker scanner agents and host receiver.
-
-Migrated from Compliy (Step 4.2.13 of instructions.txt).
 """
 
 import os
