@@ -5453,6 +5453,101 @@ def report_generate(
 
 
 # =============================================================================
+# Dashboard Commands (Section 14)
+# =============================================================================
+
+
+@cli.group()
+@click.pass_context
+def dashboard(ctx: click.Context) -> None:
+    """Launch and manage the compliance dashboard."""
+    pass
+
+
+@dashboard.command("serve")
+@click.option("--host", "-h", default="127.0.0.1", help="Host to bind to")
+@click.option("--port", "-p", default=8050, type=int, help="Port to run on")
+@click.option("--debug", is_flag=True, help="Enable debug mode")
+@click.pass_context
+def dashboard_serve(ctx: click.Context, host: str, port: int, debug: bool) -> None:
+    """
+    Start the interactive dashboard server.
+
+    The dashboard provides:
+    - Large hero compliance percentage display
+    - Framework selector with category breakdowns
+    - Platform status grid showing collection status
+    - Light/dark mode toggle
+    - Evidence summary statistics
+
+    Requires enterprise extras: pip install 'attestful[enterprise]'
+    """
+    try:
+        from attestful.dashboard import run_dashboard
+    except ImportError:
+        console.print("[red]Dashboard requires enterprise extras.[/red]")
+        console.print("Install with: pip install 'attestful[enterprise]'")
+        return
+
+    console.print("[bold blue]Attestful Dashboard[/bold blue]")
+    console.print(f"  Starting server on http://{host}:{port}")
+    console.print()
+    console.print("  Features:")
+    console.print("    • Monochrome design with 72px hero compliance percentage")
+    console.print("    • Framework selector (SOC 2, NIST CSF, NIST 800-53, ISO 27001, HITRUST)")
+    console.print("    • Category breakdown with progress bars")
+    console.print("    • Platform status grid with connection indicators")
+    console.print("    • Light/dark mode toggle with persistence")
+    console.print()
+    console.print("  Press Ctrl+C to stop the server")
+    console.print()
+
+    run_dashboard(host=host, port=port, debug=debug)
+
+
+@dashboard.command("export")
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(),
+    default="attestful_dashboard.html",
+    help="Output HTML file path",
+)
+@click.pass_context
+def dashboard_export(ctx: click.Context, output: str) -> None:
+    """
+    Export dashboard as static HTML for air-gapped viewing.
+
+    Creates a self-contained HTML file that can be opened in any browser
+    without a server. Suitable for offline deployments and sharing.
+
+    The static export includes:
+    - All styling bundled inline (no external dependencies)
+    - Light/dark mode toggle (persisted in localStorage)
+    - Current compliance data snapshot
+    - Framework overview for all frameworks
+    """
+    from attestful.dashboard import export_static_dashboard
+
+    console.print("[bold blue]Exporting Static Dashboard[/bold blue]")
+    console.print()
+
+    try:
+        result_path = export_static_dashboard(output)
+        console.print(f"[green]Dashboard exported to:[/green] {result_path}")
+        console.print()
+        console.print("Features included:")
+        console.print("  • Self-contained HTML (no external dependencies)")
+        console.print("  • Light/dark mode toggle")
+        console.print("  • Compliance data snapshot")
+        console.print("  • Works completely offline")
+        console.print()
+        console.print(f"Open in browser: file://{result_path.absolute()}")
+    except Exception as e:
+        console.print(f"[red]Failed to export dashboard: {e}[/red]")
+
+
+# =============================================================================
 # OSCAL Commands
 # =============================================================================
 
